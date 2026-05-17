@@ -49,7 +49,7 @@ export default async function ContactPage() {
               <div style={{ marginBottom: 32, borderRadius: 4, overflow: "hidden", border: "1px solid var(--hair-color)" }}>
                 <iframe
                   title="Localisation du dojo AME"
-                  src="https://maps.google.com/maps?q=X7V2%2BXQ+Ermont+France&output=embed&hl=fr&z=17"
+                  src="https://maps.google.com/maps?q=X6VX%2BX8+Ermont+France&output=embed&hl=fr&z=17"
                   width="100%"
                   height="220"
                   style={{ border: 0, display: "block", filter: "grayscale(15%)" }}
