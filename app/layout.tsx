@@ -29,6 +29,7 @@ const shippori = Shippori_Mincho({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
   display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
