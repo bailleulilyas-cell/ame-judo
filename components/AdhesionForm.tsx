@@ -383,9 +383,18 @@ export default function AdhesionForm({ formules }: { formules: Formule[] }) {
           {errors.submit && <p className="form-error" role="alert" style={{ marginBottom: 16 }}>{errors.submit}</p>}
           {state === "error" && <p className="form-error" role="alert" style={{ marginBottom: 16 }}>Une erreur est survenue. Réessayez ou contactez-nous par email.</p>}
 
-          <button type="submit" className="btn btn-primary" disabled={state === "loading"}>
-            {state === "loading" ? "Envoi…" : "Envoyer la pré-inscription"}
-            <span className="btn-dot" aria-hidden />
+          <button type="submit" className="btn btn-primary" disabled={state === "loading"} aria-busy={state === "loading"}>
+            {state === "loading" ? (
+              <>
+                <span className="spinner" aria-hidden style={{ marginRight: 10 }} />
+                Envoi en cours…
+              </>
+            ) : (
+              <>
+                Envoyer la pré-inscription
+                <span className="btn-dot" aria-hidden />
+              </>
+            )}
           </button>
         </form>
       )}

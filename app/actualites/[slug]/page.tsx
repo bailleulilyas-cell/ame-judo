@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { getActualiteBySlug } from "@/lib/data";
 import { renderMarkdown } from "@/lib/markdown";
+
+const SITE_URL = "https://ame-judo.fr";
 
 export async function generateMetadata({
   params,
@@ -14,10 +17,28 @@ export async function generateMetadata({
   const { slug } = await params;
   const actu = await getActualiteBySlug(slug);
   if (!actu) return { title: "Actualité introuvable" };
+  const ogImg = actu.photo_url
+    ? [{ url: actu.photo_url, alt: actu.titre }]
+    : [{ url: "/opengraph-image", width: 1200, height: 630, alt: actu.titre }];
   return {
     title: actu.titre,
     description: actu.extrait,
-    openGraph: actu.photo_url ? { images: [actu.photo_url] } : undefined,
+    alternates: { canonical: `/actualites/${slug}` },
+    openGraph: {
+      type: "article",
+      title: actu.titre,
+      description: actu.extrait,
+      url: `${SITE_URL}/actualites/${slug}`,
+      publishedTime: actu.date_publication,
+      modifiedTime: actu.updated_at || actu.date_publication,
+      images: ogImg,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: actu.titre,
+      description: actu.extrait,
+      images: ogImg.map((i) => i.url),
+    },
   };
 }
 
@@ -38,14 +59,42 @@ export default async function ActualiteDetail({
 
   const html = renderMarkdown(actu.body);
 
+  // JSON-LD Article + BreadcrumbList
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: actu.titre,
+    description: actu.extrait,
+    datePublished: actu.date_publication,
+    dateModified: actu.updated_at || actu.date_publication,
+    image: actu.photo_url ? [actu.photo_url] : [`${SITE_URL}/opengraph-image`],
+    author: { "@type": "Organization", name: "AME — Arts Martiaux Ermontois" },
+    publisher: { "@type": "Organization", name: "AME", logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png` } },
+    mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}/actualites/${slug}` },
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Accueil", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: "Actualités", item: `${SITE_URL}/actualites` },
+      { "@type": "ListItem", position: 3, name: actu.titre, item: `${SITE_URL}/actualites/${slug}` },
+    ],
+  };
+
   return (
     <>
       <Nav />
       <main id="main">
         <article className="container article">
-          <Link href="/actualites" className="article-back">
-            ← Toutes les actualités
-          </Link>
+          <nav className="breadcrumb" aria-label="Fil d'Ariane">
+            <Link href="/">Accueil</Link>
+            <span className="breadcrumb-sep" aria-hidden>·</span>
+            <Link href="/actualites">Actualités</Link>
+            <span className="breadcrumb-sep" aria-hidden>·</span>
+            <span className="breadcrumb-current" aria-current="page">{actu.titre}</span>
+          </nav>
 
           <div className="article-kanji" lang="ja" aria-hidden>{actu.kanji}</div>
 
@@ -53,24 +102,22 @@ export default async function ActualiteDetail({
             <span className="actu-cat-dot" aria-hidden />
             <span>{actu.categorie}</span>
             <span>·</span>
-            <span>{dateStr}</span>
+            <time dateTime={actu.date_publication}>{dateStr}</time>
           </div>
 
           <h1 className="article-title">{actu.titre}</h1>
 
           {actu.photo_url && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={actu.photo_url}
-              alt={actu.titre}
-              style={{
-                width: "100%",
-                maxHeight: 480,
-                objectFit: "cover",
-                marginBottom: 40,
-                background: "var(--paper)",
-              }}
-            />
+            <div style={{ position: "relative", width: "100%", aspectRatio: "16/9", marginBottom: 40, background: "var(--paper)", overflow: "hidden" }}>
+              <Image
+                src={actu.photo_url}
+                alt={actu.titre}
+                fill
+                sizes="(max-width: 900px) 100vw, 900px"
+                style={{ objectFit: "cover" }}
+                priority
+              />
+            </div>
           )}
 
           <div
@@ -81,54 +128,14 @@ export default async function ActualiteDetail({
       </main>
       <Footer />
 
-      <style>{`
-        .markdown-body h2 {
-          font-family: var(--serif);
-          font-weight: 400;
-          font-size: clamp(24px, 3vw, 36px);
-          letter-spacing: -0.02em;
-          margin: 40px 0 16px;
-        }
-        .markdown-body h3 {
-          font-family: var(--serif);
-          font-weight: 400;
-          font-size: clamp(20px, 2.2vw, 26px);
-          margin: 32px 0 12px;
-        }
-        .markdown-body img {
-          max-width: 100%;
-          height: auto;
-          display: block;
-          margin: 24px 0;
-        }
-        .markdown-body a {
-          color: var(--red);
-          border-bottom: 1px solid currentColor;
-        }
-        .markdown-body blockquote {
-          border-left: 3px solid var(--red);
-          margin: 24px 0;
-          padding: 8px 20px;
-          font-style: italic;
-          color: var(--sumi-soft);
-        }
-        .markdown-body ul, .markdown-body ol {
-          margin: 0 0 24px 24px;
-          padding: 0;
-        }
-        .markdown-body li {
-          font-family: var(--serif);
-          font-size: 17px;
-          line-height: 1.75;
-          margin: 6px 0;
-        }
-        .markdown-body hr {
-          border: none;
-          border-top: 1px solid var(--hair-color);
-          margin: 40px 0;
-        }
-        .markdown-body strong { font-weight: 600; }
-      `}</style>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
     </>
   );
 }

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { sanitizeInlineTitle } from "@/lib/markdown";
 
 interface Props {
   title: string;
@@ -21,7 +22,7 @@ export default function AdminPageHeader({ title, description, backHref, backLabe
         </Link>
       )}
       <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
-        <h1 className="admin-h1" style={{ margin: 0 }} dangerouslySetInnerHTML={{ __html: title }} />
+        <h1 className="admin-h1" style={{ margin: 0 }} dangerouslySetInnerHTML={{ __html: sanitizeInlineTitle(title) }} />
         {action}
       </div>
       {description && (

@@ -2,7 +2,9 @@ import Link from "next/link";
 import Image from "next/image";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import ScrollReveal from "@/components/ScrollReveal";
 import { getActualites, getDisciplines, getFormules, getHeroContent, getAboutContent, getSettings } from "@/lib/data";
+import { sanitizeInlineTitle } from "@/lib/markdown";
 
 export default async function HomePage() {
   const [disciplines, formules, actus, hero, about, settings] = await Promise.all([
@@ -34,7 +36,7 @@ export default async function HomePage() {
                 <span className="hero-eyebrow-rule" aria-hidden />
                 <span>{hero.eyebrow}</span>
               </p>
-              <h1 className="hero-title" dangerouslySetInnerHTML={{ __html: hero.titre }} />
+              <h1 className="hero-title" dangerouslySetInnerHTML={{ __html: sanitizeInlineTitle(hero.titre) }} />
               <p className="hero-sub">{hero.sous_titre}</p>
               <div className="hero-actions">
                 <Link href="/adhesion" className="btn btn-primary">
@@ -77,7 +79,7 @@ export default async function HomePage() {
         </section>
 
         {/* ─── LES VOIES (preview) ─── */}
-        <section className="section section--paper">
+        <ScrollReveal as="section" className="section section--paper">
           <div className="container">
             <div className="section-header">
               <span className="section-header-dot" aria-hidden />
@@ -105,10 +107,10 @@ export default async function HomePage() {
               ))}
             </div>
           </div>
-        </section>
+        </ScrollReveal>
 
         {/* ─── L'ÂME ─── */}
-        <section className="section">
+        <ScrollReveal as="section" className="section">
           <div className="container ame-grid">
             <div>
               <div className="section-header">
@@ -125,7 +127,7 @@ export default async function HomePage() {
               </p>
             </div>
             <div>
-              <h2 className="title-lg" dangerouslySetInnerHTML={{ __html: about.titre }} />
+              <h2 className="title-lg" dangerouslySetInnerHTML={{ __html: sanitizeInlineTitle(about.titre) }} />
               {about.paragraphes.split("\n\n").map((p, i) => (
                 <p key={i} style={{ fontFamily: "var(--serif)", fontSize: "clamp(15px, 1.15vw, 18px)", lineHeight: 1.75, color: "var(--sumi-soft)", marginBottom: 20 }}>
                   {p}
@@ -133,10 +135,10 @@ export default async function HomePage() {
               ))}
             </div>
           </div>
-        </section>
+        </ScrollReveal>
 
         {/* ─── ADHÉSION CTA ─── */}
-        <section className="section section--sand">
+        <ScrollReveal as="section" className="section section--sand">
           <div className="container">
             <div className="section-header">
               <span className="section-header-dot" aria-hidden />
@@ -174,10 +176,10 @@ export default async function HomePage() {
               <span className="btn-dot" aria-hidden />
             </Link>
           </div>
-        </section>
+        </ScrollReveal>
 
         {/* ─── ACTUALITÉS ─── */}
-        <section className="section">
+        <ScrollReveal as="section" className="section">
           <div className="container">
             <div className="section-header">
               <span className="section-header-dot" aria-hidden />
@@ -214,7 +216,7 @@ export default async function HomePage() {
               </Link>
             </div>
           </div>
-        </section>
+        </ScrollReveal>
       </main>
       <Footer
         adresse={{ ligne1: settings.adresse_ligne1, ligne2: settings.adresse_ligne2, ligne3: settings.adresse_ligne3 }}

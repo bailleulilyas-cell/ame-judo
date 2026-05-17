@@ -60,6 +60,119 @@ img { display: block; max-width: 100%; height: auto; }
 }
 .skip-link:focus { top: 0; }
 
+/* ─── Focus visible cohérent (accessibilité WCAG AA) ─── */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+:where(input, textarea, select):focus-visible {
+  outline-offset: 0;
+}
+
+/* ─── Scroll-padding pour ancrages sous nav sticky ─── */
+html { scroll-padding-top: 88px; }
+
+/* ─── ScrollReveal — apparition au scroll ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal.is-visible { opacity: 1; transform: none; transition: none; }
+}
+
+/* ─── Fil d'Ariane ─── */
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--sans);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin-bottom: 32px;
+}
+.breadcrumb a {
+  color: var(--stone);
+  transition: color 0.25s;
+}
+.breadcrumb a:hover { color: var(--sumi); }
+.breadcrumb-sep { color: var(--stone-soft, #B8B0A0); }
+.breadcrumb-current { color: var(--sumi); }
+
+/* ─── Markdown body (actualités) ─── */
+.markdown-body h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(24px, 3vw, 36px);
+  letter-spacing: -0.02em;
+  margin: 40px 0 16px;
+}
+.markdown-body h3 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(20px, 2.2vw, 26px);
+  margin: 32px 0 12px;
+}
+.markdown-body img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 24px 0;
+}
+.markdown-body a {
+  color: var(--red);
+  border-bottom: 1px solid currentColor;
+}
+.markdown-body blockquote {
+  border-left: 3px solid var(--red);
+  margin: 24px 0;
+  padding: 8px 20px;
+  font-style: italic;
+  color: var(--sumi-soft);
+}
+.markdown-body ul,
+.markdown-body ol {
+  margin: 0 0 24px 24px;
+  padding: 0;
+}
+.markdown-body li {
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.75;
+  margin: 6px 0;
+}
+.markdown-body hr {
+  border: none;
+  border-top: 1px solid var(--hair-color);
+  margin: 40px 0;
+}
+.markdown-body strong { font-weight: 600; }
+
+/* ─── Spinner inline ─── */
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  animation: spin 0.7s linear infinite;
+  vertical-align: -2px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
 /* ═══════════════════════════════════════════════════════════
    Navigation
    ═══════════════════════════════════════════════════════════ */

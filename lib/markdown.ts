@@ -21,3 +21,16 @@ export function renderMarkdown(md: string): string {
     ALLOWED_ATTR: ["href", "title", "alt", "src", "target", "rel"],
   });
 }
+
+/**
+ * Sanitisation minimale pour les titres éditoriaux qui autorisent juste
+ * `<em>` pour la mise en italique des mots-clés (titres saisis depuis l'admin).
+ * Tout le reste est échappé / supprimé.
+ */
+export function sanitizeInlineTitle(html: string): string {
+  if (!html) return "";
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: ["em", "strong", "br"],
+    ALLOWED_ATTR: [],
+  });
+}

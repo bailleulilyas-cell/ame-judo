@@ -1,11 +1,12 @@
 /**
  * Authentification admin.
  *
- * - Mot de passe haché bcrypt stocké dans la table `settings` (DB)
+ * - Mot de passe haché bcrypt stocké dans la table `settings`
  * - Fallback sur ADMIN_PASSWORD (.env) au premier démarrage
- * - Session JWT signée avec AUTH_SECRET, cookie httpOnly
+ * - Session JWT signée avec AUTH_SECRET, cookie httpOnly + secure (prod)
  * - Comparaison timing-safe contre les timing attacks
  * - Rate-limiting : 5 tentatives / 15 min → blocage 30 min
+ * - Token version : invalide toutes les sessions à chaque changement de mot de passe
  */
 import { cookies } from "next/headers";
 import { SignJWT, jwtVerify } from "jose";
@@ -25,8 +26,47 @@ function getSecret(): Uint8Array {
   return new TextEncoder().encode(secret);
 }
 
+// ─── Settings (DB) ────────────────────────────────────────────
+async function readSetting(key: string): Promise<string | null> {
+  try {
+    const { query } = await import("@/lib/db");
+    const rows = await query<{ value: string }>(
+      "SELECT `value` FROM settings WHERE `key` = ? LIMIT 1",
+      [key]
+    );
+    return rows[0]?.value ?? null;
+  } catch {
+    return null;
+  }
+}
+
+async function writeSetting(key: string, value: string): Promise<boolean> {
+  try {
+    const { query } = await import("@/lib/db");
+    await query(
+      "INSERT INTO settings (`key`, `value`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `value` = VALUES(`value`)",
+      [key, value]
+    );
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function getCurrentTokenVersion(): Promise<number> {
+  const v = await readSetting("token_version");
+  return v ? Number(v) || 1 : 1;
+}
+
+async function bumpTokenVersion(): Promise<void> {
+  const next = (await getCurrentTokenVersion()) + 1;
+  await writeSetting("token_version", String(next));
+}
+
+// ─── Session ──────────────────────────────────────────────────
 export async function createSession(): Promise<void> {
-  const token = await new SignJWT({ role: "admin" })
+  const tokenVersion = await getCurrentTokenVersion();
+  const token = await new SignJWT({ role: "admin", v: tokenVersion })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime(`${SESSION_MAX_AGE}s`)
@@ -52,13 +92,18 @@ export async function isAuthenticated(): Promise<boolean> {
   const token = store.get(SESSION_COOKIE)?.value;
   if (!token) return false;
   try {
-    await jwtVerify(token, getSecret());
-    return true;
+    const { payload } = await jwtVerify(token, getSecret());
+    // Vérifie que la version du token correspond à la version courante (rotation)
+    const tokenV = typeof payload.v === "number" ? payload.v : 1;
+    const currentV = await getCurrentTokenVersion();
+    if (tokenV !== currentV) return false;
+    return payload.role === "admin";
   } catch {
     return false;
   }
 }
 
+// ─── Mot de passe ─────────────────────────────────────────────
 function constantTimeStringCompare(a: string, b: string): boolean {
   const enc = new TextEncoder();
   const bufA = enc.encode(a);
@@ -72,23 +117,11 @@ function constantTimeStringCompare(a: string, b: string): boolean {
   return same && bufA.length === bufB.length;
 }
 
-async function getStoredHash(): Promise<string | null> {
-  try {
-    const { query } = await import("@/lib/db");
-    const rows = await query<{ value: string }>(
-      "SELECT `value` FROM settings WHERE `key` = 'password_hash' LIMIT 1"
-    );
-    return rows[0]?.value ?? null;
-  } catch {
-    return null;
-  }
-}
-
 export async function verifyPassword(input: string): Promise<boolean> {
-  if (!input) return false;
+  if (!input || input.length > 256) return false;
 
-  // Priorité 1 : hash bcrypt stocké en DB
-  const dbHash = await getStoredHash();
+  // 1) Hash bcrypt en DB
+  const dbHash = await readSetting("password_hash");
   if (dbHash && dbHash.startsWith("$2")) {
     try {
       return await bcrypt.compare(input, dbHash);
@@ -97,7 +130,7 @@ export async function verifyPassword(input: string): Promise<boolean> {
     }
   }
 
-  // Priorité 2 : mot de passe en clair dans .env (premier démarrage)
+  // 2) Fallback : mot de passe en clair dans .env (premier démarrage)
   const expected = process.env.ADMIN_PASSWORD;
   if (!expected) return false;
   return constantTimeStringCompare(input, expected);
@@ -113,6 +146,9 @@ export async function updatePassword(
   if (newPassword.length < 8) {
     return { ok: false, error: "Le nouveau mot de passe doit faire au moins 8 caractères." };
   }
+  if (newPassword.length > 128) {
+    return { ok: false, error: "Le mot de passe est trop long (max 128 caractères)." };
+  }
 
   const valid = await verifyPassword(currentPassword);
   if (!valid) {
@@ -120,17 +156,17 @@ export async function updatePassword(
   }
 
   const hash = await bcrypt.hash(newPassword, 12);
-
-  try {
-    const { query } = await import("@/lib/db");
-    await query(
-      "INSERT INTO settings (`key`, `value`) VALUES ('password_hash', ?) ON DUPLICATE KEY UPDATE `value` = VALUES(`value`)",
-      [hash]
-    );
-    return { ok: true };
-  } catch {
+  const saved = await writeSetting("password_hash", hash);
+  if (!saved) {
     return { ok: false, error: "Erreur lors de la sauvegarde. Réessayez." };
   }
+
+  // Invalide toutes les sessions existantes
+  await bumpTokenVersion();
+  // Renouvelle la session courante avec la nouvelle version
+  await createSession();
+
+  return { ok: true };
 }
 
 // ─── Rate-limiting connexion ──────────────────────────────────
@@ -141,6 +177,7 @@ const MAX_ATTEMPTS = 5;
 const BLOCK_MS = 30 * 60 * 1000;
 
 export function loginRateCheck(ip: string): { allowed: boolean; retryAfterSec?: number } {
+  if (!ip || ip === "local" || ip === "unknown") return { allowed: true };
   const now = Date.now();
   const a = attempts.get(ip);
 

@@ -7,6 +7,7 @@ import { getSettings } from "@/lib/data";
 export const metadata: Metadata = {
   title: "Contact",
   description: "Contactez le club AME — adresse, email, horaires de permanence.",
+  alternates: { canonical: "/contact" },
 };
 
 export default async function ContactPage() {

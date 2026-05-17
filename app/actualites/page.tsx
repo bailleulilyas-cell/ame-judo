@@ -7,6 +7,7 @@ import { getActualites } from "@/lib/data";
 export const metadata: Metadata = {
   title: "Actualités",
   description: "Toutes les actualités du club AME — stages, compétitions, événements.",
+  alternates: { canonical: "/actualites" },
 };
 
 export default async function ActualitesPage() {

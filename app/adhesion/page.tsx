@@ -7,6 +7,7 @@ import { getFormules } from "@/lib/data";
 export const metadata: Metadata = {
   title: "Adhésion — Pré-inscription",
   description: "Pré-inscrivez-vous au club AME en quelques instants. Deux séances d'essai gratuites.",
+  alternates: { canonical: "/adhesion" },
 };
 
 export default async function AdhesionPage() {

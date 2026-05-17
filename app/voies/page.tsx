@@ -7,6 +7,7 @@ import { getDisciplines, getSlots } from "@/lib/data";
 export const metadata: Metadata = {
   title: "Les voies — Judo, Ju-jitsu, Taïso",
   description: "Découvrez les trois disciplines enseignées au club AME : judo, ju-jitsu et taïso.",
+  alternates: { canonical: "/voies" },
 };
 
 export default async function VoiesPage() {

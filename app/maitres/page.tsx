@@ -7,6 +7,7 @@ import { getMaitres } from "@/lib/data";
 export const metadata: Metadata = {
   title: "Les maîtres — Équipe enseignante",
   description: "Les professeurs du club AME — gradés, formés et passionnés.",
+  alternates: { canonical: "/maitres" },
 };
 
 export default async function MaitresPage() {

@@ -1,25 +1,73 @@
 import type { NextConfig } from "next";
 
+// CSP — équilibre sécurité / fonctionnalité.
+// 'unsafe-inline' sur style nécessaire (nombreux style={} inline).
+// 'unsafe-inline' / 'unsafe-eval' sur script car Next.js streaming + hydratation.
+// Pour un site low-risk (vitrine club) c'est un bon compromis.
+const ContentSecurityPolicy = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+  "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
+  "img-src 'self' data: blob: https:",
+  "font-src 'self' data: fonts.gstatic.com",
+  "connect-src 'self' vitals.vercel-insights.com",
+  "frame-src 'self' https://maps.google.com https://www.google.com",
+  "frame-ancestors 'self'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "object-src 'none'",
+  "upgrade-insecure-requests",
+].join("; ");
+
 const securityHeaders = [
-  // Empêche l'embedding du site dans une iframe externe (anti clickjacking)
+  { key: "Content-Security-Policy", value: ContentSecurityPolicy },
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
-  // Bloque le sniffing MIME (force le navigateur à respecter Content-Type)
   { key: "X-Content-Type-Options", value: "nosniff" },
-  // Limite ce qu'on envoie comme Referer aux sites externes
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-  // Désactive l'accès au caméra / micro / géoloc par défaut
-  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), interest-cohort=()" },
-  // Force HTTPS pendant 1 an (effectif en production seulement)
-  { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains" },
+  {
+    key: "Permissions-Policy",
+    value: [
+      "camera=()",
+      "microphone=()",
+      "geolocation=()",
+      "interest-cohort=()",
+      "payment=()",
+      "usb=()",
+      "magnetometer=()",
+      "accelerometer=()",
+      "gyroscope=()",
+      "fullscreen=(self)",
+    ].join(", "),
+  },
+  {
+    key: "Strict-Transport-Security",
+    value: "max-age=63072000; includeSubDomains; preload",
+  },
+  // Anti enumération technologique
+  { key: "X-DNS-Prefetch-Control", value: "on" },
 ];
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["192.168.1.94", "*.local"],
+  poweredByHeader: false,
+  reactStrictMode: true,
+  images: {
+    formats: ["image/avif", "image/webp"],
+    remotePatterns: [
+      // Pour les images uploadées sur Vercel Blob (quand activé)
+      { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
+    ],
+  },
   async headers() {
     return [
       {
         source: "/:path*",
         headers: securityHeaders,
+      },
+      // Cache long pour les assets statiques
+      {
+        source: "/_next/static/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
       },
     ];
   },
