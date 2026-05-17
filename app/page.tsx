@@ -1,65 +1,226 @@
+import Link from "next/link";
 import Image from "next/image";
+import Nav from "@/components/Nav";
+import Footer from "@/components/Footer";
+import { getActualites, getDisciplines, getFormules, getHeroContent, getAboutContent, getSettings } from "@/lib/data";
 
-export default function Home() {
+export default async function HomePage() {
+  const [disciplines, formules, actus, hero, about, settings] = await Promise.all([
+    getDisciplines(),
+    getFormules(),
+    getActualites(3),
+    getHeroContent(),
+    getAboutContent(),
+    getSettings(),
+  ]);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <>
+      <Nav />
+      <main id="main">
+        {/* ─── HERO ─── */}
+        <section className="container" style={{ position: "relative" }}>
+          <span
+            className="hero-kanji-bg"
+            aria-hidden
+            lang="ja"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+            道
+          </span>
+          <div className="hero">
+            <div>
+              <p className="hero-eyebrow">
+                <span className="hero-eyebrow-jp" lang="ja">{hero.proverbe_jp}</span>
+                <span className="hero-eyebrow-rule" aria-hidden />
+                <span>{hero.eyebrow}</span>
+              </p>
+              <h1 className="hero-title" dangerouslySetInnerHTML={{ __html: hero.titre }} />
+              <p className="hero-sub">{hero.sous_titre}</p>
+              <div className="hero-actions">
+                <Link href="/adhesion" className="btn btn-primary">
+                  Pré-inscription
+                  <span className="btn-dot" aria-hidden />
+                </Link>
+                <Link href="/voies" className="btn btn-secondary btn-arrow">
+                  Découvrir les voies
+                </Link>
+              </div>
+
+              <div className="hero-stats">
+                <div>
+                  <div className="hero-stat-num">{hero.stat1_num}</div>
+                  <div className="hero-stat-label">{hero.stat1_label}</div>
+                </div>
+                <div>
+                  <div className="hero-stat-num">{hero.stat2_num}</div>
+                  <div className="hero-stat-label">{hero.stat2_label}</div>
+                </div>
+                <div>
+                  <div className="hero-stat-num">{hero.stat3_num}</div>
+                  <div className="hero-stat-label">{hero.stat3_label}</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="hero-visual">
+              <div className="hero-visual-disc" aria-hidden />
+              <Image
+                src="/logo.png"
+                alt="Logo AME — Arts Martiaux Ermontois"
+                width={420}
+                height={420}
+                className="hero-visual-logo"
+                priority
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* ─── LES VOIES (preview) ─── */}
+        <section className="section section--paper">
+          <div className="container">
+            <div className="section-header">
+              <span className="section-header-dot" aria-hidden />
+              <span className="section-header-num" lang="ja" aria-hidden>一</span>
+              <span className="section-header-rule" aria-hidden />
+              <span className="section-header-label">道 · Les voies</span>
+            </div>
+            <h2 className="title-lg">
+              Trois disciplines,<br />
+              une même <em>discipline</em>.
+            </h2>
+            <p className="lead">
+              Judo, ju-jitsu, taïso. Trois pratiques qui partagent la même racine —
+              le respect du corps, de l&apos;adversaire et de la tradition.
+            </p>
+
+            <div className="cards-grid">
+              {disciplines.map((d) => (
+                <article key={d.id} className="card">
+                  <span className="card-kanji" lang="ja" aria-hidden>{d.kanji}</span>
+                  <h3 className="card-title">{d.nom}</h3>
+                  <p className="card-text">{d.tagline}</p>
+                  <Link href="/voies" className="card-link">Découvrir</Link>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ─── L'ÂME ─── */}
+        <section className="section">
+          <div className="container ame-grid">
+            <div>
+              <div className="section-header">
+                <span className="section-header-dot" aria-hidden />
+                <span className="section-header-num" lang="ja" aria-hidden>二</span>
+                <span className="section-header-rule" aria-hidden />
+                <span className="section-header-label">魂 · L&apos;âme</span>
+              </div>
+              <blockquote style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: "clamp(20px, 2vw, 28px)", lineHeight: 1.35, color: "var(--sumi)", margin: 0, maxWidth: 360 }}>
+                « {about.citation} »
+              </blockquote>
+              <p style={{ marginTop: 16, fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--stone)" }}>
+                — {about.attribution}
+              </p>
+            </div>
+            <div>
+              <h2 className="title-lg" dangerouslySetInnerHTML={{ __html: about.titre }} />
+              {about.paragraphes.split("\n\n").map((p, i) => (
+                <p key={i} style={{ fontFamily: "var(--serif)", fontSize: "clamp(15px, 1.15vw, 18px)", lineHeight: 1.75, color: "var(--sumi-soft)", marginBottom: 20 }}>
+                  {p}
+                </p>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ─── ADHÉSION CTA ─── */}
+        <section className="section section--sand">
+          <div className="container">
+            <div className="section-header">
+              <span className="section-header-dot" aria-hidden />
+              <span className="section-header-num" lang="ja" aria-hidden>三</span>
+              <span className="section-header-rule" aria-hidden />
+              <span className="section-header-label">入門 · Rejoindre</span>
+            </div>
+            <h2 className="title-lg">
+              Deux essais <em>gratuits</em>,<br />
+              avant tout engagement.
+            </h2>
+            <p className="lead" style={{ marginBottom: 40 }}>
+              Trois formules selon l&apos;âge et la pratique. Aucun paiement requis pour la pré-inscription —
+              le règlement se fait au premier cours.
+            </p>
+
+            <div className="cards-grid" style={{ marginBottom: 40 }}>
+              {formules.map((f) => (
+                <div key={f.id} className="card">
+                  <span className="card-kanji" lang="ja" aria-hidden>{f.kanji}</span>
+                  <h3 className="card-title">{f.nom}</h3>
+                  <p style={{ fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--stone)", margin: 0 }}>
+                    {f.tranche_age}
+                  </p>
+                  <p style={{ fontFamily: "var(--serif)", fontWeight: 300, fontSize: 56, lineHeight: 1, letterSpacing: "-0.03em", margin: "8px 0", fontFeatureSettings: "'tnum'" }}>
+                    {f.prix}<span style={{ fontSize: 22, color: "var(--stone)", marginLeft: 4 }}>€</span>
+                  </p>
+                  <p className="card-text">{f.italique}</p>
+                </div>
+              ))}
+            </div>
+
+            <Link href="/adhesion" className="btn btn-primary">
+              Pré-inscrire — formulaire
+              <span className="btn-dot" aria-hidden />
+            </Link>
+          </div>
+        </section>
+
+        {/* ─── ACTUALITÉS ─── */}
+        <section className="section">
+          <div className="container">
+            <div className="section-header">
+              <span className="section-header-dot" aria-hidden />
+              <span className="section-header-num" lang="ja" aria-hidden>四</span>
+              <span className="section-header-rule" aria-hidden />
+              <span className="section-header-label">報 · Actualités</span>
+            </div>
+            <h2 className="title-lg">
+              La vie du <em>dojo</em>.
+            </h2>
+
+            <div className="actus-list">
+              {actus.map((a) => (
+                <Link key={a.id} href={`/actualites/${a.slug}`} className="actu-row">
+                  <span className="actu-kanji" lang="ja" aria-hidden>{a.kanji}</span>
+                  <div className="actu-content">
+                    <div className="actu-meta">
+                      <span className="actu-cat-dot" aria-hidden />
+                      <span>{a.categorie}</span>
+                      <span>·</span>
+                      <span>{new Date(a.date_publication).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}</span>
+                    </div>
+                    <h3 className="actu-title">{a.titre}</h3>
+                    <p className="actu-extrait">{a.extrait}</p>
+                  </div>
+                  <span className="actu-cta">Lire</span>
+                </Link>
+              ))}
+            </div>
+
+            <div style={{ marginTop: 40 }}>
+              <Link href="/actualites" className="btn btn-secondary btn-arrow">
+                Toutes les actualités
+              </Link>
+            </div>
+          </div>
+        </section>
       </main>
-    </div>
+      <Footer
+        adresse={{ ligne1: settings.adresse_ligne1, ligne2: settings.adresse_ligne2, ligne3: settings.adresse_ligne3 }}
+        email={settings.email}
+        permanence={settings.permanence}
+      />
+    </>
   );
 }

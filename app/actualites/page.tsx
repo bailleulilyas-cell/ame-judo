@@ -1,0 +1,68 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import Nav from "@/components/Nav";
+import Footer from "@/components/Footer";
+import { getActualites } from "@/lib/data";
+
+export const metadata: Metadata = {
+  title: "Actualités",
+  description: "Toutes les actualités du club AME — stages, compétitions, événements.",
+};
+
+export default async function ActualitesPage() {
+  const actus = await getActualites();
+
+  return (
+    <>
+      <Nav />
+      <main id="main">
+        <section className="page-hero">
+          <div className="container">
+            <div className="section-header">
+              <span className="section-header-dot" aria-hidden />
+              <span className="section-header-num" lang="ja" aria-hidden>五</span>
+              <span className="section-header-rule" aria-hidden />
+              <span className="section-header-label">報 · Actualités</span>
+            </div>
+            <h1 className="page-hero-title">
+              La vie du <em>dojo</em>.
+            </h1>
+            <p className="page-hero-sub">
+              Stages, compétitions, événements et nouvelles du club — tout ce qui se passe sur et autour du tatami.
+            </p>
+          </div>
+        </section>
+
+        <section className="section">
+          <div className="container">
+            {actus.length === 0 ? (
+              <p style={{ fontFamily: "var(--serif)", fontStyle: "italic", color: "var(--stone)" }}>
+                Les actualités arrivent bientôt.
+              </p>
+            ) : (
+              <div className="actus-list">
+                {actus.map((a) => (
+                  <Link key={a.id} href={`/actualites/${a.slug}`} className="actu-row">
+                    <span className="actu-kanji" lang="ja" aria-hidden>{a.kanji}</span>
+                    <div className="actu-content">
+                      <div className="actu-meta">
+                        <span className="actu-cat-dot" aria-hidden />
+                        <span>{a.categorie}</span>
+                        <span>·</span>
+                        <span>{new Date(a.date_publication).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}</span>
+                      </div>
+                      <h2 className="actu-title">{a.titre}</h2>
+                      <p className="actu-extrait">{a.extrait}</p>
+                    </div>
+                    <span className="actu-cta">Lire</span>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </>
+  );
+}
