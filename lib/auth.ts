@@ -1,13 +1,15 @@
 /**
- * Authentification admin (mot de passe unique).
+ * Authentification admin.
  *
- * - Mot de passe en clair dans ADMIN_PASSWORD (.env.local, gitignoré)
- * - Session JWT signée avec AUTH_SECRET, stockée dans un cookie httpOnly
+ * - Mot de passe haché bcrypt stocké dans la table `settings` (DB)
+ * - Fallback sur ADMIN_PASSWORD (.env) au premier démarrage
+ * - Session JWT signée avec AUTH_SECRET, cookie httpOnly
  * - Comparaison timing-safe contre les timing attacks
- * - Rate-limiting pour bloquer le bruteforce (5 tentatives / 15 min)
+ * - Rate-limiting : 5 tentatives / 15 min → blocage 30 min
  */
 import { cookies } from "next/headers";
 import { SignJWT, jwtVerify } from "jose";
+import bcrypt from "bcryptjs";
 import { timingSafeEqual } from "node:crypto";
 
 const SESSION_COOKIE = "ame_session";
@@ -17,8 +19,7 @@ function getSecret(): Uint8Array {
   const secret = process.env.AUTH_SECRET;
   if (!secret || secret.length < 32) {
     throw new Error(
-      "AUTH_SECRET manquant ou trop court (32 caractères minimum). " +
-      "Générer un nouveau secret avec : node scripts/generate-secret.mjs"
+      "AUTH_SECRET manquant ou trop court (32 caractères minimum)."
     );
   }
   return new TextEncoder().encode(secret);
@@ -71,11 +72,65 @@ function constantTimeStringCompare(a: string, b: string): boolean {
   return same && bufA.length === bufB.length;
 }
 
+async function getStoredHash(): Promise<string | null> {
+  try {
+    const { query } = await import("@/lib/db");
+    const rows = await query<{ value: string }>(
+      "SELECT `value` FROM settings WHERE `key` = 'password_hash' LIMIT 1"
+    );
+    return rows[0]?.value ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export async function verifyPassword(input: string): Promise<boolean> {
   if (!input) return false;
+
+  // Priorité 1 : hash bcrypt stocké en DB
+  const dbHash = await getStoredHash();
+  if (dbHash && dbHash.startsWith("$2")) {
+    try {
+      return await bcrypt.compare(input, dbHash);
+    } catch {
+      return false;
+    }
+  }
+
+  // Priorité 2 : mot de passe en clair dans .env (premier démarrage)
   const expected = process.env.ADMIN_PASSWORD;
   if (!expected) return false;
   return constantTimeStringCompare(input, expected);
+}
+
+export async function updatePassword(
+  currentPassword: string,
+  newPassword: string
+): Promise<{ ok: boolean; error?: string }> {
+  if (!currentPassword || !newPassword) {
+    return { ok: false, error: "Champs manquants." };
+  }
+  if (newPassword.length < 8) {
+    return { ok: false, error: "Le nouveau mot de passe doit faire au moins 8 caractères." };
+  }
+
+  const valid = await verifyPassword(currentPassword);
+  if (!valid) {
+    return { ok: false, error: "Mot de passe actuel incorrect." };
+  }
+
+  const hash = await bcrypt.hash(newPassword, 12);
+
+  try {
+    const { query } = await import("@/lib/db");
+    await query(
+      "INSERT INTO settings (`key`, `value`) VALUES ('password_hash', ?) ON DUPLICATE KEY UPDATE `value` = VALUES(`value`)",
+      [hash]
+    );
+    return { ok: true };
+  } catch {
+    return { ok: false, error: "Erreur lors de la sauvegarde. Réessayez." };
+  }
 }
 
 // ─── Rate-limiting connexion ──────────────────────────────────

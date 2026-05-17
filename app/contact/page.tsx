@@ -34,7 +34,7 @@ export default async function ContactPage() {
           </div>
         </section>
 
-        <section className="section">
+        <section className="section" style={{ paddingBottom: 0 }}>
           <div className="container contact-grid">
             <div>
               <div className="section-header">
@@ -90,6 +90,26 @@ export default async function ContactPage() {
                 Voir les horaires
               </Link>
             </div>
+          </div>
+        </section>
+
+        <section aria-label="Localisation" style={{ marginTop: "clamp(48px, 6vw, 80px)" }}>
+          <div className="container" style={{ marginBottom: 20 }}>
+            <div className="section-header">
+              <span className="section-header-rule" aria-hidden />
+              <span className="section-header-label">Nous trouver</span>
+            </div>
+          </div>
+          <div style={{ width: "100%", aspectRatio: "16/5", minHeight: 260, maxHeight: 440 }}>
+            <iframe
+              title="Localisation du club AME — Complexe Sportif Saint-Exupéry, Ermont"
+              src="https://maps.google.com/maps?q=Complexe+Sportif+Saint+Exupery+Rue+Kuot+95120+Ermont+France&output=embed&hl=fr&z=16"
+              width="100%"
+              height="100%"
+              style={{ border: 0, display: "block", filter: "grayscale(20%) contrast(1.05)" }}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
           </div>
         </section>
       </main>

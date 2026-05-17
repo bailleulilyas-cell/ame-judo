@@ -21,6 +21,7 @@ const SECTIONS = [
   ]},
   { title: "Configuration", items: [
     { href: "/admin/parametres",       kanji: "便", label: "Contact / Pied de page" },
+    { href: "/admin/password",         kanji: "鍵", label: "Mot de passe" },
   ]},
 ];
 
