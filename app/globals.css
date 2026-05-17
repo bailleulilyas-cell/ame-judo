@@ -888,6 +888,41 @@ main { padding-top: var(--nav-h); }
 .footer-mark-red { width: 5px; height: 5px; border-radius: 50%; background: var(--red); display: inline-block; vertical-align: middle; margin-left: 5px; }
 @media (max-width: 480px) { .footer-bottom { flex-direction: column; gap: 10px; } }
 
+.footer-credit-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 22px;
+  color: rgba(245,241,234,0.55);
+  transition: color 0.25s;
+}
+.footer-credit-inline:hover { color: rgba(245,241,234,0.95); }
+.footer-credit-logo { display: block; opacity: 0.85; transition: opacity 0.25s; border-radius: 50%; }
+.footer-credit-inline:hover .footer-credit-logo { opacity: 1; }
+.footer-credit-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+.footer-credit-label {
+  display: block;
+  font-family: var(--sans);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(245,241,234,0.5);
+}
+.footer-credit-inline strong {
+  display: block;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  margin-top: 3px;
+  color: rgba(245,241,234,0.85);
+}
+
 /* ═══════════════════════════════════════════════════════════
    Admin
    ═══════════════════════════════════════════════════════════ */

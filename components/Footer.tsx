@@ -40,6 +40,25 @@ export default function Footer({
               Club d&apos;arts martiaux à Ermont.<br />
               Judo · Ju-jitsu · Taïso.
             </p>
+            <a
+              href="https://lerelaisweb.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Site réalisé par Le Relais Web"
+              className="footer-credit-inline"
+            >
+              <Image
+                src="/logo-relais-web.png"
+                alt="Le Relais Web"
+                width={44}
+                height={44}
+                className="footer-credit-logo"
+              />
+              <span className="footer-credit-text">
+                <span className="footer-credit-label">Réalisé par</span>
+                <strong>Le Relais Web</strong>
+              </span>
+            </a>
           </div>
 
           <div>
@@ -82,6 +101,7 @@ export default function Footer({
             </span>
           </nav>
         </div>
+
       </div>
     </footer>
   );
