@@ -55,7 +55,7 @@ export default async function FormuleEdit({
         <div className="form-field">
           <label className="form-label" htmlFor="prix">Prix annuel (en euros)</label>
           <input
-            id="prix" name="prix" type="number" min={0} step={10}
+            id="prix" name="prix" type="number" min={0} step={0.01}
             defaultValue={f.prix}
             className="form-input"
             required

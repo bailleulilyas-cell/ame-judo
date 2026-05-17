@@ -748,7 +748,7 @@ main { padding-top: var(--nav-h); }
 .date-trio input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .date-trio input:nth-child(1) { width: 2.6ch; }
 .date-trio input:nth-child(3) { width: 2.6ch; }
-.date-trio input:nth-child(5) { width: 4.6ch; }
+.date-trio input:nth-child(5) { width: 5.2ch; }
 .date-trio input::placeholder { color: var(--stone-soft, #B8B0A0); font-weight: 300; }
 .date-trio-sep {
   color: var(--stone);
