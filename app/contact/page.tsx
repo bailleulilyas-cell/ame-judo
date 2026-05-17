@@ -34,18 +34,29 @@ export default async function ContactPage() {
           </div>
         </section>
 
-        <section className="section" style={{ paddingBottom: 0 }}>
+        <section className="section">
           <div className="container contact-grid">
             <div>
               <div className="section-header">
                 <span className="section-header-rule" aria-hidden />
                 <span className="section-header-label">Adresse</span>
               </div>
-              <p style={{ fontFamily: "var(--serif)", fontSize: 18, lineHeight: 1.7, marginBottom: 32 }}>
+              <p style={{ fontFamily: "var(--serif)", fontSize: 18, lineHeight: 1.7, marginBottom: 20 }}>
                 {s.adresse_ligne1}<br />
                 {s.adresse_ligne2}<br />
                 {s.adresse_ligne3}
               </p>
+              <div style={{ marginBottom: 32, borderRadius: 4, overflow: "hidden", border: "1px solid var(--hair-color)" }}>
+                <iframe
+                  title="Localisation du dojo AME"
+                  src="https://maps.google.com/maps?q=X7V2%2BXQ+Ermont+France&output=embed&hl=fr&z=17"
+                  width="100%"
+                  height="220"
+                  style={{ border: 0, display: "block", filter: "grayscale(15%)" }}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
 
               <div className="section-header">
                 <span className="section-header-rule" aria-hidden />
@@ -90,26 +101,6 @@ export default async function ContactPage() {
                 Voir les horaires
               </Link>
             </div>
-          </div>
-        </section>
-
-        <section aria-label="Localisation" style={{ marginTop: "clamp(48px, 6vw, 80px)" }}>
-          <div className="container" style={{ marginBottom: 20 }}>
-            <div className="section-header">
-              <span className="section-header-rule" aria-hidden />
-              <span className="section-header-label">Nous trouver</span>
-            </div>
-          </div>
-          <div style={{ width: "100%", aspectRatio: "16/5", minHeight: 260, maxHeight: 440 }}>
-            <iframe
-              title="Localisation du club AME — Complexe Sportif Saint-Exupéry, Ermont"
-              src="https://maps.google.com/maps?q=Complexe+Sportif+Saint+Exupery+Rue+Kuot+95120+Ermont+France&output=embed&hl=fr&z=16"
-              width="100%"
-              height="100%"
-              style={{ border: 0, display: "block", filter: "grayscale(20%) contrast(1.05)" }}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
           </div>
         </section>
       </main>
