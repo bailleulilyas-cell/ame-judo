@@ -15,34 +15,28 @@ const DB_READY = Boolean(process.env.DB_HOST && process.env.DB_NAME);
 
 // ─── Données de démo (fallback) ─────────────────────────────
 const DEMO_DISCIPLINES: Discipline[] = [
-  { id: "1", ordre: 1, kanji: "柔道", nom: "Judo", sens: "La voie de la souplesse",
+  {
+    id: "1", ordre: 1, kanji: "柔道", nom: "Judo", sens: "La voie de la souplesse",
     tagline: "Céder pour mieux vaincre.",
-    body: "Discipline olympique fondée par Jigoro Kano en 1882. Au club, nous enseignons les randoris debout (nage-waza), le travail au sol (katame-waza) et les formes (kata). Tous niveaux de ceinture, enfants à partir de 6 ans.",
-    origine: "Japon · 1882 · Jigoro Kano" },
-  { id: "2", ordre: 2, kanji: "柔術", nom: "Ju-jitsu", sens: "La technique de la souplesse",
-    tagline: "Le judo avant la simplification — une grammaire complète.",
-    body: "Art martial traditionnel japonais, ancêtre du judo. Techniques debout et au sol, clés de bras et d'épaule, projections, étranglements. Idéal pour les adultes cherchant une pratique complète et réaliste.",
-    origine: "Japon · antiquité · diverses écoles" },
-  { id: "3", ordre: 3, kanji: "体操", nom: "Taïso", sens: "La gymnastique traditionnelle",
-    tagline: "Souplesse, équilibre, coordination.",
-    body: "Ensemble d'exercices de corps issus de la tradition martiale japonaise. Le taïso améliore la souplesse, renforce les articulations et développe la coordination. Accessible à tous les âges, il complète idéalement le judo et le ju-jitsu.",
-    origine: "Japon · tradition · pratique quotidienne du dojo" },
+    body: "Discipline olympique fondée par Jigoro Kano en 1882. Au club AME, le judo s'enseigne dans toutes ses dimensions : les projections debout (nage-waza), le travail au sol (katame-waza) et les formes traditionnelles (kata). Du baby-judo (4 ans) aux adultes confirmés, dans la rigueur et la sérénité.",
+    origine: "Japon · 1882 · Jigoro Kano",
+  },
 ];
 
 const DEMO_SLOTS: ScheduleSlot[] = [
-  { id: "1", discipline_id: "1", jour: "lundi",    jour_kanji: "月", heure_debut: "19:00", heure_fin: "20:30", niveau: "Judo · Adultes +14 ans", ordre: 1 },
-  { id: "2", discipline_id: "1", jour: "mercredi", jour_kanji: "水", heure_debut: "17:00", heure_fin: "18:00", niveau: "Judo · 6/7 ans",         ordre: 1 },
-  { id: "3", discipline_id: "1", jour: "mercredi", jour_kanji: "水", heure_debut: "18:00", heure_fin: "19:15", niveau: "Judo · 8/11 ans",        ordre: 2 },
-  { id: "4", discipline_id: "3", jour: "mercredi", jour_kanji: "水", heure_debut: "19:30", heure_fin: "20:30", niveau: "Taïso · Tous niveaux",   ordre: 3 },
-  { id: "5", discipline_id: "2", jour: "jeudi",    jour_kanji: "木", heure_debut: "19:30", heure_fin: "21:00", niveau: "Ju-jitsu · Adultes",     ordre: 1 },
-  { id: "6", discipline_id: "1", jour: "samedi",   jour_kanji: "土", heure_debut: "11:45", heure_fin: "12:45", niveau: "Judo · 8/11 ans",        ordre: 1 },
-  { id: "7", discipline_id: "2", jour: "samedi",   jour_kanji: "土", heure_debut: "18:30", heure_fin: "19:30", niveau: "Ju-jitsu · Adultes +14 ans", ordre: 2 },
+  { id: "1", discipline_id: "1", jour: "lundi",    jour_kanji: "月", heure_debut: "19:00", heure_fin: "20:30", niveau: "Judo · Adultes +14 ans",       ordre: 1 },
+  { id: "2", discipline_id: "1", jour: "mercredi", jour_kanji: "水", heure_debut: "17:00", heure_fin: "18:00", niveau: "Judo · 6/7 ans",                ordre: 1 },
+  { id: "3", discipline_id: "1", jour: "mercredi", jour_kanji: "水", heure_debut: "18:00", heure_fin: "19:15", niveau: "Judo · 8/11 ans",               ordre: 2 },
+  { id: "4", discipline_id: "1", jour: "mercredi", jour_kanji: "水", heure_debut: "19:30", heure_fin: "20:30", niveau: "Judo · Adultes / Tous niveaux", ordre: 3 },
+  { id: "5", discipline_id: "1", jour: "jeudi",    jour_kanji: "木", heure_debut: "19:30", heure_fin: "21:00", niveau: "Judo · Adultes",                ordre: 1 },
+  { id: "6", discipline_id: "1", jour: "samedi",   jour_kanji: "土", heure_debut: "11:45", heure_fin: "12:45", niveau: "Judo · 8/11 ans",               ordre: 1 },
+  { id: "7", discipline_id: "1", jour: "samedi",   jour_kanji: "土", heure_debut: "18:30", heure_fin: "19:30", niveau: "Judo · Adultes / Confirmés",    ordre: 2 },
 ];
 
 const DEMO_MAITRES: Maitre[] = [
-  { id: "1", ordre: 1, nom: "Hiroshi Tanaka", role: "Professeur principal",      grade: "5ᵉ Dan · Judo",                    annees: 32, citation: "La chute n'est pas une défaite. C'est une leçon que le tatami vous offre.", photo_url: null },
-  { id: "2", ordre: 2, nom: "Marc Lefebvre",  role: "Professeur · Judo & Ju-jitsu", grade: "4ᵉ Dan Judo · 3ᵉ Dan Ju-jitsu", annees: 18, citation: "Le ju-jitsu ne cherche pas à dominer. Il cherche à comprendre.",            photo_url: null },
-  { id: "3", ordre: 3, nom: "Sophie Renard",  role: "Professeure · Taïso & Éveil",  grade: "2ᵉ Dan · Judo",                annees: 11, citation: "Enseigner aux enfants, c'est leur offrir une façon de se connaître eux-mêmes.", photo_url: null },
+  { id: "1", ordre: 1, nom: "Hiroshi Tanaka", role: "Professeur principal", grade: "5ᵉ Dan · Judo", annees: 32, citation: "La chute n'est pas une défaite. C'est une leçon que le tatami vous offre.", photo_url: null },
+  { id: "2", ordre: 2, nom: "Marc Lefebvre",  role: "Professeur de judo",   grade: "4ᵉ Dan · Judo", annees: 18, citation: "Le judo ne cherche pas à dominer. Il cherche à comprendre.",                  photo_url: null },
+  { id: "3", ordre: 3, nom: "Sophie Renard",  role: "Professeure · Éveil judo", grade: "2ᵉ Dan · Judo", annees: 11, citation: "Enseigner aux enfants, c'est leur offrir une façon de se connaître eux-mêmes.", photo_url: null },
 ];
 
 const DEMO_FORMULES: Formule[] = [
@@ -141,10 +135,10 @@ export async function getHeroContent() {
     proverbe_fr: "Tout commence par un salut, tout s'achève par un salut",
     eyebrow: "Ermont · Val-d'Oise",
     titre: "Apprendre à <em>saluer</em>,<br>à <em>vaincre</em>.",
-    sous_titre: "Club d'arts martiaux ermontois depuis 1978. Judo, ju-jitsu et taïso — enseignés dans la rigueur et la sérénité, pour les enfants comme pour les adultes.",
-    stat1_num: "47", stat1_label: "Années",
-    stat2_num: "3",  stat2_label: "Disciplines",
-    stat3_num: "2",  stat3_label: "Essais gratuits",
+    sous_titre: "Club de judo ermontois depuis 1978. Une voie enseignée dans la rigueur et la sérénité, pour les enfants comme pour les adultes.",
+    stat1_num: "47",   stat1_label: "Années",
+    stat2_num: "1882", stat2_label: "Origine du judo",
+    stat3_num: "2",    stat3_label: "Essais gratuits",
   };
 }
 
@@ -157,7 +151,7 @@ export async function getAboutContent() {
     attribution: "Tradition AME",
     titre: "Une <em>maison</em> avant d'être un club.",
     paragraphes:
-      "Le club AME a ouvert ses portes à Ermont il y a près de cinquante ans. Il en reste aujourd'hui la même règle : on entre en saluant, on part en saluant.\n\nNos trois voies ne sont pas de simples sports : ce sont des disciplines de corps et d'esprit, pratiquées par des enfants de six ans comme par des adultes qui reviennent après vingt ans d'absence.",
+      "Le club AME a ouvert ses portes à Ermont il y a près de cinquante ans. Il en reste aujourd'hui la même règle : on entre en saluant, on part en saluant.\n\nNotre voie n'est pas un simple sport : c'est une discipline de corps et d'esprit, pratiquée par des enfants de six ans comme par des adultes qui reviennent après vingt ans d'absence.",
   };
 }
 

@@ -637,6 +637,308 @@ main { padding-top: var(--nav-h); }
 }
 
 /* ═══════════════════════════════════════════════════════════
+   Home — teaser judo (remplace l'ancienne section "Les voies")
+   ═══════════════════════════════════════════════════════════ */
+.home-judo-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: clamp(40px, 6vw, 96px);
+  align-items: center;
+  margin-top: clamp(32px, 4vw, 56px);
+}
+@media (max-width: 800px) {
+  .home-judo-grid { grid-template-columns: 1fr; gap: 24px; }
+}
+.home-judo-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(181,52,30,0.05), transparent 70%),
+    var(--bg);
+  border: 1px solid var(--hair-color);
+  position: relative;
+}
+.home-judo-kanji {
+  font-family: var(--serif-jp);
+  font-size: clamp(140px, 18vw, 260px);
+  line-height: 1;
+  color: var(--red);
+  letter-spacing: -0.05em;
+  user-select: none;
+}
+.home-judo-body { max-width: 600px; }
+.home-judo-body .title-lg { margin-bottom: 24px; }
+.home-judo-body .lead { margin-bottom: 18px; }
+.home-judo-body .lead strong { color: var(--sumi); font-weight: 500; }
+
+/* ═══════════════════════════════════════════════════════════
+   Page /judo
+   ═══════════════════════════════════════════════════════════ */
+.judo-hero {
+  position: relative;
+  overflow: hidden;
+}
+.judo-hero-kanji {
+  position: absolute;
+  right: clamp(-40px, -2vw, 0px);
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--serif-jp);
+  font-size: clamp(220px, 32vw, 460px);
+  line-height: 1;
+  color: var(--red);
+  opacity: 0.06;
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: -0.05em;
+}
+
+/* Grille asymétrique aside / body pour Origine + Au dojo */
+.judo-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: clamp(40px, 6vw, 96px);
+  align-items: start;
+}
+@media (max-width: 800px) {
+  .judo-grid { grid-template-columns: 1fr; gap: 32px; }
+}
+.judo-grid-aside .section-header { margin-bottom: 28px; }
+.judo-grid-body { max-width: 640px; }
+
+.judo-bigdate {
+  font-family: var(--serif);
+  font-weight: 250;
+  font-size: clamp(72px, 12vw, 160px);
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+  color: var(--sumi);
+  font-feature-settings: "tnum";
+}
+.judo-bigdate-cap {
+  font-family: var(--sans);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin: 6px 0 0;
+}
+
+.judo-prose {
+  font-family: var(--serif);
+  font-size: clamp(16px, 1.2vw, 19px);
+  line-height: 1.75;
+  color: var(--sumi-soft);
+  margin: 0 0 22px;
+}
+.judo-prose strong { color: var(--sumi); font-weight: 500; }
+.judo-prose em { color: var(--red); font-style: italic; }
+
+.judo-quote {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(22px, 2.4vw, 32px);
+  line-height: 1.3;
+  color: var(--sumi);
+  margin: 24px 0 8px;
+  max-width: 340px;
+  padding-left: 16px;
+  border-left: 3px solid var(--red);
+}
+.judo-quote-attr {
+  font-family: var(--sans);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin: 0;
+}
+
+/* Grille 3 familles techniques */
+.judo-tech-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(24px, 3vw, 48px);
+  margin-top: clamp(40px, 5vw, 64px);
+}
+@media (max-width: 800px) { .judo-tech-grid { grid-template-columns: 1fr; gap: 32px; } }
+
+.judo-tech {
+  padding: clamp(28px, 3vw, 40px);
+  background: var(--bg);
+  border: 1px solid var(--hair-color);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 0.4s, border-color 0.4s;
+}
+.judo-tech:hover {
+  transform: translateY(-3px);
+  border-color: var(--hair-strong, var(--sumi));
+}
+.judo-tech-kanji {
+  font-family: var(--serif-jp);
+  font-size: clamp(42px, 5vw, 64px);
+  line-height: 1;
+  color: var(--sumi);
+}
+.judo-tech-romaji {
+  font-family: var(--sans);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin: 0;
+}
+.judo-tech-name {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(20px, 2vw, 24px);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.judo-tech-text {
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--sumi-soft);
+  margin: 0;
+}
+.judo-tech-text em { color: var(--sumi); font-style: italic; }
+
+/* Principes Kano (2 colonnes) */
+.judo-principles {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(40px, 5vw, 80px);
+  margin-top: clamp(40px, 5vw, 64px);
+}
+@media (max-width: 800px) { .judo-principles { grid-template-columns: 1fr; gap: 48px; } }
+
+.judo-principle { max-width: 480px; }
+.judo-principle-jp {
+  display: block;
+  font-family: var(--serif-jp);
+  font-size: clamp(36px, 4.5vw, 56px);
+  line-height: 1;
+  color: var(--red);
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+.judo-principle-romaji {
+  font-family: var(--sans);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin: 0 0 12px;
+}
+.judo-principle-fr {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(22px, 2.4vw, 30px);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: var(--sumi);
+  margin: 0 0 18px;
+}
+.judo-principle-text {
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--sumi-soft);
+  margin: 0;
+}
+
+/* Grille 3 publics */
+.judo-public-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(20px, 2.5vw, 32px);
+  margin-top: clamp(40px, 5vw, 56px);
+}
+@media (max-width: 800px) { .judo-public-grid { grid-template-columns: 1fr; gap: 24px; } }
+
+.judo-public {
+  padding: clamp(24px, 2.6vw, 36px);
+  background: var(--bg);
+  border: 1px solid var(--hair-color);
+  border-top: 3px solid var(--red);
+}
+.judo-public-kanji {
+  display: block;
+  font-family: var(--serif-jp);
+  font-size: clamp(36px, 4vw, 48px);
+  line-height: 1;
+  color: var(--sumi);
+  margin-bottom: 10px;
+}
+.judo-public-age {
+  font-family: var(--sans);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin: 0 0 6px;
+  font-feature-settings: "tnum";
+}
+.judo-public-name {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(18px, 1.8vw, 22px);
+  margin: 0 0 12px;
+}
+.judo-public-text {
+  font-family: var(--serif);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--sumi-soft);
+  margin: 0;
+}
+
+/* CTA final */
+.judo-cta { max-width: 720px; }
+.judo-cta .title-lg { margin: 12px 0 16px; }
+.judo-cta-buttons {
+  margin-top: 32px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* ─── Home teaser judo (section "La voie") ─── */
+.home-judo-teaser { padding-top: clamp(64px, 7vw, 120px); padding-bottom: clamp(64px, 7vw, 120px); }
+.home-judo-grid {
+  display: grid;
+  grid-template-columns: minmax(200px, 1fr) 1.6fr;
+  gap: clamp(28px, 5vw, 80px);
+  align-items: center;
+  margin-top: 32px;
+}
+@media (max-width: 800px) { .home-judo-grid { grid-template-columns: 1fr; gap: 24px; } }
+.home-judo-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-height: 220px;
+}
+.home-judo-kanji {
+  font-family: var(--serif-jp);
+  font-size: clamp(160px, 18vw, 280px);
+  line-height: 0.85;
+  color: var(--red);
+  letter-spacing: -0.02em;
+  display: block;
+  user-select: none;
+  opacity: 0.92;
+}
+.home-judo-body { max-width: 640px; }
+
+/* ═══════════════════════════════════════════════════════════
    Voies
    ═══════════════════════════════════════════════════════════ */
 .voies-list { list-style: none; margin: 0; padding: 0; }

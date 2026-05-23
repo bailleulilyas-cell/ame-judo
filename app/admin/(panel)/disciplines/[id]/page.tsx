@@ -19,7 +19,7 @@ export default async function DisciplineEdit({
       <AdminPageHeader
         title={`Modifier — <em>${d.nom}</em>`}
         backHref="/admin/disciplines"
-        backLabel="Toutes les voies"
+        backLabel="Retour"
       />
 
       <form action={update} style={{ maxWidth: 920, display: "flex", flexDirection: "column", gap: 20 }}>

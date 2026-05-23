@@ -37,8 +37,8 @@ export default function Footer({
               </div>
             </div>
             <p className="footer-brand-sub">
-              Club d&apos;arts martiaux à Ermont.<br />
-              Judo · Ju-jitsu · Taïso.
+              Club de judo à Ermont<br />
+              depuis 1978.
             </p>
             <a
               href="https://lerelaisweb.com"
@@ -64,7 +64,7 @@ export default function Footer({
           <div>
             <p className="footer-col-title">Explorer</p>
             <ul className="footer-col-list">
-              <li><Link href="/voies">Les voies</Link></li>
+              <li><Link href="/judo">Le judo</Link></li>
               <li><Link href="/horaires">Horaires</Link></li>
               <li><Link href="/maitres">Maîtres</Link></li>
               <li><Link href="/adhesion">Adhésion</Link></li>

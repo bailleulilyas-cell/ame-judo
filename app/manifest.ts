@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "AME — Arts Martiaux Ermontois",
     short_name: "AME",
-    description: "Club de judo, ju-jitsu et taïso à Ermont depuis 1978.",
+    description: "Club de judo à Ermont depuis 1978.",
     start_url: "/",
     display: "standalone",
     background_color: "#F5F1EA",

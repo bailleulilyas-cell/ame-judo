@@ -3,15 +3,15 @@ import Link from "next/link";
 import AdminPageHeader from "@/components/AdminPageHeader";
 import { getDisciplinesAdmin } from "@/lib/actions/cms";
 
-export const metadata: Metadata = { title: "Voies — Admin", robots: { index: false } };
+export const metadata: Metadata = { title: "Le judo — Admin", robots: { index: false } };
 
 export default async function DisciplinesAdminList() {
   const disciplines = await getDisciplinesAdmin();
   return (
     <>
       <AdminPageHeader
-        title="Voies / <em>disciplines</em>"
-        description="Les trois disciplines enseignées au club (Judo, Ju-jitsu, Taïso). Texte modifiable, pas d'ajout/suppression."
+        title="Le <em>judo</em>"
+        description="Présentation de la discipline enseignée au club. Texte modifiable."
       />
 
       {disciplines.length === 0 ? (

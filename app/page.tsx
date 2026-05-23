@@ -3,12 +3,11 @@ import Image from "next/image";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
-import { getActualites, getDisciplines, getFormules, getHeroContent, getAboutContent, getSettings } from "@/lib/data";
+import { getActualites, getFormules, getHeroContent, getAboutContent, getSettings } from "@/lib/data";
 import { sanitizeInlineTitle } from "@/lib/markdown";
 
 export default async function HomePage() {
-  const [disciplines, formules, actus, hero, about, settings] = await Promise.all([
-    getDisciplines(),
+  const [formules, actus, hero, about, settings] = await Promise.all([
     getFormules(),
     getActualites(3),
     getHeroContent(),
@@ -43,8 +42,8 @@ export default async function HomePage() {
                   Pré-inscription
                   <span className="btn-dot" aria-hidden />
                 </Link>
-                <Link href="/voies" className="btn btn-secondary btn-arrow">
-                  Découvrir les voies
+                <Link href="/judo" className="btn btn-secondary btn-arrow">
+                  Découvrir le judo
                 </Link>
               </div>
 
@@ -79,32 +78,39 @@ export default async function HomePage() {
         </section>
 
         {/* ─── LES VOIES (preview) ─── */}
-        <ScrollReveal as="section" className="section section--paper">
+        <ScrollReveal as="section" className="section section--paper home-judo-teaser">
           <div className="container">
             <div className="section-header">
               <span className="section-header-dot" aria-hidden />
               <span className="section-header-num" lang="ja" aria-hidden>一</span>
               <span className="section-header-rule" aria-hidden />
-              <span className="section-header-label">道 · Les voies</span>
+              <span className="section-header-label">柔道 · La voie</span>
             </div>
-            <h2 className="title-lg">
-              Trois disciplines,<br />
-              une même <em>discipline</em>.
-            </h2>
-            <p className="lead">
-              Judo, ju-jitsu, taïso. Trois pratiques qui partagent la même racine —
-              le respect du corps, de l&apos;adversaire et de la tradition.
-            </p>
 
-            <div className="cards-grid">
-              {disciplines.map((d) => (
-                <article key={d.id} className="card">
-                  <span className="card-kanji" lang="ja" aria-hidden>{d.kanji}</span>
-                  <h3 className="card-title">{d.nom}</h3>
-                  <p className="card-text">{d.tagline}</p>
-                  <Link href="/voies" className="card-link">Découvrir</Link>
-                </article>
-              ))}
+            <div className="home-judo-grid">
+              <div className="home-judo-visual" aria-hidden>
+                <span className="home-judo-kanji" lang="ja">柔</span>
+              </div>
+
+              <div className="home-judo-body">
+                <h2 className="title-lg">
+                  Une seule voie,<br />
+                  enseignée en <em>profondeur</em>.
+                </h2>
+                <p className="lead">
+                  Au club AME, nous avons fait le choix d&apos;une discipline et d&apos;une
+                  seule : le <strong>judo</strong>. Discipline olympique fondée en 1882
+                  par Jigoro Kano, elle se pratique du baby-judo aux adultes confirmés —
+                  toujours dans la rigueur du geste et la bienveillance de la transmission.
+                </p>
+                <p className="lead" style={{ marginBottom: 32 }}>
+                  Trois familles techniques, deux principes fondateurs, une vie
+                  entière à explorer.
+                </p>
+                <Link href="/judo" className="btn btn-secondary btn-arrow">
+                  Découvrir le judo
+                </Link>
+              </div>
             </div>
           </div>
         </ScrollReveal>

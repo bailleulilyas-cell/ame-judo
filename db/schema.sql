@@ -40,8 +40,8 @@ CREATE TABLE hero_content (
   sous_titre   TEXT NOT NULL,
   stat1_num    VARCHAR(16) NOT NULL DEFAULT '47',
   stat1_label  VARCHAR(64) NOT NULL DEFAULT 'Années',
-  stat2_num    VARCHAR(16) NOT NULL DEFAULT '3',
-  stat2_label  VARCHAR(64) NOT NULL DEFAULT 'Disciplines',
+  stat2_num    VARCHAR(16) NOT NULL DEFAULT '1882',
+  stat2_label  VARCHAR(64) NOT NULL DEFAULT 'Origine du judo',
   stat3_num    VARCHAR(16) NOT NULL DEFAULT '2',
   stat3_label  VARCHAR(64) NOT NULL DEFAULT 'Essais gratuits',
   updated_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -51,7 +51,7 @@ INSERT INTO hero_content (id, proverbe_fr, titre, sous_titre) VALUES
   (1,
    'Tout commence par un salut, tout s''achève par un salut',
    'Apprendre à <em>saluer</em>,<br>à <em>vaincre</em>.',
-   'Club d''arts martiaux ermontois depuis 1978. Judo, ju-jitsu et taïso — enseignés dans la rigueur et la sérénité, pour les enfants comme pour les adultes.');
+   'Club de judo ermontois depuis 1978. Une voie enseignée dans la rigueur et la sérénité, pour les enfants comme pour les adultes.');
 
 -- ─── À propos (singleton) ────────────────────────────────────
 CREATE TABLE about_content (
@@ -67,7 +67,7 @@ INSERT INTO about_content (id, citation, titre, paragraphes) VALUES
   (1,
    'Le tatami ne ment jamais. C''est sa première leçon, et sa dernière.',
    'Une <em>maison</em> avant d''être un club.',
-   'Le club AME a ouvert ses portes à Ermont il y a près de cinquante ans. Il en reste aujourd''hui la même règle : on entre en saluant, on part en saluant. Entre les deux, tout est question d''effort, de respect et de transmission.\n\nNos trois voies ne sont pas de simples sports : ce sont des disciplines de corps et d''esprit, pratiquées par des enfants de six ans comme par des adultes qui reviennent après vingt ans d''absence.');
+   'Le club AME a ouvert ses portes à Ermont il y a près de cinquante ans. Il en reste aujourd''hui la même règle : on entre en saluant, on part en saluant. Entre les deux, tout est question d''effort, de respect et de transmission.\n\nNotre voie n''est pas un simple sport : c''est une discipline de corps et d''esprit, pratiquée par des enfants de six ans comme par des adultes qui reviennent après vingt ans d''absence.');
 
 -- ─── Disciplines ──────────────────────────────────────────────
 CREATE TABLE disciplines (
@@ -84,14 +84,8 @@ CREATE TABLE disciplines (
 
 INSERT INTO disciplines (ordre, kanji, nom, sens, tagline, body, origine, slug) VALUES
   (1, '柔道', 'Judo', 'La voie de la souplesse', 'Céder pour mieux vaincre.',
-   'Discipline olympique fondée par Jigoro Kano en 1882. Au club, nous enseignons les randoris debout (nage-waza), le travail au sol (katame-waza) et les formes (kata). Tous niveaux de ceinture, enfants à partir de 6 ans.',
-   'Japon · 1882 · Jigoro Kano', 'judo'),
-  (2, '柔術', 'Ju-jitsu', 'La technique de la souplesse', 'Le judo avant la simplification — une grammaire complète.',
-   'Art martial traditionnel japonais, ancêtre du judo. Techniques debout et au sol, clés de bras et d''épaule, projections, étranglements. Idéal pour les adultes cherchant une pratique complète et réaliste.',
-   'Japon · antiquité · diverses écoles', 'ju-jitsu'),
-  (3, '体操', 'Taïso', 'La gymnastique traditionnelle', 'Souplesse, équilibre, coordination.',
-   'Ensemble d''exercices de corps issus de la tradition martiale japonaise. Le taïso améliore la souplesse, renforce les articulations et développe la coordination. Accessible à tous les âges, il complète idéalement le judo et le ju-jitsu.',
-   'Japon · tradition · pratique quotidienne du dojo', 'taiso');
+   'Discipline olympique fondée par Jigoro Kano en 1882. Au club AME, le judo s''enseigne dans toutes ses dimensions : les projections debout (nage-waza), le travail au sol (katame-waza) et les formes traditionnelles (kata). Du baby-judo (4 ans) aux adultes confirmés, dans la rigueur et la sérénité.',
+   'Japon · 1882 · Jigoro Kano', 'judo');
 
 -- ─── Créneaux horaires ────────────────────────────────────────
 CREATE TABLE schedule_slots (
@@ -108,13 +102,13 @@ CREATE TABLE schedule_slots (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO schedule_slots (discipline_id, jour, jour_kanji, heure_debut, heure_fin, discipline, niveau, ordre) VALUES
-  (1, 'lundi',     '月', '19:00', '20:30', 'Judo',     'Adultes +14 ans', 1),
-  (1, 'mercredi',  '水', '17:00', '18:00', 'Judo',     '6/7 ans',         1),
-  (1, 'mercredi',  '水', '18:00', '19:15', 'Judo',     '8/11 ans',        2),
-  (3, 'mercredi',  '水', '19:30', '20:30', 'Taïso',    'Tous niveaux',    3),
-  (2, 'jeudi',     '木', '19:30', '21:00', 'Ju-jitsu', 'Adultes',         1),
-  (1, 'samedi',    '土', '11:45', '12:45', 'Judo',     '8/11 ans',        1),
-  (2, 'samedi',    '土', '18:30', '19:30', 'Ju-jitsu', 'Adultes +14 ans', 2);
+  (1, 'lundi',     '月', '19:00', '20:30', 'Judo', 'Adultes +14 ans',       1),
+  (1, 'mercredi',  '水', '17:00', '18:00', 'Judo', '6/7 ans',               1),
+  (1, 'mercredi',  '水', '18:00', '19:15', 'Judo', '8/11 ans',              2),
+  (1, 'mercredi',  '水', '19:30', '20:30', 'Judo', 'Adultes / Tous niveaux', 3),
+  (1, 'jeudi',     '木', '19:30', '21:00', 'Judo', 'Adultes',               1),
+  (1, 'samedi',    '土', '11:45', '12:45', 'Judo', '8/11 ans',              1),
+  (1, 'samedi',    '土', '18:30', '19:30', 'Judo', 'Adultes / Confirmés',   2);
 
 -- ─── Note temporaire pour les horaires ────────────────────────
 CREATE TABLE horaires_note (
@@ -137,9 +131,9 @@ CREATE TABLE maitres (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO maitres (ordre, nom, role, grade, annees, citation) VALUES
-  (1, 'Hiroshi Tanaka',  'Professeur principal',         '5ᵉ Dan · Judo',                   32, 'La chute n''est pas une défaite. C''est une leçon que le tatami vous offre.'),
-  (2, 'Marc Lefebvre',   'Professeur · Judo & Ju-jitsu', '4ᵉ Dan Judo · 3ᵉ Dan Ju-jitsu',    18, 'Le ju-jitsu ne cherche pas à dominer. Il cherche à comprendre.'),
-  (3, 'Sophie Renard',   'Professeure · Taïso & Éveil',  '2ᵉ Dan · Judo',                   11, 'Enseigner aux enfants, c''est leur offrir une façon de se connaître eux-mêmes.');
+  (1, 'Hiroshi Tanaka',  'Professeur principal',     '5ᵉ Dan · Judo', 32, 'La chute n''est pas une défaite. C''est une leçon que le tatami vous offre.'),
+  (2, 'Marc Lefebvre',   'Professeur de judo',       '4ᵉ Dan · Judo', 18, 'Le judo ne cherche pas à dominer. Il cherche à comprendre.'),
+  (3, 'Sophie Renard',   'Professeure · Éveil judo', '2ᵉ Dan · Judo', 11, 'Enseigner aux enfants, c''est leur offrir une façon de se connaître eux-mêmes.');
 
 -- ─── Formules d'adhésion ──────────────────────────────────────
 CREATE TABLE formules (

@@ -37,19 +37,19 @@ const SITE_URL = "https://ame-judo.fr";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "AME — Arts Martiaux Ermontois · Judo, Ju-jitsu, Taïso à Ermont",
+    default: "AME — Club de Judo à Ermont (95) · Arts Martiaux Ermontois",
     template: "%s — AME",
   },
   description:
-    "Club de judo, ju-jitsu et taïso à Ermont (95). Fondé en 1978. Cours pour enfants et adultes, deux séances d'essai gratuites.",
-  keywords: ["judo Ermont", "ju-jitsu Ermont", "taïso 95", "arts martiaux Ermont", "club judo Val d'Oise", "AME"],
+    "Club de judo à Ermont (95), fondé en 1978. Cours pour enfants, ados et adultes — du baby-judo aux ceintures noires. Deux séances d'essai gratuites.",
+  keywords: ["judo Ermont", "club judo 95", "judo Val d'Oise", "cours judo enfants", "baby judo Ermont", "AME judo"],
   authors: [{ name: "AME — Arts Martiaux Ermontois" }],
   creator: "AME",
   publisher: "AME",
   alternates: { canonical: "/" },
   openGraph: {
-    title: "AME — Arts Martiaux Ermontois",
-    description: "Club de judo, ju-jitsu et taïso à Ermont depuis 1978.",
+    title: "AME — Club de judo à Ermont",
+    description: "Club de judo à Ermont depuis 1978. Enfants, ados, adultes.",
     type: "website",
     locale: "fr_FR",
     url: SITE_URL,
@@ -60,8 +60,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "AME — Arts Martiaux Ermontois",
-    description: "Club de judo, ju-jitsu et taïso à Ermont depuis 1978.",
+    title: "AME — Club de judo à Ermont",
+    description: "Club de judo à Ermont depuis 1978. Enfants, ados, adultes.",
     images: ["/opengraph-image"],
   },
   robots: {
@@ -90,9 +90,9 @@ const ORGANIZATION_JSONLD = {
   url: SITE_URL,
   logo: `${SITE_URL}/logo.png`,
   image: `${SITE_URL}/logo.png`,
-  description: "Club de judo, ju-jitsu et taïso à Ermont depuis 1978.",
+  description: "Club de judo à Ermont depuis 1978.",
   foundingDate: "1978",
-  sport: ["Judo", "Ju-jitsu", "Taïso"],
+  sport: ["Judo"],
   address: {
     "@type": "PostalAddress",
     streetAddress: "Complexe Sportif Saint-Exupéry, Rue Kvot et Leydekkers",

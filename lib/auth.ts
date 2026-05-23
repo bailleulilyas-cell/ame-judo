@@ -31,7 +31,7 @@ async function readSetting(key: string): Promise<string | null> {
   try {
     const { query } = await import("@/lib/db");
     const rows = await query<{ value: string }>(
-      "SELECT `value` FROM settings WHERE `key` = ? LIMIT 1",
+      "SELECT `value` FROM app_settings WHERE `key` = ? LIMIT 1",
       [key]
     );
     return rows[0]?.value ?? null;
@@ -44,7 +44,7 @@ async function writeSetting(key: string, value: string): Promise<boolean> {
   try {
     const { query } = await import("@/lib/db");
     await query(
-      "INSERT INTO settings (`key`, `value`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `value` = VALUES(`value`)",
+      "INSERT INTO app_settings (`key`, `value`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `value` = VALUES(`value`)",
       [key, value]
     );
     return true;

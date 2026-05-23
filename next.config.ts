@@ -71,6 +71,13 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      // Ancienne URL /voies → nouvelle URL /judo (préserve le SEO)
+      { source: "/voies", destination: "/judo", permanent: true },
+      { source: "/voies/:slug", destination: "/judo", permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;

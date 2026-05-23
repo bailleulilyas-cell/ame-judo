@@ -28,7 +28,7 @@ export default function MaitreForm({ action, maitre, mode }: Props) {
         <label className="form-label" htmlFor="role">Rôle</label>
         <input
           id="role" name="role" type="text"
-          placeholder="Professeur principal, Professeur Judo & Ju-jitsu…"
+          placeholder="Professeur principal, Judo enfants, Judo adultes…"
           defaultValue={maitre?.role ?? ""}
           className="form-input"
           required

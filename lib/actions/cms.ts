@@ -14,7 +14,7 @@ async function requireAuth() {
 
 function refresh() {
   revalidatePath("/");
-  revalidatePath("/voies");
+  revalidatePath("/judo");
   revalidatePath("/horaires");
   revalidatePath("/maitres");
   revalidatePath("/adhesion");

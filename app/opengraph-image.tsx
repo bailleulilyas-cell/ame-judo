@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 // Next.js convention : Open Graph image générée à la build
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "AME — Arts Martiaux Ermontois · Judo, Ju-jitsu, Taïso à Ermont";
+export const alt = "AME — Club de judo à Ermont (95)";
 
 export const runtime = "edge";
 
@@ -60,7 +60,7 @@ export default function OpengraphImage() {
             maxWidth: 1000,
           }}
         >
-          Arts Martiaux Ermontois
+          Club de Judo · Ermont
         </div>
 
         <div
@@ -71,7 +71,7 @@ export default function OpengraphImage() {
             marginTop: 24,
           }}
         >
-          Judo · Ju-jitsu · Taïso · Ermont (95)
+          Une voie. Une école. Depuis 1978.
         </div>
 
         <div

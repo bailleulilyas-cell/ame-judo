@@ -17,10 +17,10 @@ INSERT INTO maitres (ordre, nom, role, grade, annees, citation)
 SELECT * FROM (
   SELECT 2 AS ordre,
          'Marc Lefebvre' AS nom,
-         'Professeur · Judo & Ju-jitsu' AS role,
-         '4ᵉ Dan Judo · 3ᵉ Dan Ju-jitsu' AS grade,
+         'Professeur de judo' AS role,
+         '4ᵉ Dan · Judo' AS grade,
          18 AS annees,
-         'Le ju-jitsu ne cherche pas à dominer. Il cherche à comprendre.' AS citation
+         'Le judo ne cherche pas à dominer. Il cherche à comprendre.' AS citation
 ) AS t
 WHERE NOT EXISTS (SELECT 1 FROM maitres WHERE nom = 'Marc Lefebvre');
 
@@ -28,7 +28,7 @@ INSERT INTO maitres (ordre, nom, role, grade, annees, citation)
 SELECT * FROM (
   SELECT 3 AS ordre,
          'Sophie Renard' AS nom,
-         'Professeure · Taïso & Éveil' AS role,
+         'Professeure · Éveil judo' AS role,
          '2ᵉ Dan · Judo' AS grade,
          11 AS annees,
          'Enseigner aux enfants, c''est leur offrir une façon de se connaître eux-mêmes.' AS citation
