@@ -49,13 +49,16 @@ export default function ScrollReveal({
     return () => observer.disconnect();
   }, [threshold]);
 
+  // `Tag` peut être div/section/article/li — on neutralise le typage strict du ref
+  // pour rester compatible avec n'importe quel HTMLElement.
+  const TagComponent = Tag as React.ElementType;
   return (
-    <Tag
-      ref={ref as React.Ref<HTMLDivElement>}
+    <TagComponent
+      ref={ref}
       className={`reveal${visible ? " is-visible" : ""}${className ? ` ${className}` : ""}`}
       style={{ transitionDelay: visible ? `${delay}ms` : "0ms" }}
     >
       {children}
-    </Tag>
+    </TagComponent>
   );
 }
