@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { query, queryOne } from "@/lib/db";
 import { isAuthenticated } from "@/lib/auth";
 import type { Discipline, ScheduleSlot, Maitre, Formule } from "@/types";
+import type { HeroContent, AboutContent } from "@/lib/cms-types";
 
 const DB_READY = Boolean(process.env.DB_HOST && process.env.DB_NAME);
 
@@ -24,18 +25,6 @@ function refresh() {
 // ═══════════════════════════════════════════════════════════
 // HERO (singleton)
 // ═══════════════════════════════════════════════════════════
-export interface HeroContent {
-  id: number;
-  proverbe_jp: string;
-  proverbe_fr: string;
-  eyebrow: string;
-  titre: string;
-  sous_titre: string;
-  stat1_num: string; stat1_label: string;
-  stat2_num: string; stat2_label: string;
-  stat3_num: string; stat3_label: string;
-}
-
 export async function getHero(): Promise<HeroContent | null> {
   if (!DB_READY) return null;
   try {
@@ -72,14 +61,6 @@ export async function updateHero(formData: FormData) {
 // ═══════════════════════════════════════════════════════════
 // ABOUT (singleton)
 // ═══════════════════════════════════════════════════════════
-export interface AboutContent {
-  id: number;
-  citation: string;
-  attribution: string;
-  titre: string;
-  paragraphes: string;
-}
-
 export async function getAbout(): Promise<AboutContent | null> {
   if (!DB_READY) return null;
   try {
