@@ -23,14 +23,26 @@ const DEMO_DISCIPLINES: Discipline[] = [
   },
 ];
 
+// Créneaux saison 2026/2027
 const DEMO_SLOTS: ScheduleSlot[] = [
-  { id: "1", discipline_id: "1", jour: "lundi",    jour_kanji: "月", heure_debut: "19:00", heure_fin: "20:30", niveau: "Judo · Adultes +14 ans",       ordre: 1 },
-  { id: "2", discipline_id: "1", jour: "mercredi", jour_kanji: "水", heure_debut: "17:00", heure_fin: "18:00", niveau: "Judo · 6/7 ans",                ordre: 1 },
-  { id: "3", discipline_id: "1", jour: "mercredi", jour_kanji: "水", heure_debut: "18:00", heure_fin: "19:15", niveau: "Judo · 8/11 ans",               ordre: 2 },
-  { id: "4", discipline_id: "1", jour: "mercredi", jour_kanji: "水", heure_debut: "19:30", heure_fin: "20:30", niveau: "Judo · Adultes / Tous niveaux", ordre: 3 },
-  { id: "5", discipline_id: "1", jour: "jeudi",    jour_kanji: "木", heure_debut: "19:30", heure_fin: "21:00", niveau: "Judo · Adultes",                ordre: 1 },
-  { id: "6", discipline_id: "1", jour: "samedi",   jour_kanji: "土", heure_debut: "11:45", heure_fin: "12:45", niveau: "Judo · 8/11 ans",               ordre: 1 },
-  { id: "7", discipline_id: "1", jour: "samedi",   jour_kanji: "土", heure_debut: "18:30", heure_fin: "19:30", niveau: "Judo · Adultes / Confirmés",    ordre: 2 },
+  // Lundi
+  { id: "1",  discipline_id: "1", jour: "lundi",    jour_kanji: "月", heure_debut: "17:00", heure_fin: "18:00", niveau: "Judo · Poussin",           ordre: 1 },
+  { id: "2",  discipline_id: "1", jour: "lundi",    jour_kanji: "月", heure_debut: "18:00", heure_fin: "19:00", niveau: "Judo · Benjamin",          ordre: 2 },
+  { id: "3",  discipline_id: "1", jour: "lundi",    jour_kanji: "月", heure_debut: "19:00", heure_fin: "20:00", niveau: "Judo · Minime à adulte",   ordre: 3 },
+  // Mercredi
+  { id: "4",  discipline_id: "1", jour: "mercredi", jour_kanji: "水", heure_debut: "16:30", heure_fin: "17:15", niveau: "Judo · Éveil 4 ans",       ordre: 1 },
+  { id: "5",  discipline_id: "1", jour: "mercredi", jour_kanji: "水", heure_debut: "17:15", heure_fin: "18:00", niveau: "Judo · Éveil 5 ans",       ordre: 2 },
+  { id: "6",  discipline_id: "1", jour: "mercredi", jour_kanji: "水", heure_debut: "18:00", heure_fin: "19:00", niveau: "Judo · Mini-poussin",      ordre: 3 },
+  // Jeudi
+  { id: "7",  discipline_id: "1", jour: "jeudi",    jour_kanji: "木", heure_debut: "17:00", heure_fin: "18:00", niveau: "Judo · Poussin",           ordre: 1 },
+  { id: "8",  discipline_id: "1", jour: "jeudi",    jour_kanji: "木", heure_debut: "18:00", heure_fin: "19:00", niveau: "Judo · Benjamin",          ordre: 2 },
+  { id: "9",  discipline_id: "1", jour: "jeudi",    jour_kanji: "木", heure_debut: "19:00", heure_fin: "20:00", niveau: "Judo · Minime à adulte",   ordre: 3 },
+  // Samedi
+  { id: "10", discipline_id: "1", jour: "samedi",   jour_kanji: "土", heure_debut: "09:15", heure_fin: "10:00", niveau: "Judo · Éveil 5 ans",       ordre: 1 },
+  { id: "11", discipline_id: "1", jour: "samedi",   jour_kanji: "土", heure_debut: "10:00", heure_fin: "10:45", niveau: "Judo · Éveil 4 ans",       ordre: 2 },
+  { id: "12", discipline_id: "1", jour: "samedi",   jour_kanji: "土", heure_debut: "10:45", heure_fin: "11:45", niveau: "Judo · Mini-poussin",      ordre: 3 },
+  { id: "13", discipline_id: "1", jour: "samedi",   jour_kanji: "土", heure_debut: "11:45", heure_fin: "12:45", niveau: "Judo · Poussin",           ordre: 4 },
+  { id: "14", discipline_id: "1", jour: "samedi",   jour_kanji: "土", heure_debut: "12:45", heure_fin: "13:45", niveau: "Judo · Benjamin à adulte — ou Taïso (renforcement musculaire)", ordre: 5 },
 ];
 
 const DEMO_MAITRES: Maitre[] = [

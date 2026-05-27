@@ -134,52 +134,67 @@ export default function JudoPage() {
           </div>
         </ScrollReveal>
 
-        {/* ─── 03 · ESPRIT ─── */}
+        {/* ─── 03 · CODE MORAL ─── */}
         <ScrollReveal as="section" className="section section--sand">
           <div className="container">
             <div className="section-header">
               <span className="section-header-dot" aria-hidden />
               <span className="section-header-num" lang="ja" aria-hidden>三</span>
               <span className="section-header-rule" aria-hidden />
-              <span className="section-header-label">心 · L&apos;esprit</span>
+              <span className="section-header-label">道徳 · Code moral</span>
             </div>
 
             <h2 className="title-lg" style={{ marginBottom: 16 }}>
-              Deux principes,<br />
-              une <em>vie entière</em>.
+              Le code moral<br />
+              du <em>judoka</em>.
             </h2>
             <p className="lead">
-              Au-delà de la technique, Jigoro Kano a transmis deux principes
-              fondateurs. Au club, nous y revenons sans cesse — sur le tatami, mais aussi en dehors.
+              Huit valeurs transmises à chaque élève, du plus jeune au plus expérimenté.
+              C&apos;est ce qui se respecte sur le tatami — et au-delà.
             </p>
 
-            <div className="judo-principles">
-              <div className="judo-principle">
-                <span className="judo-principle-jp" lang="ja">精力善用</span>
-                <p className="judo-principle-romaji">Seiryoku-zen&apos;yō</p>
-                <h3 className="judo-principle-fr">
-                  &laquo;&nbsp;Le meilleur usage de l&apos;énergie.&nbsp;&raquo;
-                </h3>
-                <p className="judo-principle-text">
-                  Faire avec ce que l&apos;on a, pas contre. La force de l&apos;adversaire
-                  devient un appui ; la fatigue, une occasion d&apos;ajuster. Une philosophie
-                  qui dépasse largement le tatami.
-                </p>
-              </div>
-
-              <div className="judo-principle">
-                <span className="judo-principle-jp" lang="ja">自他共栄</span>
-                <p className="judo-principle-romaji">Jita-kyōei</p>
-                <h3 className="judo-principle-fr">
-                  &laquo;&nbsp;Prospérité mutuelle.&nbsp;&raquo;
-                </h3>
-                <p className="judo-principle-text">
-                  Je ne progresse que si mon partenaire progresse aussi. L&apos;adversaire
-                  n&apos;est pas un ennemi à vaincre — c&apos;est celui qui me permet
-                  d&apos;apprendre. On grandit ensemble, ou on ne grandit pas.
-                </p>
-              </div>
-            </div>
+            <ol className="code-moral">
+              <li>
+                <span className="code-moral-kanji" lang="ja" aria-hidden>礼</span>
+                <h3>La Politesse</h3>
+                <p>Le respect d&apos;autrui.</p>
+              </li>
+              <li>
+                <span className="code-moral-kanji" lang="ja" aria-hidden>勇</span>
+                <h3>Le Courage</h3>
+                <p>Faire ce qui est juste.</p>
+              </li>
+              <li>
+                <span className="code-moral-kanji" lang="ja" aria-hidden>誠</span>
+                <h3>La Sincérité</h3>
+                <p>S&apos;exprimer sans déguiser sa pensée.</p>
+              </li>
+              <li>
+                <span className="code-moral-kanji" lang="ja" aria-hidden>名誉</span>
+                <h3>L&apos;Honneur</h3>
+                <p>Être fidèle à la parole donnée.</p>
+              </li>
+              <li>
+                <span className="code-moral-kanji" lang="ja" aria-hidden>謙</span>
+                <h3>La Modestie</h3>
+                <p>Parler de soi-même sans orgueil.</p>
+              </li>
+              <li>
+                <span className="code-moral-kanji" lang="ja" aria-hidden>尊</span>
+                <h3>Le Respect</h3>
+                <p>Sans respect, aucune confiance ne peut naître.</p>
+              </li>
+              <li>
+                <span className="code-moral-kanji" lang="ja" aria-hidden>制</span>
+                <h3>Le Contrôle de soi</h3>
+                <p>Savoir se taire lorsque monte la colère.</p>
+              </li>
+              <li>
+                <span className="code-moral-kanji" lang="ja" aria-hidden>友</span>
+                <h3>L&apos;Amitié</h3>
+                <p>Le plus pur des sentiments humains.</p>
+              </li>
+            </ol>
           </div>
         </ScrollReveal>
 
