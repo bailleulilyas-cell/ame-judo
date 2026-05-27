@@ -45,13 +45,78 @@ export default function JudoPage() {
           </div>
         </section>
 
-        {/* ─── 01 · ORIGINE ─── */}
+        {/* ─── 01 · CODE MORAL (en premier — il fonde tout le reste) ─── */}
+        <ScrollReveal as="section" className="section section--sand">
+          <div className="container">
+            <div className="section-header">
+              <span className="section-header-dot" aria-hidden />
+              <span className="section-header-num" lang="ja" aria-hidden>一</span>
+              <span className="section-header-rule" aria-hidden />
+              <span className="section-header-label">道徳 · Code moral</span>
+            </div>
+
+            <h2 className="title-lg" style={{ marginBottom: 16 }}>
+              Le code moral<br />
+              du <em>judoka</em>.
+            </h2>
+            <p className="lead">
+              Avant la technique, avant la compétition, il y a ces huit valeurs.
+              Elles sont transmises à chaque élève, du plus jeune au plus expérimenté —
+              car le judo est d&apos;abord une école du caractère.
+            </p>
+
+            <ol className="code-moral">
+              <li>
+                <span className="code-moral-kanji" lang="ja" aria-hidden>礼</span>
+                <h3>La Politesse</h3>
+                <p>Le respect d&apos;autrui.</p>
+              </li>
+              <li>
+                <span className="code-moral-kanji" lang="ja" aria-hidden>勇</span>
+                <h3>Le Courage</h3>
+                <p>Faire ce qui est juste.</p>
+              </li>
+              <li>
+                <span className="code-moral-kanji" lang="ja" aria-hidden>誠</span>
+                <h3>La Sincérité</h3>
+                <p>S&apos;exprimer sans déguiser sa pensée.</p>
+              </li>
+              <li>
+                <span className="code-moral-kanji" lang="ja" aria-hidden>名誉</span>
+                <h3>L&apos;Honneur</h3>
+                <p>Être fidèle à la parole donnée.</p>
+              </li>
+              <li>
+                <span className="code-moral-kanji" lang="ja" aria-hidden>謙</span>
+                <h3>La Modestie</h3>
+                <p>Parler de soi-même sans orgueil.</p>
+              </li>
+              <li>
+                <span className="code-moral-kanji" lang="ja" aria-hidden>尊</span>
+                <h3>Le Respect</h3>
+                <p>Sans respect, aucune confiance ne peut naître.</p>
+              </li>
+              <li>
+                <span className="code-moral-kanji" lang="ja" aria-hidden>制</span>
+                <h3>Le Contrôle de soi</h3>
+                <p>Savoir se taire lorsque monte la colère.</p>
+              </li>
+              <li>
+                <span className="code-moral-kanji" lang="ja" aria-hidden>友</span>
+                <h3>L&apos;Amitié</h3>
+                <p>Le plus pur des sentiments humains.</p>
+              </li>
+            </ol>
+          </div>
+        </ScrollReveal>
+
+        {/* ─── 02 · ORIGINE ─── */}
         <ScrollReveal as="section" className="section section--paper">
           <div className="container judo-grid">
             <div className="judo-grid-aside">
               <div className="section-header">
                 <span className="section-header-rule" aria-hidden />
-                <span className="section-header-label">一 · Origine</span>
+                <span className="section-header-label">二 · Origine</span>
               </div>
               <div className="judo-bigdate" aria-hidden>1882</div>
               <p className="judo-bigdate-cap">Naissance d&apos;une voie</p>
@@ -79,12 +144,12 @@ export default function JudoPage() {
           </div>
         </ScrollReveal>
 
-        {/* ─── 02 · TECHNIQUES ─── */}
+        {/* ─── 03 · TECHNIQUES ─── */}
         <ScrollReveal as="section" className="section">
           <div className="container">
             <div className="section-header">
               <span className="section-header-dot" aria-hidden />
-              <span className="section-header-num" lang="ja" aria-hidden>二</span>
+              <span className="section-header-num" lang="ja" aria-hidden>三</span>
               <span className="section-header-rule" aria-hidden />
               <span className="section-header-label">技 · Trois familles</span>
             </div>
@@ -131,70 +196,6 @@ export default function JudoPage() {
                 </p>
               </article>
             </div>
-          </div>
-        </ScrollReveal>
-
-        {/* ─── 03 · CODE MORAL ─── */}
-        <ScrollReveal as="section" className="section section--sand">
-          <div className="container">
-            <div className="section-header">
-              <span className="section-header-dot" aria-hidden />
-              <span className="section-header-num" lang="ja" aria-hidden>三</span>
-              <span className="section-header-rule" aria-hidden />
-              <span className="section-header-label">道徳 · Code moral</span>
-            </div>
-
-            <h2 className="title-lg" style={{ marginBottom: 16 }}>
-              Le code moral<br />
-              du <em>judoka</em>.
-            </h2>
-            <p className="lead">
-              Huit valeurs transmises à chaque élève, du plus jeune au plus expérimenté.
-              C&apos;est ce qui se respecte sur le tatami — et au-delà.
-            </p>
-
-            <ol className="code-moral">
-              <li>
-                <span className="code-moral-kanji" lang="ja" aria-hidden>礼</span>
-                <h3>La Politesse</h3>
-                <p>Le respect d&apos;autrui.</p>
-              </li>
-              <li>
-                <span className="code-moral-kanji" lang="ja" aria-hidden>勇</span>
-                <h3>Le Courage</h3>
-                <p>Faire ce qui est juste.</p>
-              </li>
-              <li>
-                <span className="code-moral-kanji" lang="ja" aria-hidden>誠</span>
-                <h3>La Sincérité</h3>
-                <p>S&apos;exprimer sans déguiser sa pensée.</p>
-              </li>
-              <li>
-                <span className="code-moral-kanji" lang="ja" aria-hidden>名誉</span>
-                <h3>L&apos;Honneur</h3>
-                <p>Être fidèle à la parole donnée.</p>
-              </li>
-              <li>
-                <span className="code-moral-kanji" lang="ja" aria-hidden>謙</span>
-                <h3>La Modestie</h3>
-                <p>Parler de soi-même sans orgueil.</p>
-              </li>
-              <li>
-                <span className="code-moral-kanji" lang="ja" aria-hidden>尊</span>
-                <h3>Le Respect</h3>
-                <p>Sans respect, aucune confiance ne peut naître.</p>
-              </li>
-              <li>
-                <span className="code-moral-kanji" lang="ja" aria-hidden>制</span>
-                <h3>Le Contrôle de soi</h3>
-                <p>Savoir se taire lorsque monte la colère.</p>
-              </li>
-              <li>
-                <span className="code-moral-kanji" lang="ja" aria-hidden>友</span>
-                <h3>L&apos;Amitié</h3>
-                <p>Le plus pur des sentiments humains.</p>
-              </li>
-            </ol>
           </div>
         </ScrollReveal>
 

@@ -48,14 +48,9 @@ export default async function AdhesionPage() {
             {docAnchors.length > 0 && (
               <p className="page-hero-sub" style={{ marginTop: 18 }}>
                 Avant de venir au dojo, pensez à télécharger{" "}
-                {docAnchors.map((d, i) => (
-                  <span key={d.id}>
-                    {i > 0 && (i === docAnchors.length - 1 ? " et " : ", ")}
-                    <a href={`#${d.anchor}`} className="adhesion-inline-link">
-                      {d.nom.toLowerCase()}
-                    </a>
-                  </span>
-                ))}
+                <a href="#documents-section" className="adhesion-inline-link">
+                  les documents
+                </a>
                 {" "}— à compléter et apporter sur place.
               </p>
             )}
@@ -70,7 +65,7 @@ export default async function AdhesionPage() {
 
         {/* ─── Documents à fournir ─── */}
         {docAnchors.length > 0 && (
-          <ScrollReveal as="section" className="section section--sand docs-section">
+          <ScrollReveal as="section" id="documents-section" className="section section--sand docs-section">
             <div className="container">
               <div className="section-header">
                 <span className="section-header-dot" aria-hidden />

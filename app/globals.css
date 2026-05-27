@@ -1028,74 +1028,60 @@ main { padding-top: var(--nav-h); }
   border-bottom-color: var(--sumi);
 }
 
-/* ─── Code moral du judo (FFJDA) — design éditorial impactant ─── */
+/* ─── Code moral du judo (FFJDA) — format compact, valeur par valeur ─── */
 .code-moral {
   list-style: none;
-  margin: 48px 0 0;
+  margin: 32px 0 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(16px, 2vw, 28px);
   counter-reset: code-moral;
-  border-top: 1px solid var(--hair-color);
-  border-left: 1px solid var(--hair-color);
 }
-@media (max-width: 700px) { .code-moral { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .code-moral { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .code-moral { grid-template-columns: 1fr; } }
 
 .code-moral > li {
   counter-increment: code-moral;
   background: var(--paper);
-  border-right: 1px solid var(--hair-color);
-  border-bottom: 1px solid var(--hair-color);
-  padding: clamp(28px, 3.2vw, 44px);
+  border: 1px solid var(--hair-color);
+  padding: 24px 22px 22px;
   position: relative;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: clamp(20px, 2.4vw, 32px);
-  align-items: start;
-  transition: background 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: border-color 0.25s, transform 0.25s;
 }
-.code-moral > li:hover { background: var(--bg-warm); }
-.code-moral > li::after {
+.code-moral > li:hover { border-color: var(--sumi); transform: translateY(-2px); }
+.code-moral > li::before {
   content: "0" counter(code-moral);
   position: absolute;
-  top: 18px;
-  right: 22px;
+  top: 14px;
+  right: 18px;
   font-family: var(--sans);
-  font-weight: 300;
-  font-size: 13px;
-  letter-spacing: 0.32em;
+  font-size: 10px;
+  letter-spacing: 0.22em;
   color: var(--stone-soft, #B8B0A0);
 }
-
 .code-moral-kanji {
   font-family: var(--serif-jp);
-  font-size: clamp(64px, 6vw, 92px);
-  line-height: 0.85;
+  font-size: 44px;
+  line-height: 1;
   color: var(--red);
   display: block;
-  min-width: 1em;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-bottom: 14px;
 }
-.code-moral > li:hover .code-moral-kanji { transform: translateX(4px); }
-
 .code-moral > li h3 {
   font-family: var(--serif);
   font-weight: 400;
-  font-size: clamp(22px, 2.2vw, 30px);
-  letter-spacing: -0.015em;
-  line-height: 1.15;
-  margin: 6px 0 10px;
+  font-size: 19px;
+  letter-spacing: -0.01em;
+  margin: 0 0 6px;
   color: var(--sumi);
 }
 .code-moral > li p {
   font-family: var(--serif);
-  font-style: italic;
-  font-size: clamp(15px, 1.15vw, 17px);
-  line-height: 1.6;
+  font-size: 14px;
+  line-height: 1.5;
   color: var(--sumi-soft);
   margin: 0;
-  max-width: 360px;
 }
 
 /* ─── Home teaser judo (section "La voie") ─── */

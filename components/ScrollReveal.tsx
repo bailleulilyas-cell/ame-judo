@@ -8,6 +8,7 @@ interface Props {
   threshold?: number;   // 0..1
   className?: string;
   as?: "div" | "section" | "article" | "li";
+  id?: string;
 }
 
 /**
@@ -20,6 +21,7 @@ export default function ScrollReveal({
   threshold = 0.12,
   className = "",
   as: Tag = "div",
+  id,
 }: Props) {
   const ref = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(false);
@@ -55,6 +57,7 @@ export default function ScrollReveal({
   return (
     <TagComponent
       ref={ref}
+      id={id}
       className={`reveal${visible ? " is-visible" : ""}${className ? ` ${className}` : ""}`}
       style={{ transitionDelay: visible ? `${delay}ms` : "0ms" }}
     >
