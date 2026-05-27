@@ -4,8 +4,8 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import { isAuthenticated } from "@/lib/auth";
 
-const MAX_SIZE = 5 * 1024 * 1024; // 5 Mo
-const ALLOWED = ["image/jpeg", "image/png", "image/webp", "image/gif"] as const;
+const MAX_SIZE = 10 * 1024 * 1024; // 10 Mo (les PDF peuvent être plus lourds que les images)
+const ALLOWED = ["image/jpeg", "image/png", "image/webp", "image/gif", "application/pdf"] as const;
 type AllowedMime = (typeof ALLOWED)[number];
 
 const EXT_FROM_MIME: Record<AllowedMime, string> = {
@@ -13,6 +13,7 @@ const EXT_FROM_MIME: Record<AllowedMime, string> = {
   "image/png": "png",
   "image/webp": "webp",
   "image/gif": "gif",
+  "application/pdf": "pdf",
 };
 
 // Magic bytes (signatures binaires) — empêche un attaquant d'uploader
@@ -30,6 +31,8 @@ function detectMimeFromBytes(buf: Buffer): AllowedMime | null {
     buf[0] === 0x52 && buf[1] === 0x49 && buf[2] === 0x46 && buf[3] === 0x46 &&
     buf[8] === 0x57 && buf[9] === 0x45 && buf[10] === 0x42 && buf[11] === 0x50
   ) return "image/webp";
+  // PDF : 25 50 44 46 (%PDF)
+  if (buf[0] === 0x25 && buf[1] === 0x50 && buf[2] === 0x44 && buf[3] === 0x46) return "application/pdf";
   return null;
 }
 

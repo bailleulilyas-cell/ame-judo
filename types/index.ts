@@ -79,6 +79,16 @@ export interface Actualite {
   updated_at: string;
 }
 
+export interface AdhesionDocument {
+  id: string;
+  ordre: number;
+  nom: string;
+  description: string | null;
+  kanji: string | null;
+  url: string;
+  active: boolean;
+}
+
 export interface Preregistration {
   id: string;
   full_name: string;

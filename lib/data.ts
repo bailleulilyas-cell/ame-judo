@@ -8,7 +8,7 @@
 import { query } from "@/lib/db";
 import type {
   Discipline, ScheduleSlot, HorairesNote, Maitre,
-  Formule, Actualite, FooterContent
+  Formule, Actualite, FooterContent, AdhesionDocument
 } from "@/types";
 
 const DB_READY = Boolean(process.env.DB_HOST && process.env.DB_NAME);
@@ -109,6 +109,42 @@ export async function getHorairesNote(): Promise<HorairesNote | null> {
 export async function getMaitres(): Promise<Maitre[]> {
   const rows = await tryQuery<Maitre>("SELECT * FROM maitres ORDER BY ordre");
   return rows ?? DEMO_MAITRES;
+}
+
+const DEMO_DOCUMENTS: AdhesionDocument[] = [
+  { id: "1", ordre: 1, nom: "Bulletin d'adhésion",  description: "Formulaire d'inscription au club (saison 2026/2027).", kanji: "証", url: "#", active: true },
+  { id: "2", ordre: 2, nom: "Certificat médical",   description: "Modèle à faire compléter par votre médecin.",          kanji: "医", url: "#", active: true },
+  { id: "3", ordre: 3, nom: "Règlement intérieur",  description: "Les règles de vie du dojo et du club.",                kanji: "規", url: "#", active: true },
+  { id: "4", ordre: 4, nom: "Autorisation parentale", description: "Pour les pratiquants mineurs.",                      kanji: "親", url: "#", active: true },
+];
+
+export async function getDocuments(): Promise<AdhesionDocument[]> {
+  const rows = await tryQuery<AdhesionDocument & { active: number | boolean }>(
+    "SELECT id, ordre, nom, description, kanji, url, active FROM documents WHERE active = 1 ORDER BY ordre, id"
+  );
+  if (rows) return rows.map((r) => ({ ...r, active: Boolean(r.active) }));
+  return DEMO_DOCUMENTS;
+}
+
+/** Admin : tous les documents (actifs et inactifs). */
+export async function getDocumentsAdmin(): Promise<AdhesionDocument[]> {
+  const rows = await tryQuery<AdhesionDocument & { active: number | boolean }>(
+    "SELECT id, ordre, nom, description, kanji, url, active FROM documents ORDER BY ordre, id"
+  );
+  if (rows) return rows.map((r) => ({ ...r, active: Boolean(r.active) }));
+  return DEMO_DOCUMENTS;
+}
+
+export async function getDocumentById(id: string): Promise<AdhesionDocument | null> {
+  const rows = await tryQuery<AdhesionDocument & { active: number | boolean }>(
+    "SELECT id, ordre, nom, description, kanji, url, active FROM documents WHERE id = ? LIMIT 1",
+    [id]
+  );
+  if (rows) {
+    const r = rows[0];
+    return r ? { ...r, active: Boolean(r.active) } : null;
+  }
+  return DEMO_DOCUMENTS.find((d) => d.id === id) ?? null;
 }
 
 export async function getFormules(): Promise<Formule[]> {

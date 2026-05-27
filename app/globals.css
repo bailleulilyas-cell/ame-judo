@@ -909,111 +909,193 @@ main { padding-top: var(--nav-h); }
   gap: 16px;
 }
 
-/* ─── Documents à fournir ─── */
-.docs-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
-.doc-card {
-  display: grid;
-  grid-template-columns: 64px 1fr auto;
-  align-items: center;
-  gap: 20px;
-  padding: 20px 24px;
-  background: var(--paper);
-  border: 1px solid var(--hair-color);
-  transition: border-color 0.25s, transform 0.25s, background 0.25s;
-}
-.doc-card:hover { border-color: var(--sumi); transform: translateY(-1px); background: var(--bg-warm); }
-.doc-kanji {
-  font-family: var(--serif-jp);
-  font-size: 36px;
-  line-height: 1;
-  color: var(--red);
-  text-align: center;
-}
-.doc-body h3 {
-  font-family: var(--serif);
-  font-weight: 400;
-  font-size: 18px;
-  letter-spacing: -0.01em;
-  margin: 0 0 4px;
-  color: var(--sumi);
-}
-.doc-body p {
-  font-family: var(--serif);
-  font-size: 14px;
-  color: var(--sumi-soft);
-  margin: 0;
-  line-height: 1.5;
-}
-.doc-cta {
-  font-family: var(--sans);
-  font-size: 10px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--sumi);
-  padding: 8px 14px;
-  border: 1px solid var(--hair-strong);
-  transition: background 0.25s, color 0.25s, border-color 0.25s;
-  white-space: nowrap;
-}
-.doc-card:hover .doc-cta { background: var(--sumi); color: var(--bg); border-color: var(--sumi); }
-@media (max-width: 560px) {
-  .doc-card { grid-template-columns: 56px 1fr; gap: 14px; padding: 18px 20px; }
-  .doc-cta { grid-column: 2; justify-self: start; margin-top: 8px; }
-}
+/* ─── Documents à fournir (v2 — design impactant) ─── */
+.docs-section { scroll-margin-top: 100px; }
 
-/* ─── Code moral du judo (FFJDA) ─── */
-.code-moral {
-  list-style: none;
-  margin: 32px 0 0;
-  padding: 0;
+.docs-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: clamp(16px, 2vw, 28px);
-  counter-reset: code-moral;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
 }
-@media (max-width: 900px) { .code-moral { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 480px) { .code-moral { grid-template-columns: 1fr; } }
-.code-moral > li {
-  counter-increment: code-moral;
+@media (max-width: 760px) { .docs-grid { grid-template-columns: 1fr; } }
+
+.doc-card-v2 {
+  display: flex;
+  flex-direction: column;
+  position: relative;
   background: var(--paper);
   border: 1px solid var(--hair-color);
-  padding: 24px 22px 22px;
-  position: relative;
-  transition: border-color 0.25s, transform 0.25s;
+  padding: 0;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s, box-shadow 0.3s;
+  overflow: hidden;
+  scroll-margin-top: 100px;
+  text-decoration: none;
+  color: inherit;
+  min-height: 220px;
 }
-.code-moral > li:hover { border-color: var(--sumi); transform: translateY(-2px); }
-.code-moral > li::before {
-  content: "0" counter(code-moral);
+.doc-card-v2:not(.is-placeholder):hover {
+  transform: translateY(-4px);
+  border-color: var(--sumi);
+  box-shadow: 0 20px 40px -20px rgba(10, 10, 10, 0.18);
+}
+.doc-card-v2.is-placeholder {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+.doc-card-v2::before {
+  content: "";
   position: absolute;
-  top: 14px;
-  right: 18px;
-  font-family: var(--sans);
-  font-size: 10px;
-  letter-spacing: 0.22em;
-  color: var(--stone-soft, #B8B0A0);
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--red) 0%, var(--red) 100%);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.code-moral-kanji {
+.doc-card-v2:not(.is-placeholder):hover::before { transform: scaleX(1); }
+
+.doc-card-v2-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 22px 28px 8px;
+  border-bottom: 1px solid var(--hair-color);
+}
+.doc-card-v2-num {
+  font-family: var(--sans);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--stone);
+  padding-top: 8px;
+}
+.doc-card-v2-kanji {
   font-family: var(--serif-jp);
-  font-size: 44px;
+  font-size: 56px;
   line-height: 1;
   color: var(--red);
   display: block;
-  margin-bottom: 14px;
 }
+
+.doc-card-v2-body {
+  flex: 1;
+  padding: 22px 28px 16px;
+}
+.doc-card-v2-name {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(20px, 1.6vw, 24px);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  margin: 0 0 10px;
+  color: var(--sumi);
+}
+.doc-card-v2-desc {
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--sumi-soft);
+  margin: 0;
+}
+
+.doc-card-v2-cta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  background: rgba(245, 241, 234, 0.5);
+  border-top: 1px solid var(--hair-color);
+  font-family: var(--sans);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--sumi);
+  transition: background 0.25s, color 0.25s, gap 0.25s;
+}
+.doc-card-v2:not(.is-placeholder):hover .doc-card-v2-cta {
+  background: var(--sumi);
+  color: var(--bg);
+  gap: 12px;
+}
+
+/* Lien inline dans paragraphe (mention contextuelle d'un document) */
+.adhesion-inline-link {
+  border-bottom: 1px solid var(--red);
+  color: var(--sumi);
+  transition: color 0.25s, border-color 0.25s;
+}
+.adhesion-inline-link:hover {
+  color: var(--red);
+  border-bottom-color: var(--sumi);
+}
+
+/* ─── Code moral du judo (FFJDA) — design éditorial impactant ─── */
+.code-moral {
+  list-style: none;
+  margin: 48px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+  counter-reset: code-moral;
+  border-top: 1px solid var(--hair-color);
+  border-left: 1px solid var(--hair-color);
+}
+@media (max-width: 700px) { .code-moral { grid-template-columns: 1fr; } }
+
+.code-moral > li {
+  counter-increment: code-moral;
+  background: var(--paper);
+  border-right: 1px solid var(--hair-color);
+  border-bottom: 1px solid var(--hair-color);
+  padding: clamp(28px, 3.2vw, 44px);
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: clamp(20px, 2.4vw, 32px);
+  align-items: start;
+  transition: background 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.code-moral > li:hover { background: var(--bg-warm); }
+.code-moral > li::after {
+  content: "0" counter(code-moral);
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: 13px;
+  letter-spacing: 0.32em;
+  color: var(--stone-soft, #B8B0A0);
+}
+
+.code-moral-kanji {
+  font-family: var(--serif-jp);
+  font-size: clamp(64px, 6vw, 92px);
+  line-height: 0.85;
+  color: var(--red);
+  display: block;
+  min-width: 1em;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.code-moral > li:hover .code-moral-kanji { transform: translateX(4px); }
+
 .code-moral > li h3 {
   font-family: var(--serif);
   font-weight: 400;
-  font-size: 19px;
-  letter-spacing: -0.01em;
-  margin: 0 0 6px;
+  font-size: clamp(22px, 2.2vw, 30px);
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  margin: 6px 0 10px;
   color: var(--sumi);
 }
 .code-moral > li p {
   font-family: var(--serif);
-  font-size: 14px;
-  line-height: 1.5;
+  font-style: italic;
+  font-size: clamp(15px, 1.15vw, 17px);
+  line-height: 1.6;
   color: var(--sumi-soft);
   margin: 0;
+  max-width: 360px;
 }
 
 /* ─── Home teaser judo (section "La voie") ─── */

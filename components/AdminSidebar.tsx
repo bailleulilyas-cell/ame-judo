@@ -15,6 +15,7 @@ const SECTIONS = [
     { href: "/admin/horaires",         kanji: "時", label: "Horaires" },
     { href: "/admin/maitres",          kanji: "師", label: "Maîtres" },
     { href: "/admin/formules",         kanji: "入", label: "Formules" },
+    { href: "/admin/documents",        kanji: "書", label: "Documents" },
   ]},
   { title: "Demandes",     items: [
     { href: "/admin/preregistrations", kanji: "願", label: "Pré-inscriptions" },
