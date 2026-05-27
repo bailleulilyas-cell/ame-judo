@@ -23,14 +23,27 @@ export function renderMarkdown(md: string): string {
 }
 
 /**
- * Sanitisation minimale pour les titres éditoriaux qui autorisent juste
- * `<em>` pour la mise en italique des mots-clés (titres saisis depuis l'admin).
- * Tout le reste est échappé / supprimé.
+ * Sanitisation minimale pour les titres éditoriaux (admin + home).
+ * N'autorise que <em>, <strong>, <br> — tout le reste est échappé.
+ *
+ * Pourquoi pas DOMPurify ici : isomorphic-dompurify utilise jsdom côté Node,
+ * ce qui plante dans les serverless functions Vercel. Pour 3 tags inline,
+ * un sanitizer regex est largement suffisant et 100x plus léger.
  */
 export function sanitizeInlineTitle(html: string): string {
   if (!html) return "";
-  return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: ["em", "strong", "br"],
-    ALLOWED_ATTR: [],
-  });
+  // 1) Échapper tout le HTML brut
+  const escaped = html
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+  // 2) Ré-injecter UNIQUEMENT les tags safe (sans aucun attribut)
+  return escaped
+    .replace(/&lt;em&gt;/gi, "<em>")
+    .replace(/&lt;\/em&gt;/gi, "</em>")
+    .replace(/&lt;strong&gt;/gi, "<strong>")
+    .replace(/&lt;\/strong&gt;/gi, "</strong>")
+    .replace(/&lt;br\s*\/?&gt;/gi, "<br />");
 }
