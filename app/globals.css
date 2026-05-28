@@ -1945,6 +1945,52 @@ main { padding-top: var(--nav-h); }
   margin: 0 auto;
   font-size: clamp(16px, 1.2vw, 17px);
 }
+/* Évite que la première ligne se cache sous la barre d'outils sticky */
+.ae-body .rich-editor-content { padding-top: 32px; }
+
+/* Force le scroll-padding-top de la page entière à 130px en mode éditeur,
+   pour que le curseur ne se cache jamais sous les barres sticky. */
+html:has(.editor-shell) { scroll-padding-top: 130px; }
+
+/* ─── MODAL APERÇU ─── */
+.ae-preview-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  animation: ae-preview-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes ae-preview-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.ae-preview-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px clamp(16px, 3vw, 32px);
+  background: rgba(245, 241, 234, 0.95);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--hair-color);
+}
+.ae-preview-tag {
+  font-family: var(--sans);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+.ae-preview-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 80px;
+}
 .ae-body .rich-toolbar {
   border-top: 1px solid var(--hair-color);
 }

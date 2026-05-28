@@ -1,9 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useRef, useTransition } from "react";
+import { useState, useRef, useTransition, useEffect } from "react";
 import RichEditor from "./RichEditor";
 import type { Actualite } from "@/types";
+
+interface PreviewSnapshot {
+  titre: string;
+  extrait: string;
+  kanji: string;
+  categorie: string;
+  date: string;
+  bodyHtml: string;
+}
 
 interface Props {
   actualite?: Actualite | null;
@@ -51,7 +60,30 @@ export default function ActualiteEditor({ actualite, action, mode }: Props) {
   const [datePub, setDatePub] = useState(actualite?.date_publication?.slice(0, 10) ?? new Date().toISOString().slice(0, 10));
   const [statut, setStatut] = useState<"draft" | "published">(actualite?.statut ?? "draft");
   const [error, setError] = useState<string | null>(null);
+  const [preview, setPreview] = useState<PreviewSnapshot | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
+
+  // Ferme l'aperçu avec Escape
+  useEffect(() => {
+    if (!preview) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setPreview(null); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [preview]);
+
+  const handlePreview = () => {
+    const form = formRef.current;
+    if (!form) return;
+    const fd = new FormData(form);
+    setPreview({
+      titre:     (fd.get("titre")            as string) || "(Titre manquant)",
+      extrait:   (fd.get("extrait")          as string) || "",
+      kanji:     (fd.get("kanji")            as string) || kanji,
+      categorie: (fd.get("categorie")        as string) || categorie,
+      date:      (fd.get("date_publication") as string) || datePub,
+      bodyHtml:  (fd.get("body_html")        as string) || "",
+    });
+  };
 
   const handleTitreChange = (v: string) => {
     setTitre(v);
@@ -77,6 +109,7 @@ export default function ActualiteEditor({ actualite, action, mode }: Props) {
   };
 
   return (
+    <>
     <form ref={formRef} className="ae-root">
       {/* ────── BARRE DU HAUT ────── */}
       <header className="ae-topbar">
@@ -96,6 +129,15 @@ export default function ActualiteEditor({ actualite, action, mode }: Props) {
         </div>
 
         <div className="ae-actions">
+          <button
+            type="button"
+            className="ae-btn ae-btn--ghost"
+            onClick={handlePreview}
+            disabled={isPending}
+            title="Voir l'article comme s'il était publié (sans rien sauvegarder)"
+          >
+            👁 Aperçu
+          </button>
           <button
             type="button"
             className="ae-btn ae-btn--ghost"
@@ -254,5 +296,48 @@ export default function ActualiteEditor({ actualite, action, mode }: Props) {
         </div>
       </div>
     </form>
+
+    {/* ────── MODAL APERÇU ────── */}
+    {preview && (
+      <div className="ae-preview-overlay" role="dialog" aria-modal="true" aria-label="Aperçu de l'article">
+        <div className="ae-preview-topbar">
+          <span className="ae-preview-tag">Aperçu — comme si l&apos;article était publié</span>
+          <button
+            type="button"
+            className="ae-btn ae-btn--primary"
+            onClick={() => setPreview(null)}
+            autoFocus
+          >
+            ← Retour à l&apos;édition
+          </button>
+        </div>
+        <div className="ae-preview-scroll">
+          <article className="container article">
+            <div className="article-kanji" lang="ja" aria-hidden>{preview.kanji}</div>
+            <div className="article-meta">
+              <span className="actu-cat-dot" aria-hidden />
+              <span>{preview.categorie}</span>
+              <span>·</span>
+              <span>
+                {preview.date
+                  ? new Date(preview.date).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })
+                  : "—"}
+              </span>
+            </div>
+            <h1 className="article-title">{preview.titre}</h1>
+            {preview.extrait && (
+              <p style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: "clamp(17px, 1.6vw, 21px)", color: "var(--stone)", marginBottom: 32 }}>
+                {preview.extrait}
+              </p>
+            )}
+            <div
+              className="article-body markdown-body"
+              dangerouslySetInnerHTML={{ __html: preview.bodyHtml }}
+            />
+          </article>
+        </div>
+      </div>
+    )}
+    </>
   );
 }
