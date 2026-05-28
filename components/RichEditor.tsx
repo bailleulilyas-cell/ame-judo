@@ -22,6 +22,8 @@ interface Props {
  * droite / pleine largeur). Pas de positionnement absolu (pour rester
  * responsive sur mobile).
  */
+type ResizeHandle = "nw" | "n" | "ne" | "e" | "se" | "s" | "sw" | "w";
+
 function ImageNodeView({ node, updateAttributes, selected }: NodeViewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [dragging, setDragging] = useState(false);
@@ -30,18 +32,37 @@ function ImageNodeView({ node, updateAttributes, selected }: NodeViewProps) {
   const width: string = node.attrs.width ?? "100%";
   const caption: string = node.attrs.caption ?? "";
 
-  const startResize = (e: React.MouseEvent<HTMLDivElement>) => {
+  /**
+   * 8 poignées comme Word : 4 coins + 4 milieux de côté.
+   * Toutes maintiennent le ratio de l'image (pour éviter les images écrasées).
+   * Les coins et milieux horizontaux/verticaux ont juste un feedback visuel différent.
+   */
+  const startResize = (handle: ResizeHandle) => (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setDragging(true);
-    const start = e.clientX;
+    const startX = e.clientX;
+    const startY = e.clientY;
     const img = containerRef.current?.querySelector("img");
     if (!img) return;
     const startWidth = img.getBoundingClientRect().width;
-    const parentWidth = containerRef.current?.parentElement?.getBoundingClientRect().width ?? 1;
+    const parentEl = containerRef.current?.parentElement?.parentElement ?? containerRef.current?.parentElement;
+    const parentWidth = parentEl?.getBoundingClientRect().width ?? 800;
 
     const onMove = (ev: MouseEvent) => {
-      const delta = ev.clientX - start;
+      const dx = ev.clientX - startX;
+      const dy = ev.clientY - startY;
+      let delta = 0;
+      switch (handle) {
+        case "e":  delta = dx; break;
+        case "w":  delta = -dx; break;
+        case "n":  delta = -dy; break;
+        case "s":  delta = dy; break;
+        case "ne": delta = Math.max(dx, -dy); break;
+        case "nw": delta = Math.max(-dx, -dy); break;
+        case "se": delta = Math.max(dx, dy); break;
+        case "sw": delta = Math.max(-dx, dy); break;
+      }
       const newPx = Math.max(80, Math.min(parentWidth, startWidth + delta));
       const newPct = Math.round((newPx / parentWidth) * 100);
       updateAttributes({ width: `${newPct}%` });
@@ -65,12 +86,20 @@ function ImageNodeView({ node, updateAttributes, selected }: NodeViewProps) {
         <img src={node.attrs.src} alt={node.attrs.alt ?? ""} draggable={false} />
         {selected && (
           <>
-            <div className="tt-resize tt-resize--right" onMouseDown={startResize} />
+            {/* 8 poignées Word-like */}
+            <div className="tt-h tt-h-nw" onMouseDown={startResize("nw")} />
+            <div className="tt-h tt-h-n"  onMouseDown={startResize("n")} />
+            <div className="tt-h tt-h-ne" onMouseDown={startResize("ne")} />
+            <div className="tt-h tt-h-e"  onMouseDown={startResize("e")} />
+            <div className="tt-h tt-h-se" onMouseDown={startResize("se")} />
+            <div className="tt-h tt-h-s"  onMouseDown={startResize("s")} />
+            <div className="tt-h tt-h-sw" onMouseDown={startResize("sw")} />
+            <div className="tt-h tt-h-w"  onMouseDown={startResize("w")} />
             <div className="tt-toolbar">
-              <button type="button" title="Aligner à gauche" onClick={() => updateAttributes({ alignment: "left" })}>⬅</button>
-              <button type="button" title="Centrer" onClick={() => updateAttributes({ alignment: "center" })}>⬌</button>
-              <button type="button" title="Aligner à droite" onClick={() => updateAttributes({ alignment: "right" })}>➡</button>
-              <button type="button" title="Pleine largeur" onClick={() => updateAttributes({ alignment: "wide", width: "100%" })}>⛶</button>
+              <button type="button" title="Aligner à gauche"  onClick={() => updateAttributes({ alignment: "left" })}>⬅</button>
+              <button type="button" title="Centrer"            onClick={() => updateAttributes({ alignment: "center" })}>⬌</button>
+              <button type="button" title="Aligner à droite"   onClick={() => updateAttributes({ alignment: "right" })}>➡</button>
+              <button type="button" title="Pleine largeur"     onClick={() => updateAttributes({ alignment: "wide", width: "100%" })}>⛶</button>
             </div>
           </>
         )}
