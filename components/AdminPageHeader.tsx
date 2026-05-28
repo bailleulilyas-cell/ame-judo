@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { sanitizeInlineTitle } from "@/lib/markdown";
+import { sanitizeInlineTitle } from "@/lib/sanitize";
 
 interface Props {
   title: string;

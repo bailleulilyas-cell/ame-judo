@@ -4,7 +4,7 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import { getActualites, getFormules, getHeroContent, getAboutContent, getSettings } from "@/lib/data";
-import { sanitizeInlineTitle } from "@/lib/markdown";
+import { sanitizeInlineTitle } from "@/lib/sanitize";
 
 export default async function HomePage() {
   const [formules, actus, hero, about, settings] = await Promise.all([
