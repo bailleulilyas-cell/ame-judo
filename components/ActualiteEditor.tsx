@@ -286,7 +286,7 @@ export default function ActualiteEditor({ actualite, action, mode }: Props) {
             <RichEditor
               name="body_html"
               defaultValue={actualite?.body_html ?? actualite?.body ?? ""}
-              placeholder="Commencez à écrire votre article ici… Glissez-déposez des images, cliquez sur une image pour la redimensionner."
+              placeholder="Commencez à écrire votre article…"
             />
           </div>
 
