@@ -2129,16 +2129,31 @@ html:has(.editor-shell) { scroll-padding-top: 130px; }
   float: left;
 }
 
-/* ─── Image avec resize + alignement ─── */
+/* ─── Image — taille selon alignement (4 modes) ─── */
 .tt-image {
   margin: 22px 0;
   position: relative;
 }
-.tt-image--left  { float: left;  margin: 6px 22px 14px 0; max-width: 60%; clear: none; }
-.tt-image--right { float: right; margin: 6px 0 14px 22px; max-width: 60%; clear: none; }
-.tt-image--center,
-.tt-image--wide { display: flex; flex-direction: column; align-items: center; clear: both; }
-.tt-image--wide .tt-image-frame { width: 100% !important; }
+/* Gauche : flotte à gauche, ~50% largeur, texte enroulé à droite */
+.tt-image--left  { float: left;  margin: 6px 22px 14px 0; width: 50%; max-width: 60%; clear: none; }
+/* Droite : flotte à droite */
+.tt-image--right { float: right; margin: 6px 0 14px 22px; width: 50%; max-width: 60%; clear: none; }
+/* Centré : centré, taille normale (max 75%) */
+.tt-image--center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  clear: both;
+}
+.tt-image--center .tt-image-frame { width: 75%; }
+/* Pleine largeur : 100% */
+.tt-image--wide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  clear: both;
+}
+.tt-image--wide .tt-image-frame { width: 100%; }
 
 .tt-image-frame {
   position: relative;
@@ -2158,31 +2173,7 @@ html:has(.editor-shell) { scroll-padding-top: 130px; }
   outline-offset: 2px;
 }
 
-/* Les 8 poignées de redimensionnement (style Word) */
-.tt-h {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  background: var(--red);
-  border: 2px solid #fff;
-  border-radius: 50%;
-  z-index: 10;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.25);
-  transition: transform 0.1s ease;
-}
-.tt-h:hover { transform: scale(1.25); }
-.tt-h-nw { top: -7px; left: -7px;   cursor: nwse-resize; }
-.tt-h-n  { top: -7px; left: 50%;    cursor: ns-resize;   transform: translateX(-50%); }
-.tt-h-ne { top: -7px; right: -7px;  cursor: nesw-resize; }
-.tt-h-e  { top: 50%;  right: -7px;  cursor: ew-resize;   transform: translateY(-50%); }
-.tt-h-se { bottom: -7px; right: -7px; cursor: nwse-resize; }
-.tt-h-s  { bottom: -7px; left: 50%;  cursor: ns-resize;   transform: translateX(-50%); }
-.tt-h-sw { bottom: -7px; left: -7px; cursor: nesw-resize; }
-.tt-h-w  { top: 50%;  left: -7px;   cursor: ew-resize;   transform: translateY(-50%); }
-.tt-h-n:hover  { transform: translateX(-50%) scale(1.25); }
-.tt-h-s:hover  { transform: translateX(-50%) scale(1.25); }
-.tt-h-e:hover  { transform: translateY(-50%) scale(1.25); }
-.tt-h-w:hover  { transform: translateY(-50%) scale(1.25); }
+/* (Plus de poignées de redimensionnement — taille gérée par alignement) */
 
 .tt-toolbar {
   position: absolute;
@@ -2273,13 +2264,12 @@ html:has(.editor-shell) { scroll-padding-top: 130px; }
 .article-body h2[style*="text-align"],
 .article-body h3[style*="text-align"] { /* hérite des styles inline */ }
 
-/* Image rendue côté public — aligne comme dans l'éditeur */
-.article-body [data-alignment="left"]  { float: left;  margin: 6px 22px 14px 0; max-width: 60%; }
-.article-body [data-alignment="right"] { float: right; margin: 6px 0 14px 22px; max-width: 60%; }
-.article-body [data-alignment="center"],
-.article-body [data-alignment="wide"]  { display: block; margin-left: auto; margin-right: auto; clear: both; }
-.article-body [data-alignment="wide"]  { width: 100% !important; max-width: 100% !important; }
+/* Image rendue côté public — 4 modes d'alignement identiques à l'éditeur */
+.article-body [data-alignment="left"]  { float: left;  margin: 6px 22px 14px 0; width: 50%; max-width: 60%; }
+.article-body [data-alignment="right"] { float: right; margin: 6px 0 14px 22px; width: 50%; max-width: 60%; }
+.article-body [data-alignment="center"] { display: block; margin: 22px auto; width: 75%; clear: both; }
+.article-body [data-alignment="wide"]  { display: block; margin: 22px auto; width: 100%; clear: both; }
 @media (max-width: 640px) {
   .article-body [data-alignment="left"],
-  .article-body [data-alignment="right"] { float: none; max-width: 100%; margin: 16px auto; display: block; }
+  .article-body [data-alignment="right"] { float: none; width: 100%; max-width: 100%; margin: 16px auto; display: block; }
 }
