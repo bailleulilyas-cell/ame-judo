@@ -30,43 +30,70 @@ function ImageNodeView({ node, updateAttributes, selected }: NodeViewProps) {
 
   const alignment: string = node.attrs.alignment ?? "center";
   const width: string = node.attrs.width ?? "100%";
+  const height: string = node.attrs.height ?? "auto";
   const caption: string = node.attrs.caption ?? "";
 
   /**
-   * 8 poignées comme Word : 4 coins + 4 milieux de côté.
-   * Toutes maintiennent le ratio de l'image (pour éviter les images écrasées).
-   * Les coins et milieux horizontaux/verticaux ont juste un feedback visuel différent.
+   * Comportement Word-like par poignée :
+   *   - 4 coins (NW/NE/SE/SW) : redimensionnent proportionnellement (ratio conservé)
+   *   - 2 milieux horizontaux (E/W) : changent la largeur uniquement
+   *   - 2 milieux verticaux (N/S) : changent la hauteur uniquement (ratio cassé)
    */
   const startResize = (handle: ResizeHandle) => (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setDragging(true);
+
     const startX = e.clientX;
     const startY = e.clientY;
     const img = containerRef.current?.querySelector("img");
     if (!img) return;
-    const startWidth = img.getBoundingClientRect().width;
-    const parentEl = containerRef.current?.parentElement?.parentElement ?? containerRef.current?.parentElement;
+
+    const startRect = img.getBoundingClientRect();
+    const startWidthPx = startRect.width;
+    const startHeightPx = startRect.height;
+
+    // Le conteneur de référence pour le calcul de la largeur en %
+    const parentEl =
+      containerRef.current?.parentElement?.parentElement ??
+      containerRef.current?.parentElement;
     const parentWidth = parentEl?.getBoundingClientRect().width ?? 800;
+
+    const isCorner = handle.length === 2; // nw/ne/se/sw
+    const isHoriz = handle === "e" || handle === "w";
+    const isVert = handle === "n" || handle === "s";
 
     const onMove = (ev: MouseEvent) => {
       const dx = ev.clientX - startX;
       const dy = ev.clientY - startY;
-      let delta = 0;
-      switch (handle) {
-        case "e":  delta = dx; break;
-        case "w":  delta = -dx; break;
-        case "n":  delta = -dy; break;
-        case "s":  delta = dy; break;
-        case "ne": delta = Math.max(dx, -dy); break;
-        case "nw": delta = Math.max(-dx, -dy); break;
-        case "se": delta = Math.max(dx, dy); break;
-        case "sw": delta = Math.max(-dx, dy); break;
+
+      if (isCorner) {
+        // Coin → ratio conservé. La direction du coin détermine le signe.
+        let deltaX = 0;
+        switch (handle) {
+          case "ne": deltaX = Math.max(dx, -dy); break;
+          case "nw": deltaX = Math.max(-dx, -dy); break;
+          case "se": deltaX = Math.max(dx, dy); break;
+          case "sw": deltaX = Math.max(-dx, dy); break;
+        }
+        const newW = Math.max(80, Math.min(parentWidth, startWidthPx + deltaX));
+        const newPct = Math.round((newW / parentWidth) * 100);
+        updateAttributes({ width: `${newPct}%`, height: "auto" });
+      } else if (isHoriz) {
+        // Milieu gauche/droite → largeur uniquement
+        const delta = handle === "e" ? dx : -dx;
+        const newW = Math.max(80, Math.min(parentWidth, startWidthPx + delta));
+        const newPct = Math.round((newW / parentWidth) * 100);
+        // Si height était fixé, on le garde en px (Word-style : on déforme)
+        updateAttributes({ width: `${newPct}%` });
+      } else if (isVert) {
+        // Milieu haut/bas → hauteur uniquement (squish/stretch)
+        const delta = handle === "s" ? dy : -dy;
+        const newH = Math.max(60, Math.min(1200, startHeightPx + delta));
+        updateAttributes({ height: `${Math.round(newH)}px` });
       }
-      const newPx = Math.max(80, Math.min(parentWidth, startWidth + delta));
-      const newPct = Math.round((newPx / parentWidth) * 100);
-      updateAttributes({ width: `${newPct}%` });
     };
+
     const onUp = () => {
       setDragging(false);
       window.removeEventListener("mousemove", onMove);
@@ -76,30 +103,49 @@ function ImageNodeView({ node, updateAttributes, selected }: NodeViewProps) {
     window.addEventListener("mouseup", onUp);
   };
 
+  // Style sur l'image elle-même pour avoir un redimensionnement précis.
+  const imgStyle: React.CSSProperties = {
+    width: "100%",
+    height: height && height !== "auto" ? "100%" : "auto",
+    objectFit: height && height !== "auto" ? "fill" : undefined,
+  };
+
   return (
     <NodeViewWrapper
       className={`tt-image tt-image--${alignment}${selected ? " is-selected" : ""}`}
       data-alignment={alignment}
+      data-drag-handle
     >
-      <div className="tt-image-frame" ref={containerRef} style={{ width }}>
+      <div
+        className="tt-image-frame"
+        ref={containerRef}
+        style={{ width, height: height && height !== "auto" ? height : undefined }}
+      >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={node.attrs.src} alt={node.attrs.alt ?? ""} draggable={false} />
+        <img
+          src={node.attrs.src}
+          alt={node.attrs.alt ?? ""}
+          draggable={false}
+          style={imgStyle}
+        />
         {selected && (
           <>
-            {/* 8 poignées Word-like */}
-            <div className="tt-h tt-h-nw" onMouseDown={startResize("nw")} />
-            <div className="tt-h tt-h-n"  onMouseDown={startResize("n")} />
-            <div className="tt-h tt-h-ne" onMouseDown={startResize("ne")} />
-            <div className="tt-h tt-h-e"  onMouseDown={startResize("e")} />
-            <div className="tt-h tt-h-se" onMouseDown={startResize("se")} />
-            <div className="tt-h tt-h-s"  onMouseDown={startResize("s")} />
-            <div className="tt-h tt-h-sw" onMouseDown={startResize("sw")} />
-            <div className="tt-h tt-h-w"  onMouseDown={startResize("w")} />
+            {/* 8 poignées Word — chacune a sa propre sémantique */}
+            <div className="tt-h tt-h-nw" onMouseDown={startResize("nw")} title="Redimensionner (proportionnel)" />
+            <div className="tt-h tt-h-n"  onMouseDown={startResize("n")}  title="Modifier la hauteur" />
+            <div className="tt-h tt-h-ne" onMouseDown={startResize("ne")} title="Redimensionner (proportionnel)" />
+            <div className="tt-h tt-h-e"  onMouseDown={startResize("e")}  title="Modifier la largeur" />
+            <div className="tt-h tt-h-se" onMouseDown={startResize("se")} title="Redimensionner (proportionnel)" />
+            <div className="tt-h tt-h-s"  onMouseDown={startResize("s")}  title="Modifier la hauteur" />
+            <div className="tt-h tt-h-sw" onMouseDown={startResize("sw")} title="Redimensionner (proportionnel)" />
+            <div className="tt-h tt-h-w"  onMouseDown={startResize("w")}  title="Modifier la largeur" />
             <div className="tt-toolbar">
               <button type="button" title="Aligner à gauche"  onClick={() => updateAttributes({ alignment: "left" })}>⬅</button>
               <button type="button" title="Centrer"            onClick={() => updateAttributes({ alignment: "center" })}>⬌</button>
               <button type="button" title="Aligner à droite"   onClick={() => updateAttributes({ alignment: "right" })}>➡</button>
-              <button type="button" title="Pleine largeur"     onClick={() => updateAttributes({ alignment: "wide", width: "100%" })}>⛶</button>
+              <button type="button" title="Pleine largeur"     onClick={() => updateAttributes({ alignment: "wide", width: "100%", height: "auto" })}>⛶</button>
+              <span className="tt-toolbar-sep" />
+              <button type="button" title="Réinitialiser ratio"     onClick={() => updateAttributes({ height: "auto" })}>⤺</button>
             </div>
           </>
         )}
@@ -113,7 +159,7 @@ function ImageNodeView({ node, updateAttributes, selected }: NodeViewProps) {
           onChange={(e) => updateAttributes({ caption: e.target.value })}
         />
       )}
-      {dragging && <div className="tt-resize-hint">Glissez pour redimensionner</div>}
+      {dragging && <div className="tt-resize-hint">Glissez pour redimensionner — relâchez pour valider</div>}
     </NodeViewWrapper>
   );
 }
@@ -124,9 +170,10 @@ const ResizableImage = ImageExt.extend({
   addAttributes() {
     return {
       ...this.parent?.(),
-      width: { default: "100%", parseHTML: (e) => e.getAttribute("data-width") ?? "100%", renderHTML: (a) => ({ "data-width": a.width }) },
+      width:     { default: "100%", parseHTML: (e) => e.getAttribute("data-width")     ?? "100%",   renderHTML: (a) => ({ "data-width":     a.width     }) },
+      height:    { default: "auto", parseHTML: (e) => e.getAttribute("data-height")    ?? "auto",   renderHTML: (a) => ({ "data-height":    a.height    }) },
       alignment: { default: "center", parseHTML: (e) => e.getAttribute("data-alignment") ?? "center", renderHTML: (a) => ({ "data-alignment": a.alignment }) },
-      caption: { default: "", parseHTML: (e) => e.getAttribute("data-caption") ?? "", renderHTML: (a) => ({ "data-caption": a.caption }) },
+      caption:   { default: "",     parseHTML: (e) => e.getAttribute("data-caption")   ?? "",       renderHTML: (a) => ({ "data-caption":   a.caption   }) },
     };
   },
   addNodeView() {

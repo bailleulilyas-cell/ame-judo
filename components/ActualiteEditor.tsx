@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useState, useRef, useTransition } from "react";
 import RichEditor from "./RichEditor";
 import type { Actualite } from "@/types";
@@ -50,32 +49,13 @@ export default function ActualiteEditor({ actualite, action, mode }: Props) {
   const [kanji, setKanji] = useState(actualite?.kanji ?? "報");
   const [categorie, setCategorie] = useState(actualite?.categorie ?? "Actualité");
   const [datePub, setDatePub] = useState(actualite?.date_publication?.slice(0, 10) ?? new Date().toISOString().slice(0, 10));
-  const [photoUrl, setPhotoUrl] = useState(actualite?.photo_url ?? "");
   const [statut, setStatut] = useState<"draft" | "published">(actualite?.statut ?? "draft");
-  const [coverUploading, setCoverUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleTitreChange = (v: string) => {
     setTitre(v);
     if (!slugTouched) setSlug(slugify(v));
-  };
-
-  const uploadCover = async (file: File) => {
-    setCoverUploading(true);
-    setError(null);
-    try {
-      const fd = new FormData();
-      fd.append("file", file);
-      const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
-      const data = await res.json();
-      if (res.ok) setPhotoUrl(data.url);
-      else setError(data.message ?? "Erreur upload.");
-    } catch {
-      setError("Erreur réseau pendant l'upload.");
-    } finally {
-      setCoverUploading(false);
-    }
   };
 
   const handleSubmit = (nextStatut: "draft" | "published") => {
@@ -221,46 +201,8 @@ export default function ActualiteEditor({ actualite, action, mode }: Props) {
             </div>
           </div>
 
-          {/* ── COVER IMAGE ── */}
-          <div className="ae-cover">
-            {photoUrl ? (
-              <div className="ae-cover-preview">
-                <Image
-                  src={photoUrl}
-                  alt="Couverture"
-                  width={1600}
-                  height={600}
-                  className="ae-cover-img"
-                  unoptimized
-                />
-                <div className="ae-cover-actions">
-                  <label className="ae-btn ae-btn--ghost" style={{ cursor: "pointer" }}>
-                    {coverUploading ? "Upload…" : "Remplacer"}
-                    <input type="file" accept="image/*" hidden onChange={(e) => e.target.files?.[0] && uploadCover(e.target.files[0])} />
-                  </label>
-                  <button type="button" className="ae-btn ae-btn--ghost ae-btn--danger" onClick={() => setPhotoUrl("")}>
-                    Retirer
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <label className="ae-cover-dropzone">
-                <input
-                  type="file"
-                  accept="image/*"
-                  hidden
-                  disabled={coverUploading}
-                  onChange={(e) => e.target.files?.[0] && uploadCover(e.target.files[0])}
-                />
-                <span className="ae-cover-icon">📷</span>
-                <span className="ae-cover-text">
-                  {coverUploading ? "Téléversement…" : "Cliquer pour ajouter une image de couverture"}
-                </span>
-                <span className="ae-cover-hint">Optionnel — apparaît en grand au-dessus de l&apos;article</span>
-              </label>
-            )}
-            <input type="hidden" name="photo_url" value={photoUrl} />
-          </div>
+          {/* Champ caché conservé pour compatibilité (vide = pas de couverture) */}
+          <input type="hidden" name="photo_url" value="" />
 
           {/* ── KANJI + META PREVIEW (style article publié) ── */}
           <div className="ae-article-meta-preview">

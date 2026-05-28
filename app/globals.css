@@ -1978,7 +1978,8 @@ main { padding-top: var(--nav-h); }
   background: var(--bg-warm);
   border-bottom: 1px solid var(--hair-color);
   position: sticky;
-  top: 0;
+  /* Sticky sous la barre du haut de l'éditeur (ae-topbar fait ~58px) */
+  top: 58px;
   z-index: 5;
 }
 .rich-tool-group {
@@ -2018,11 +2019,9 @@ main { padding-top: var(--nav-h); }
   color: var(--stone);
 }
 
-/* Contenu */
+/* Contenu — pas de scroll interne, la page scrolle */
 .rich-editor-content {
   min-height: 320px;
-  max-height: 70vh;
-  overflow-y: auto;
   padding: 24px clamp(16px, 3vw, 36px);
   background: var(--paper);
 }
@@ -2164,6 +2163,21 @@ main { padding-top: var(--nav-h); }
   transition: background 0.15s;
 }
 .tt-toolbar button:hover { background: rgba(255,255,255,0.15); }
+.tt-toolbar-sep {
+  width: 1px;
+  height: 18px;
+  background: rgba(255,255,255,0.2);
+  margin: 0 4px;
+}
+
+/* Curseur "move" sur l'image quand sélectionnée — indique qu'elle peut être glissée */
+.tt-image.is-selected .tt-image-frame { cursor: move; }
+
+/* Cursor de drop (où l'image va atterrir quand on la drague) */
+.ProseMirror-dropcursor {
+  border-left: 2px solid var(--red);
+  margin: 0;
+}
 
 .tt-image-caption {
   display: block;
