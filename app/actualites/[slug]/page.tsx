@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { getActualiteBySlug } from "@/lib/data";
-import { renderMarkdown } from "@/lib/markdown";
+import { renderArticleBody } from "@/lib/markdown";
 
 const SITE_URL = "https://ame-judo.fr";
 
@@ -57,7 +57,7 @@ export default async function ActualiteDetail({
     year: "numeric",
   });
 
-  const html = renderMarkdown(actu.body);
+  const html = renderArticleBody(actu.body_html, actu.body);
 
   // JSON-LD Article + BreadcrumbList
   const articleJsonLd = {

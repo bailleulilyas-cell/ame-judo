@@ -18,7 +18,7 @@ marked.setOptions({
  */
 
 const DANGEROUS_TAGS = [
-  "script", "iframe", "object", "embed", "style", "form",
+  "script", "object", "embed", "style", "form",
   "input", "button", "textarea", "select", "option",
   "link", "meta", "base", "applet",
 ];
@@ -31,13 +31,31 @@ const ALLOWED_TAGS = new Set([
   "hr", "code", "pre",
   "table", "thead", "tbody", "tr", "th", "td",
   "span", "div",
+  // iframe : autorisé uniquement avec src YouTube (validation dans isSafeUrl)
+  "iframe",
 ]);
 
-const ALLOWED_ATTR_GLOBAL = new Set(["title", "lang"]);
+const ALLOWED_ATTR_GLOBAL = new Set(["title", "lang", "style", "data-alignment", "data-width", "data-caption"]);
 const ALLOWED_ATTR_BY_TAG: Record<string, Set<string>> = {
   a: new Set(["href", "title", "target", "rel"]),
   img: new Set(["src", "alt", "title", "width", "height"]),
+  iframe: new Set(["src", "width", "height", "allowfullscreen", "frameborder", "allow"]),
 };
+
+/**
+ * Valide un attribut style — n'autorise QUE `text-align` (left/center/right/justify).
+ * Tout le reste est supprimé (anti CSS injection).
+ */
+function sanitizeStyleAttr(value: string): string {
+  const allowed: string[] = [];
+  for (const decl of value.split(";")) {
+    const [prop, val] = decl.split(":").map((s) => s.trim().toLowerCase());
+    if (prop === "text-align" && ["left", "center", "right", "justify"].includes(val)) {
+      allowed.push(`text-align:${val}`);
+    }
+  }
+  return allowed.join(";");
+}
 
 function isSafeUrl(url: string): boolean {
   const trimmed = url.trim().toLowerCase();
@@ -47,9 +65,29 @@ function isSafeUrl(url: string): boolean {
   return true;
 }
 
+/** Une iframe est autorisée uniquement si son src est sur un domaine vidéo de confiance. */
+function isSafeIframeSrc(url: string): boolean {
+  const trimmed = url.trim().toLowerCase();
+  return (
+    trimmed.startsWith("https://www.youtube.com/embed/") ||
+    trimmed.startsWith("https://youtube.com/embed/") ||
+    trimmed.startsWith("https://www.youtube-nocookie.com/embed/") ||
+    trimmed.startsWith("https://player.vimeo.com/video/")
+  );
+}
+
 function sanitizeHtml(html: string): string {
-  // 1) Retire les balises dangereuses ET leur contenu
   let cleaned = html;
+
+  // 0) Pré-traitement iframes : on retire entièrement (avec leur contenu)
+  //    les iframes dont le src n'est pas un domaine vidéo de confiance.
+  cleaned = cleaned.replace(/<iframe\b([^>]*)>([\s\S]*?)<\/iframe>/gi, (full, attrs: string) => {
+    const srcMatch = /src\s*=\s*("([^"]*)"|'([^']*)'|([^\s>]+))/i.exec(attrs);
+    const src = srcMatch ? (srcMatch[2] ?? srcMatch[3] ?? srcMatch[4] ?? "") : "";
+    return isSafeIframeSrc(src) ? full : "";
+  });
+
+  // 1) Retire les balises dangereuses ET leur contenu
   for (const tag of DANGEROUS_TAGS) {
     const open = new RegExp(`<${tag}\\b[\\s\\S]*?<\\/${tag}>`, "gi");
     const selfClosing = new RegExp(`<${tag}\\b[^>]*\\/?>`, "gi");
@@ -76,16 +114,28 @@ function sanitizeHtml(html: string): string {
       if (!allowedForTag.has(name) && !ALLOWED_ATTR_GLOBAL.has(name)) continue;
 
       const rawValue = m[3] ?? m[4] ?? m[5] ?? "";
-      const value = rawValue
+
+      // URLs : bloque les schémas dangereux
+      if ((name === "href" || name === "src") && !isSafeUrl(rawValue)) continue;
+      // iframe : src doit être whitelist YouTube/Vimeo (sinon l'iframe entier sera retirée)
+      if (tag === "iframe" && name === "src" && !isSafeIframeSrc(rawValue)) {
+        return ""; // supprime l'iframe entière
+      }
+
+      // Style : ne garde que text-align (anti CSS injection)
+      let finalValue = rawValue;
+      if (name === "style") {
+        finalValue = sanitizeStyleAttr(rawValue);
+        if (!finalValue) continue;
+      }
+
+      const escaped = finalValue
         .replace(/&/g, "&amp;")
         .replace(/"/g, "&quot;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;");
 
-      // URLs : bloque les schémas dangereux
-      if ((name === "href" || name === "src") && !isSafeUrl(rawValue)) continue;
-
-      kept.push(`${name}="${value}"`);
+      kept.push(`${name}="${escaped}"`);
     }
 
     // Force rel="noopener noreferrer" sur les liens externes
@@ -109,4 +159,15 @@ export function renderMarkdown(md: string): string {
   if (!md) return "";
   const raw = marked.parse(md, { async: false }) as string;
   return sanitizeHtml(raw);
+}
+
+/**
+ * Rend le contenu d'un article : préfère le HTML (nouvel éditeur TipTap),
+ * fallback sur le Markdown (ancien éditeur). Toujours sanitisé.
+ */
+export function renderArticleBody(bodyHtml: string | null | undefined, bodyMarkdown: string): string {
+  if (bodyHtml && bodyHtml.replace(/<[^>]*>/g, "").trim()) {
+    return sanitizeHtml(bodyHtml);
+  }
+  return renderMarkdown(bodyMarkdown);
 }

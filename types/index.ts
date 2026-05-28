@@ -73,6 +73,7 @@ export interface Actualite {
   slug: string;
   extrait: string;
   body: string;
+  body_html?: string | null;
   photo_url: string | null;
   statut: "draft" | "published";
   created_at: string;

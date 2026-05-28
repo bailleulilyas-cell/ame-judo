@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { Actualite } from "@/types";
-import MarkdownEditor from "./MarkdownEditor";
+import RichEditor from "./RichEditor";
 import ImageUpload from "./ImageUpload";
 
 interface Props {
@@ -132,14 +132,15 @@ export default function ActualiteForm({ action, actualite, mode }: Props) {
 
         <div className="form-field" style={{ gridColumn: "1 / -1" }}>
           <label className="form-label">
-            Contenu de l&apos;article <span style={{ textTransform: "none", letterSpacing: 0, color: "var(--stone)" }}>(utilisez la barre d&apos;outils pour mettre en forme)</span>
+            Contenu de l&apos;article <span style={{ textTransform: "none", letterSpacing: 0, color: "var(--stone)" }}>(éditeur visuel — mise en forme libre, images redimensionnables)</span>
           </label>
-          <MarkdownEditor
-            name="body"
-            defaultValue={actualite?.body ?? ""}
-            rows={18}
-            required
+          <RichEditor
+            name="body_html"
+            defaultValue={actualite?.body_html ?? actualite?.body ?? ""}
+            placeholder="Tapez votre article ici. Glissez-déposez des images, cliquez sur la barre d'outils pour mettre en forme…"
           />
+          {/* Champ caché : on garde le markdown existant pour rétrocompat */}
+          <input type="hidden" name="body" defaultValue={actualite?.body ?? ""} />
         </div>
 
         <div className="form-field" style={{ gridColumn: "1 / -1" }}>

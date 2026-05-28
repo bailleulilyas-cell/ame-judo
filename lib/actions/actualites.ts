@@ -47,8 +47,16 @@ function extractFields(formData: FormData) {
   const extrait = ((formData.get("extrait") as string) ?? "").trim();
   if (!extrait) throw new Error("L'extrait est obligatoire (1 à 2 phrases visibles sur la liste).");
 
+  // Le contenu peut venir soit du nouvel éditeur (body_html) soit de l'ancien (body, Markdown).
+  const bodyHtml = ((formData.get("body_html") as string) ?? "").trim();
   const body = ((formData.get("body") as string) ?? "").trim();
-  if (!body) throw new Error("Le contenu de l'article est obligatoire.");
+  // On vérifie qu'au moins un des deux est rempli, et qu'il a un contenu réel
+  // (pas juste un paragraphe vide <p></p>).
+  const htmlIsEmpty = !bodyHtml || bodyHtml.replace(/<[^>]*>/g, "").trim() === "";
+  if (htmlIsEmpty && !body) {
+    throw new Error("Le contenu de l'article est obligatoire.");
+  }
+  if (bodyHtml.length > 200_000) throw new Error("Le contenu est trop long.");
 
   const datePub = ((formData.get("date_publication") as string) ?? "").trim();
   // Vérifie le format YYYY-MM-DD si fourni
@@ -63,6 +71,7 @@ function extractFields(formData: FormData) {
     date_publication: datePub || new Date().toISOString().slice(0, 10),
     extrait,
     body,
+    body_html: bodyHtml || null,
     photo_url: ((formData.get("photo_url") as string) ?? "").trim() || null,
     statut: (formData.get("statut") as string) === "published" ? "published" as const : "draft" as const,
     slugInput: ((formData.get("slug") as string) ?? "").trim(),
@@ -77,8 +86,8 @@ export async function createActualite(formData: FormData) {
   const slug = await ensureUniqueSlug(f.slugInput || slugify(f.titre));
 
   await query(
-    "INSERT INTO actualites (kanji, categorie, date_publication, titre, slug, extrait, body, photo_url, statut) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-    [f.kanji, f.categorie, f.date_publication, f.titre, slug, f.extrait, f.body, f.photo_url, f.statut]
+    "INSERT INTO actualites (kanji, categorie, date_publication, titre, slug, extrait, body, body_html, photo_url, statut) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    [f.kanji, f.categorie, f.date_publication, f.titre, slug, f.extrait, f.body, f.body_html, f.photo_url, f.statut]
   );
 
   refreshPublicCache();
@@ -93,8 +102,8 @@ export async function updateActualite(id: string, formData: FormData) {
   const slug = await ensureUniqueSlug(f.slugInput || slugify(f.titre), id);
 
   await query(
-    `UPDATE actualites SET kanji = ?, categorie = ?, date_publication = ?, titre = ?, slug = ?, extrait = ?, body = ?, photo_url = ?, statut = ? WHERE id = ?`,
-    [f.kanji, f.categorie, f.date_publication, f.titre, slug, f.extrait, f.body, f.photo_url, f.statut, id]
+    `UPDATE actualites SET kanji = ?, categorie = ?, date_publication = ?, titre = ?, slug = ?, extrait = ?, body = ?, body_html = ?, photo_url = ?, statut = ? WHERE id = ?`,
+    [f.kanji, f.categorie, f.date_publication, f.titre, slug, f.extrait, f.body, f.body_html, f.photo_url, f.statut, id]
   );
 
   refreshPublicCache();
