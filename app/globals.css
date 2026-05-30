@@ -1725,9 +1725,10 @@ main { padding-top: var(--nav-h); }
   transition: border-color 0.2s;
 }
 .ed-input:focus { border-color: var(--sumi); }
-.ed-kanji-wrap { position: relative; display: flex; gap: 4px; }
+.ed-kanji-wrap { position: relative; display: flex; gap: 4px; width: 100%; }
 .ed-kanji-input {
   flex: 1;
+  min-width: 0;
   padding: 4px 0;
   text-align: center;
   font-family: var(--serif-jp);
