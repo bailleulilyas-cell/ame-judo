@@ -28,6 +28,7 @@ const ALLOWED_TAGS = new Set([
   "h1", "h2", "h3", "h4", "h5", "h6",
   "ul", "ol", "li",
   "a", "img",
+  "figure", "figcaption",
   "hr", "code", "pre",
   "table", "thead", "tbody", "tr", "th", "td",
   "span", "div",
@@ -35,7 +36,11 @@ const ALLOWED_TAGS = new Set([
   "iframe",
 ]);
 
-const ALLOWED_ATTR_GLOBAL = new Set(["title", "lang", "style", "data-alignment", "data-width", "data-caption"]);
+const ALLOWED_ATTR_GLOBAL = new Set([
+  "title", "lang", "style",
+  // images : nouveau format <figure> + ancien format <img> (compat)
+  "data-ame-fig", "data-align", "data-width", "data-alignment", "data-caption",
+]);
 const ALLOWED_ATTR_BY_TAG: Record<string, Set<string>> = {
   a: new Set(["href", "title", "target", "rel"]),
   img: new Set(["src", "alt", "title", "width", "height"]),
@@ -43,7 +48,9 @@ const ALLOWED_ATTR_BY_TAG: Record<string, Set<string>> = {
 };
 
 /**
- * Valide un attribut style — n'autorise QUE `text-align` (left/center/right/justify).
+ * Valide un attribut style — n'autorise QUE :
+ *   - `text-align` (left/center/right/justify) — alignement de paragraphe
+ *   - `width` exprimé en pourcentage 1–100% — largeur d'une image <figure>
  * Tout le reste est supprimé (anti CSS injection).
  */
 function sanitizeStyleAttr(value: string): string {
@@ -52,6 +59,11 @@ function sanitizeStyleAttr(value: string): string {
     const [prop, val] = decl.split(":").map((s) => s.trim().toLowerCase());
     if (prop === "text-align" && ["left", "center", "right", "justify"].includes(val)) {
       allowed.push(`text-align:${val}`);
+    } else if (prop === "width") {
+      const m = /^(\d{1,3})%$/.exec(val);
+      if (m && Number(m[1]) >= 1 && Number(m[1]) <= 100) {
+        allowed.push(`width:${val}`);
+      }
     }
   }
   return allowed.join(";");
@@ -162,12 +174,23 @@ export function renderMarkdown(md: string): string {
 }
 
 /**
+ * Un corps HTML a-t-il du contenu réel ? On compte le texte visible MAIS
+ * aussi les médias (image, vidéo, séparateur) : un article qui ne contient
+ * qu'une photo n'est pas « vide ».
+ */
+export function htmlHasContent(html: string | null | undefined): boolean {
+  if (!html) return false;
+  if (html.replace(/<[^>]*>/g, "").trim().length > 0) return true;
+  return /<(img|figure|iframe|video|hr)\b/i.test(html);
+}
+
+/**
  * Rend le contenu d'un article : préfère le HTML (nouvel éditeur TipTap),
  * fallback sur le Markdown (ancien éditeur). Toujours sanitisé.
  */
 export function renderArticleBody(bodyHtml: string | null | undefined, bodyMarkdown: string): string {
-  if (bodyHtml && bodyHtml.replace(/<[^>]*>/g, "").trim()) {
-    return sanitizeHtml(bodyHtml);
+  if (htmlHasContent(bodyHtml)) {
+    return sanitizeHtml(bodyHtml as string);
   }
   return renderMarkdown(bodyMarkdown);
 }

@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
   }
   if (file.size > MAX_SIZE) {
     return NextResponse.json(
-      { message: "Fichier trop volumineux (5 Mo max)." },
+      { message: "Fichier trop volumineux (10 Mo max)." },
       { status: 400 }
     );
   }

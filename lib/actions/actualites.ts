@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { query, queryOne } from "@/lib/db";
 import { isAuthenticated } from "@/lib/auth";
+import { htmlHasContent } from "@/lib/markdown";
 import type { Actualite } from "@/types";
 
 const DB_READY = Boolean(process.env.DB_HOST && process.env.DB_NAME);
@@ -50,10 +51,9 @@ function extractFields(formData: FormData) {
   // Le contenu peut venir soit du nouvel éditeur (body_html) soit de l'ancien (body, Markdown).
   const bodyHtml = ((formData.get("body_html") as string) ?? "").trim();
   const body = ((formData.get("body") as string) ?? "").trim();
-  // On vérifie qu'au moins un des deux est rempli, et qu'il a un contenu réel
-  // (pas juste un paragraphe vide <p></p>).
-  const htmlIsEmpty = !bodyHtml || bodyHtml.replace(/<[^>]*>/g, "").trim() === "";
-  if (htmlIsEmpty && !body) {
+  // On vérifie qu'au moins un des deux a un contenu réel — texte OU média
+  // (un article composé uniquement d'une photo est valide).
+  if (!htmlHasContent(bodyHtml) && !body) {
     throw new Error("Le contenu de l'article est obligatoire.");
   }
   if (bodyHtml.length > 200_000) throw new Error("Le contenu est trop long.");

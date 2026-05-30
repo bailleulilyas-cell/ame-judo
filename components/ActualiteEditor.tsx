@@ -3,16 +3,9 @@
 import Link from "next/link";
 import { useState, useRef, useTransition, useEffect } from "react";
 import RichEditor from "./RichEditor";
+import { renderArticleBody } from "@/lib/markdown";
+import { uploadImage, UploadError, ACCEPTED_IMAGE_TYPES } from "@/lib/image-upload";
 import type { Actualite } from "@/types";
-
-interface PreviewSnapshot {
-  titre: string;
-  extrait: string;
-  kanji: string;
-  categorie: string;
-  date: string;
-  bodyHtml: string;
-}
 
 interface Props {
   actualite?: Actualite | null;
@@ -20,17 +13,21 @@ interface Props {
   mode: "create" | "edit";
 }
 
-const CATEGORIES = [
-  { value: "Actualité", label: "Actualité" },
-  { value: "Stage", label: "Stage" },
-  { value: "Compétition", label: "Compétition" },
-  { value: "Événement", label: "Événement" },
-  { value: "Information", label: "Information" },
-];
+interface PreviewSnap {
+  titre: string;
+  extrait: string;
+  kanji: string;
+  categorie: string;
+  date: string;
+  bodyHtml: string;
+  cover: string;
+}
 
-const KANJIS = [
+const CATEGORIES = ["Actualité", "Stage", "Compétition", "Événement", "Information"] as const;
+
+const KANJIS: { char: string; label: string }[] = [
   { char: "報", label: "Annonce" },
-  { char: "祭", label: "Stage / Fête" },
+  { char: "祭", label: "Stage" },
   { char: "勝", label: "Victoire" },
   { char: "新", label: "Nouveau" },
   { char: "学", label: "Apprentissage" },
@@ -40,10 +37,8 @@ const KANJIS = [
 ];
 
 function slugify(s: string): string {
-  return s
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
+  return s.toLowerCase()
+    .normalize("NFD").replace(/[̀-ͯ]/g, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "")
     .slice(0, 80);
@@ -51,27 +46,41 @@ function slugify(s: string): string {
 
 export default function ActualiteEditor({ actualite, action, mode }: Props) {
   const [isPending, startTransition] = useTransition();
-  const [titre, setTitre] = useState(actualite?.titre ?? "");
-  const [extrait, setExtrait] = useState(actualite?.extrait ?? "");
-  const [slug, setSlug] = useState(actualite?.slug ?? "");
-  const [slugTouched, setSlugTouched] = useState(!!actualite?.slug);
-  const [kanji, setKanji] = useState(actualite?.kanji ?? "報");
-  const [categorie, setCategorie] = useState(actualite?.categorie ?? "Actualité");
-  const [datePub, setDatePub] = useState(actualite?.date_publication?.slice(0, 10) ?? new Date().toISOString().slice(0, 10));
-  const [statut, setStatut] = useState<"draft" | "published">(actualite?.statut ?? "draft");
-  const [error, setError] = useState<string | null>(null);
-  const [preview, setPreview] = useState<PreviewSnapshot | null>(null);
+  const [titre, setTitre]       = useState(actualite?.titre ?? "");
+  const [extrait, setExtrait]   = useState(actualite?.extrait ?? "");
+  const [slug, setSlug]         = useState(actualite?.slug ?? "");
+  const [slugTouched, setSlugT] = useState(!!actualite?.slug);
+  const [kanji, setKanji]       = useState(actualite?.kanji ?? "報");
+  const [categorie, setCateg]   = useState(actualite?.categorie ?? "Actualité");
+  const [datePub, setDatePub]   = useState(actualite?.date_publication?.slice(0, 10) ?? new Date().toISOString().slice(0, 10));
+  const [statut, setStatut]     = useState<"draft" | "published">(actualite?.statut ?? "draft");
+  const [cover, setCover]       = useState(actualite?.photo_url ?? "");
+  const [error, setError]       = useState<string | null>(null);
+  const [preview, setPreview]   = useState<PreviewSnap | null>(null);
+  const [kanjiOpen, setKanjiO]  = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
-  // Ferme l'aperçu avec Escape
   useEffect(() => {
-    if (!preview) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setPreview(null); };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      if (preview) setPreview(null);
+      else if (kanjiOpen) setKanjiO(false);
+    };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [preview]);
+  }, [preview, kanjiOpen]);
 
-  const handlePreview = () => {
+  const handleTitre = (v: string) => {
+    setTitre(v);
+    if (!slugTouched) setSlug(slugify(v));
+  };
+
+  const handleSlug = (v: string) => {
+    setSlug(slugify(v));
+    setSlugT(true);
+  };
+
+  const openPreview = () => {
     const form = formRef.current;
     if (!form) return;
     const fd = new FormData(form);
@@ -82,20 +91,15 @@ export default function ActualiteEditor({ actualite, action, mode }: Props) {
       categorie: (fd.get("categorie")        as string) || categorie,
       date:      (fd.get("date_publication") as string) || datePub,
       bodyHtml:  (fd.get("body_html")        as string) || "",
+      cover,
     });
   };
 
-  const handleTitreChange = (v: string) => {
-    setTitre(v);
-    if (!slugTouched) setSlug(slugify(v));
-  };
-
-  const handleSubmit = (nextStatut: "draft" | "published") => {
+  const submit = (nextStatut: "draft" | "published") => {
     setError(null);
     setStatut(nextStatut);
     const form = formRef.current;
     if (!form) return;
-
     const fd = new FormData(form);
     fd.set("statut", nextStatut);
 
@@ -108,236 +112,217 @@ export default function ActualiteEditor({ actualite, action, mode }: Props) {
     });
   };
 
+  const formattedDate = datePub
+    ? new Date(datePub).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })
+    : "—";
+
   return (
     <>
-    <form ref={formRef} className="ae-root">
-      {/* ────── BARRE DU HAUT ────── */}
-      <header className="ae-topbar">
-        <Link href="/admin/actualites" className="ae-back">
-          <span aria-hidden>←</span> Toutes les actualités
-        </Link>
+      <form ref={formRef} className="ed-page">
+        {/* ━━━━━━━━━━━━━━━━━━━━━━ BARRE FIXE EN HAUT ━━━━━━━━━━━━━━━━━━━━━━ */}
+        <header className="ed-bar">
+          <Link href="/admin/actualites" className="ed-back" title="Retour à la liste des actualités">
+            <span aria-hidden>←</span> Actualités
+          </Link>
 
-        <div className="ae-status">
-          <span className={`ae-status-pill ae-status-pill--${statut}`}>
+          <span className={`ed-pill ed-pill--${statut}`}>
             {statut === "published" ? "● Publié" : "○ Brouillon"}
           </span>
-          {actualite?.updated_at && (
-            <span className="ae-saved">
-              Modifié le {new Date(actualite.updated_at).toLocaleDateString("fr-FR")}
-            </span>
-          )}
-        </div>
 
-        <div className="ae-actions">
-          <button
-            type="button"
-            className="ae-btn ae-btn--ghost"
-            onClick={handlePreview}
-            disabled={isPending}
-            title="Voir l'article comme s'il était publié (sans rien sauvegarder)"
-          >
-            👁 Aperçu
-          </button>
-          <button
-            type="button"
-            className="ae-btn ae-btn--ghost"
-            onClick={() => handleSubmit("draft")}
-            disabled={isPending}
-          >
-            {isPending && statut === "draft" ? "Enregistrement…" : "Enregistrer en brouillon"}
-          </button>
-          <button
-            type="button"
-            className="ae-btn ae-btn--primary"
-            onClick={() => handleSubmit("published")}
-            disabled={isPending}
-          >
-            {isPending && statut === "published" ? "Publication…" : (mode === "edit" ? "Mettre à jour" : "Publier")}
-            <span className="ae-btn-dot" aria-hidden />
-          </button>
-        </div>
-      </header>
+          <div className="ed-bar-actions">
+            <button type="button" className="ed-btn" onClick={openPreview} disabled={isPending} title="Voir le rendu publié (sans rien enregistrer)">
+              <span aria-hidden>👁</span> Aperçu
+            </button>
+            <button type="button" className="ed-btn" onClick={() => submit("draft")} disabled={isPending}>
+              {isPending && statut === "draft" ? "…" : "Brouillon"}
+            </button>
+            <button type="button" className="ed-btn ed-btn--primary" onClick={() => submit("published")} disabled={isPending}>
+              {isPending && statut === "published"
+                ? (mode === "edit" ? "Mise à jour…" : "Publication…")
+                : (mode === "edit" ? "Mettre à jour" : "Publier")}
+            </button>
+          </div>
+        </header>
 
-      {error && (
-        <div className="ae-error" role="alert">
-          <strong>Erreur :</strong> {error}
-        </div>
-      )}
+        {error && (
+          <div className="ed-error" role="alert">
+            <strong>Erreur :</strong> {error}
+          </div>
+        )}
 
-      {/* ────── CONTENU PRINCIPAL ────── */}
-      <div className="ae-workspace">
-        <div className="ae-canvas">
-          {/* ── BAREME META (kanji, catégorie, date) ── */}
-          <div className="ae-meta-bar">
-            <div className="ae-meta-item">
-              <label htmlFor="kanji-input">Kanji</label>
-              <div className="ae-kanji-wrap">
-                <input
-                  id="kanji-input"
-                  name="kanji"
-                  type="text"
-                  maxLength={2}
-                  value={kanji}
-                  onChange={(e) => setKanji(e.target.value.slice(0, 2))}
-                  className="ae-kanji-input"
-                  lang="ja"
-                />
-                <details className="ae-kanji-picker">
-                  <summary aria-label="Choisir un kanji">▾</summary>
-                  <div className="ae-kanji-grid">
-                    {KANJIS.map((k) => (
-                      <button
-                        type="button"
-                        key={k.char}
-                        onClick={() => setKanji(k.char)}
-                        className={`ae-kanji-choice${kanji === k.char ? " is-active" : ""}`}
-                        title={k.label}
-                      >
-                        <span lang="ja">{k.char}</span>
-                        <span className="ae-kanji-label">{k.label}</span>
-                      </button>
-                    ))}
-                  </div>
-                </details>
-              </div>
-            </div>
-
-            <div className="ae-meta-item">
-              <label htmlFor="categorie-input">Catégorie</label>
-              <select
-                id="categorie-input"
-                name="categorie"
-                value={categorie}
-                onChange={(e) => setCategorie(e.target.value)}
-                className="ae-select"
-              >
-                {CATEGORIES.map((c) => (
-                  <option key={c.value} value={c.value}>{c.label}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className="ae-meta-item">
-              <label htmlFor="date-input">Date</label>
+        {/* ━━━━━━━━━━━━━━━━━━━━━━ MÉTADONNÉES ━━━━━━━━━━━━━━━━━━━━━━ */}
+        <div className="ed-meta">
+          <div className="ed-meta-field">
+            <label htmlFor="m-kanji">Kanji</label>
+            <div className="ed-kanji-wrap">
               <input
-                id="date-input"
-                name="date_publication"
-                type="date"
-                value={datePub}
-                onChange={(e) => setDatePub(e.target.value)}
-                className="ae-input"
+                id="m-kanji" name="kanji" type="text" maxLength={2} value={kanji}
+                onChange={(e) => setKanji(e.target.value.slice(0, 2))}
+                onFocus={() => setKanjiO(false)}
+                className="ed-kanji-input" lang="ja"
               />
-            </div>
-
-            <div className="ae-meta-item ae-meta-item--grow">
-              <label htmlFor="slug-input">URL (slug)</label>
-              <input
-                id="slug-input"
-                name="slug"
-                type="text"
-                value={slug}
-                placeholder="généré automatiquement"
-                onChange={(e) => { setSlug(slugify(e.target.value)); setSlugTouched(true); }}
-                className="ae-input"
-              />
+              <button type="button" className="ed-kanji-pick" onClick={() => setKanjiO((v) => !v)} title="Choisir un kanji" aria-haspopup="true" aria-expanded={kanjiOpen}>▾</button>
+              {kanjiOpen && (
+                <div className="ed-kanji-menu" role="menu">
+                  {KANJIS.map((k) => (
+                    <button key={k.char} type="button" role="menuitem"
+                      className={`ed-kanji-item${kanji === k.char ? " is-active" : ""}`}
+                      onClick={() => { setKanji(k.char); setKanjiO(false); }}>
+                      <span lang="ja">{k.char}</span>
+                      <small>{k.label}</small>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Champ caché conservé pour compatibilité (vide = pas de couverture) */}
-          <input type="hidden" name="photo_url" value="" />
+          <div className="ed-meta-field">
+            <label htmlFor="m-cat">Catégorie</label>
+            <select id="m-cat" name="categorie" value={categorie} onChange={(e) => setCateg(e.target.value)} className="ed-input">
+              {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
 
-          {/* ── KANJI + META PREVIEW (style article publié) ── */}
-          <div className="ae-article-meta-preview">
-            <span className="ae-article-kanji" lang="ja" aria-hidden>{kanji}</span>
-            <div className="ae-article-meta">
-              <span className="ae-cat-dot" aria-hidden />
+          <div className="ed-meta-field">
+            <label htmlFor="m-date">Date</label>
+            <input id="m-date" name="date_publication" type="date" value={datePub} onChange={(e) => setDatePub(e.target.value)} className="ed-input" />
+          </div>
+
+          <div className="ed-meta-field ed-meta-field--grow">
+            <label htmlFor="m-slug">URL (slug)</label>
+            <input id="m-slug" name="slug" type="text" value={slug} placeholder="généré automatiquement depuis le titre" onChange={(e) => handleSlug(e.target.value)} className="ed-input" />
+          </div>
+        </div>
+
+        {/* ━━━━━━━━━━━━━━━━━━━━━━ ARTICLE (feuille) ━━━━━━━━━━━━━━━━━━━━━━ */}
+        <article className="ed-paper">
+          <CoverField value={cover} onChange={setCover} />
+
+          <div className="ed-paper-head">
+            <div className="ed-paper-kanji" lang="ja" aria-hidden>{kanji || "·"}</div>
+            <div className="ed-paper-cat">
+              <span className="ed-cat-dot" aria-hidden />
               <span>{categorie}</span>
               <span>·</span>
-              <span>{datePub ? new Date(datePub).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }) : "—"}</span>
+              <time dateTime={datePub}>{formattedDate}</time>
             </div>
           </div>
 
-          {/* ── TITRE (gros, comme publié) ── */}
           <input
-            name="titre"
-            type="text"
-            placeholder="Titre de l'article…"
-            value={titre}
-            onChange={(e) => handleTitreChange(e.target.value)}
-            className="ae-titre"
-            required
-            maxLength={255}
+            name="titre" type="text" placeholder="Titre de l'article…" value={titre}
+            onChange={(e) => handleTitre(e.target.value)}
+            className="ed-paper-titre" required maxLength={255}
           />
 
-          {/* ── EXTRAIT ── */}
           <textarea
             name="extrait"
-            placeholder="Extrait — 1 à 2 phrases qui apparaissent dans la liste des actualités…"
+            placeholder="Chapô — 1 à 2 phrases d'introduction (apparaît aussi dans la liste et sur Google)."
             value={extrait}
             onChange={(e) => setExtrait(e.target.value)}
-            className="ae-extrait"
-            required
-            rows={2}
-            maxLength={500}
+            className="ed-paper-extrait" required rows={2} maxLength={500}
           />
 
-          {/* ── CORPS (RichEditor) ── */}
-          <div className="ae-body">
+          <div className="ed-paper-body">
             <RichEditor
               name="body_html"
               defaultValue={actualite?.body_html ?? actualite?.body ?? ""}
               placeholder="Commencez à écrire votre article…"
             />
           </div>
+        </article>
 
-          {/* Champs cachés */}
-          <input type="hidden" name="body" value={actualite?.body ?? ""} />
-          <input type="hidden" name="statut" value={statut} />
-        </div>
-      </div>
-    </form>
+        {/* Champs cachés */}
+        <input type="hidden" name="body"      value={actualite?.body ?? ""} />
+        <input type="hidden" name="photo_url" value={cover} />
+        <input type="hidden" name="statut"    value={statut} />
+      </form>
 
-    {/* ────── MODAL APERÇU ────── */}
-    {preview && (
-      <div className="ae-preview-overlay" role="dialog" aria-modal="true" aria-label="Aperçu de l'article">
-        <div className="ae-preview-topbar">
-          <span className="ae-preview-tag">Aperçu — comme si l&apos;article était publié</span>
-          <button
-            type="button"
-            className="ae-btn ae-btn--primary"
-            onClick={() => setPreview(null)}
-            autoFocus
-          >
-            ← Retour à l&apos;édition
-          </button>
+      {/* ━━━━━━━━━━━━━━━━━━━━━━ APERÇU (MODAL) ━━━━━━━━━━━━━━━━━━━━━━ */}
+      {preview && (
+        <div className="ed-preview" role="dialog" aria-modal="true" aria-label="Aperçu de l'article">
+          <header className="ed-preview-bar">
+            <span className="ed-preview-tag">Aperçu — exactement comme il sera publié</span>
+            <button type="button" className="ed-btn ed-btn--primary" onClick={() => setPreview(null)} autoFocus>
+              ← Revenir à l&apos;édition
+            </button>
+          </header>
+          <div className="ed-preview-scroll">
+            <article className="container article">
+              <div className="article-kanji" lang="ja" aria-hidden>{preview.kanji}</div>
+              <div className="article-meta">
+                <span className="actu-cat-dot" aria-hidden />
+                <span>{preview.categorie}</span>
+                <span>·</span>
+                <time dateTime={preview.date}>
+                  {preview.date
+                    ? new Date(preview.date).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })
+                    : "—"}
+                </time>
+              </div>
+              <h1 className="article-title">{preview.titre}</h1>
+              {preview.extrait && <p className="article-lead">{preview.extrait}</p>}
+              {preview.cover && (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img className="article-cover" src={preview.cover} alt={preview.titre} />
+              )}
+              <div
+                className="article-body markdown-body"
+                dangerouslySetInnerHTML={{ __html: renderArticleBody(preview.bodyHtml, "") }}
+              />
+            </article>
+          </div>
         </div>
-        <div className="ae-preview-scroll">
-          <article className="container article">
-            <div className="article-kanji" lang="ja" aria-hidden>{preview.kanji}</div>
-            <div className="article-meta">
-              <span className="actu-cat-dot" aria-hidden />
-              <span>{preview.categorie}</span>
-              <span>·</span>
-              <span>
-                {preview.date
-                  ? new Date(preview.date).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })
-                  : "—"}
-              </span>
-            </div>
-            <h1 className="article-title">{preview.titre}</h1>
-            {preview.extrait && (
-              <p style={{ fontFamily: "var(--serif)", fontStyle: "italic", fontSize: "clamp(17px, 1.6vw, 21px)", color: "var(--stone)", marginBottom: 32 }}>
-                {preview.extrait}
-              </p>
-            )}
-            <div
-              className="article-body markdown-body"
-              dangerouslySetInnerHTML={{ __html: preview.bodyHtml }}
-            />
-          </article>
-        </div>
-      </div>
-    )}
+      )}
     </>
+  );
+}
+
+/* ─── Champ image de couverture ─── */
+function CoverField({ value, onChange }: { value: string; onChange: (url: string) => void }) {
+  const ref = useRef<HTMLInputElement>(null);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
+
+  const pick = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    e.target.value = "";
+    if (!f) return;
+    setErr("");
+    setBusy(true);
+    try {
+      const { url } = await uploadImage(f);
+      onChange(url);
+    } catch (x) {
+      setErr(x instanceof UploadError ? x.message : "Échec de l'envoi.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="ed-cover">
+      {value ? (
+        <div className="ed-cover-set">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={value} alt="" className="ed-cover-img" />
+          <div className="ed-cover-overlay">
+            <button type="button" className="ed-cover-act" onClick={() => ref.current?.click()} disabled={busy}>
+              {busy ? "Envoi…" : "Remplacer"}
+            </button>
+            <button type="button" className="ed-cover-act ed-cover-act--danger" onClick={() => onChange("")}>
+              Retirer
+            </button>
+          </div>
+        </div>
+      ) : (
+        <button type="button" className="ed-cover-empty" onClick={() => ref.current?.click()} disabled={busy}>
+          <span className="ed-cover-empty-icon" aria-hidden>🖼</span>
+          {busy ? "Envoi en cours…" : "Ajouter une image de couverture (optionnelle)"}
+        </button>
+      )}
+      {err && <p className="ed-cover-err" role="alert">{err}</p>}
+      <input ref={ref} type="file" accept={ACCEPTED_IMAGE_TYPES} hidden onChange={pick} />
+    </div>
   );
 }

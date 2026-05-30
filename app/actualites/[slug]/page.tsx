@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
@@ -107,17 +106,11 @@ export default async function ActualiteDetail({
 
           <h1 className="article-title">{actu.titre}</h1>
 
+          {actu.extrait && <p className="article-lead">{actu.extrait}</p>}
+
           {actu.photo_url && (
-            <div style={{ position: "relative", width: "100%", aspectRatio: "16/9", marginBottom: 40, background: "var(--paper)", overflow: "hidden" }}>
-              <Image
-                src={actu.photo_url}
-                alt={actu.titre}
-                fill
-                sizes="(max-width: 900px) 100vw, 900px"
-                style={{ objectFit: "cover" }}
-                priority
-              />
-            </div>
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img className="article-cover" src={actu.photo_url} alt={actu.titre} />
           )}
 
           <div
