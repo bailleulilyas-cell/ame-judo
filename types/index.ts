@@ -75,6 +75,11 @@ export interface Actualite {
   body: string;
   body_html?: string | null;
   photo_url: string | null;
+  /** Champs « Compétition » — renseignés quand categorie === "Compétition". */
+  compet_pole?: "jeunes" | "veteran" | null;
+  compet_or?: number;
+  compet_argent?: number;
+  compet_bronze?: number;
   statut: "draft" | "published";
   created_at: string;
   updated_at: string;

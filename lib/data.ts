@@ -160,6 +160,16 @@ export async function getActualites(limit = 50): Promise<Actualite[]> {
   return rows ?? DEMO_ACTUS.slice(0, limit);
 }
 
+/** Articles taggés « Compétition » et publiés, du plus récent au plus ancien. */
+export async function getCompetitionResults(limit = 30): Promise<Actualite[]> {
+  const rows = await tryQuery<Actualite>(
+    "SELECT * FROM actualites WHERE statut = 'published' AND categorie = 'Compétition' ORDER BY date_publication DESC LIMIT ?",
+    [limit]
+  );
+  if (rows) return rows;
+  return DEMO_ACTUS.filter((a) => a.categorie === "Compétition").slice(0, limit);
+}
+
 export async function getActualiteBySlug(slug: string): Promise<Actualite | null> {
   const rows = await tryQuery<Actualite>(
     "SELECT * FROM actualites WHERE slug = ? AND statut = 'published' LIMIT 1",

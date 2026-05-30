@@ -55,6 +55,10 @@ export default function ActualiteEditor({ actualite, action, mode }: Props) {
   const [datePub, setDatePub]   = useState(actualite?.date_publication?.slice(0, 10) ?? new Date().toISOString().slice(0, 10));
   const [statut, setStatut]     = useState<"draft" | "published">(actualite?.statut ?? "draft");
   const [cover, setCover]       = useState(actualite?.photo_url ?? "");
+  const [pole, setPole]         = useState<"jeunes" | "veteran">(actualite?.compet_pole ?? "jeunes");
+  const [medOr, setMedOr]       = useState(actualite?.compet_or ?? 0);
+  const [medArg, setMedArg]     = useState(actualite?.compet_argent ?? 0);
+  const [medBro, setMedBro]     = useState(actualite?.compet_bronze ?? 0);
   const [error, setError]       = useState<string | null>(null);
   const [preview, setPreview]   = useState<PreviewSnap | null>(null);
   const [kanjiOpen, setKanjiO]  = useState(false);
@@ -115,6 +119,8 @@ export default function ActualiteEditor({ actualite, action, mode }: Props) {
   const formattedDate = datePub
     ? new Date(datePub).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })
     : "—";
+
+  const isCompet = categorie === "Compétition";
 
   return (
     <>
@@ -195,10 +201,52 @@ export default function ActualiteEditor({ actualite, action, mode }: Props) {
           </div>
         </div>
 
+        {/* ━━━━━━━━━━━━━━━━━━━━━━ BLOC COMPÉTITION (adaptatif) ━━━━━━━━━━━━━━━━━━━━━━ */}
+        {isCompet && (
+          <section className="ed-compet" aria-label="Détails de la compétition">
+            <div className="ed-compet-head">
+              <span className="ed-compet-kanji" lang="ja" aria-hidden>競</span>
+              <div>
+                <h2 className="ed-compet-title">Résultats de compétition</h2>
+                <p className="ed-compet-sub">
+                  Ces informations alimentent la page <strong>Compétition</strong> du site.
+                  Le reste (récit, détails) s’écrit dans l’article ci-dessous.
+                </p>
+              </div>
+            </div>
+
+            <div className="ed-compet-grid">
+              <div className="ed-compet-field">
+                <label>Pôle</label>
+                <div className="ed-pole-toggle" role="group" aria-label="Pôle">
+                  <button type="button" className={`ed-pole-opt${pole === "jeunes" ? " is-on" : ""}`} onClick={() => setPole("jeunes")}>
+                    <span lang="ja" aria-hidden>少</span> Jeunes
+                  </button>
+                  <button type="button" className={`ed-pole-opt${pole === "veteran" ? " is-on" : ""}`} onClick={() => setPole("veteran")}>
+                    <span lang="ja" aria-hidden>達</span> Vétérans
+                  </button>
+                </div>
+              </div>
+
+              <div className="ed-compet-field">
+                <label>Médailles</label>
+                <div className="ed-medals">
+                  <MedalInput label="Or" tone="or" value={medOr} onChange={setMedOr} />
+                  <MedalInput label="Argent" tone="argent" value={medArg} onChange={setMedArg} />
+                  <MedalInput label="Bronze" tone="bronze" value={medBro} onChange={setMedBro} />
+                </div>
+              </div>
+
+              <div className="ed-compet-field ed-compet-field--photo">
+                <label>Photo du podium <span className="ed-opt">(vignette, facultative)</span></label>
+                <PhotoField value={cover} onChange={setCover} />
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* ━━━━━━━━━━━━━━━━━━━━━━ ARTICLE (feuille) ━━━━━━━━━━━━━━━━━━━━━━ */}
         <article className="ed-paper">
-          <CoverField value={cover} onChange={setCover} />
-
           <div className="ed-paper-head">
             <div className="ed-paper-kanji" lang="ja" aria-hidden>{kanji || "·"}</div>
             <div className="ed-paper-cat">
@@ -233,9 +281,13 @@ export default function ActualiteEditor({ actualite, action, mode }: Props) {
         </article>
 
         {/* Champs cachés */}
-        <input type="hidden" name="body"      value={actualite?.body ?? ""} />
-        <input type="hidden" name="photo_url" value={cover} />
-        <input type="hidden" name="statut"    value={statut} />
+        <input type="hidden" name="body"          value={actualite?.body ?? ""} />
+        <input type="hidden" name="photo_url"     value={cover} />
+        <input type="hidden" name="compet_pole"   value={isCompet ? pole : ""} />
+        <input type="hidden" name="compet_or"     value={isCompet ? medOr : 0} />
+        <input type="hidden" name="compet_argent" value={isCompet ? medArg : 0} />
+        <input type="hidden" name="compet_bronze" value={isCompet ? medBro : 0} />
+        <input type="hidden" name="statut"        value={statut} />
       </form>
 
       {/* ━━━━━━━━━━━━━━━━━━━━━━ APERÇU (MODAL) ━━━━━━━━━━━━━━━━━━━━━━ */}
@@ -278,8 +330,28 @@ export default function ActualiteEditor({ actualite, action, mode }: Props) {
   );
 }
 
-/* ─── Champ image de couverture ─── */
-function CoverField({ value, onChange }: { value: string; onChange: (url: string) => void }) {
+/* ─── Compteur de médailles ─── */
+function MedalInput({
+  label, tone, value, onChange,
+}: { label: string; tone: "or" | "argent" | "bronze"; value: number; onChange: (n: number) => void }) {
+  const clamp = (n: number) => Math.max(0, Math.min(99, n));
+  return (
+    <div className={`ed-medal ed-medal--${tone}`}>
+      <span className="ed-medal-dot" aria-hidden />
+      <button type="button" className="ed-medal-step" onClick={() => onChange(clamp(value - 1))} aria-label={`Retirer une médaille ${label}`}>−</button>
+      <input
+        type="number" min={0} max={99} value={value}
+        onChange={(e) => onChange(clamp(parseInt(e.target.value, 10) || 0))}
+        className="ed-medal-num" aria-label={`Médailles ${label}`}
+      />
+      <button type="button" className="ed-medal-step" onClick={() => onChange(clamp(value + 1))} aria-label={`Ajouter une médaille ${label}`}>+</button>
+      <span className="ed-medal-label">{label}</span>
+    </div>
+  );
+}
+
+/* ─── Champ photo (podium / vignette) ─── */
+function PhotoField({ value, onChange }: { value: string; onChange: (url: string) => void }) {
   const ref = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
@@ -317,8 +389,8 @@ function CoverField({ value, onChange }: { value: string; onChange: (url: string
         </div>
       ) : (
         <button type="button" className="ed-cover-empty" onClick={() => ref.current?.click()} disabled={busy}>
-          <span className="ed-cover-empty-icon" aria-hidden>🖼</span>
-          {busy ? "Envoi en cours…" : "Ajouter une image de couverture (optionnelle)"}
+          <span className="ed-cover-empty-icon" aria-hidden>🏅</span>
+          {busy ? "Envoi en cours…" : "Ajouter la photo du podium"}
         </button>
       )}
       {err && <p className="ed-cover-err" role="alert">{err}</p>}

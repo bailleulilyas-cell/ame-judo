@@ -165,7 +165,12 @@ CREATE TABLE actualites (
   slug             VARCHAR(255) UNIQUE NOT NULL,
   extrait          TEXT NOT NULL,
   body             MEDIUMTEXT NOT NULL,
+  body_html        MEDIUMTEXT NULL,
   photo_url        VARCHAR(255),
+  compet_pole      ENUM('jeunes','veteran') NULL,
+  compet_or        TINYINT UNSIGNED NOT NULL DEFAULT 0,
+  compet_argent    TINYINT UNSIGNED NOT NULL DEFAULT 0,
+  compet_bronze    TINYINT UNSIGNED NOT NULL DEFAULT 0,
   statut           ENUM('draft','published') NOT NULL DEFAULT 'draft',
   created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

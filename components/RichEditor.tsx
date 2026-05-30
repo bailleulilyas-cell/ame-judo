@@ -436,8 +436,8 @@ export default function RichEditor({ name, defaultValue = "", placeholder }: Pro
         </Group>
         <Group>
           <Btn label="🔗" on={isActive("link")} onClick={insertLink} title="Insérer un lien" />
-          <label className="rich-btn" title="Insérer une image" style={{ cursor: "pointer" }}>
-            🖼
+          <label className="rich-btn rich-btn--labelled" title="Insérer une image dans l'article" style={{ cursor: "pointer" }}>
+            🖼 Image
             <input type="file" accept={ACCEPTED_IMAGE_TYPES} hidden multiple onChange={handleFileInput} />
           </label>
           <Btn label="▶" on={false} onClick={insertYoutube} title="Vidéo YouTube" />
@@ -461,9 +461,10 @@ export default function RichEditor({ name, defaultValue = "", placeholder }: Pro
       <EditorContent editor={editor} className="rich-content" />
 
       <p className="rich-hint">
-        Astuce : cliquez une image pour la <strong>redimensionner</strong> (poignées rouges ou boutons S/M/L),
-        l&apos;<strong>aligner</strong>, ajouter une <strong>légende</strong> ou un <strong>texte alternatif</strong>.
-        Vous pouvez aussi glisser-déposer ou coller une image directement.
+        <strong>Insérer une image dans l’article :</strong> cliquez sur le bouton «&nbsp;🖼 Image&nbsp;» de la barre
+        (ou glissez-déposez / collez directement une photo). Une fois insérée, cliquez dessus pour la
+        <strong> redimensionner</strong> (poignées rouges ou boutons S/M/L), l&apos;<strong>aligner</strong>,
+        ou écrire une <strong>légende</strong> sous l’image — par exemple «&nbsp;<em>Léa Martin, 3ᵉ au départemental</em>&nbsp;».
       </p>
 
       <textarea name={name} value={html} hidden readOnly />

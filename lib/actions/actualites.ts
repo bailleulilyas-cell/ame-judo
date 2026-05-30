@@ -28,6 +28,7 @@ async function requireAuth() {
 function refreshPublicCache() {
   revalidatePath("/");
   revalidatePath("/actualites");
+  revalidatePath("/competition");
   revalidatePath("/admin/actualites");
 }
 
@@ -64,15 +65,29 @@ function extractFields(formData: FormData) {
     throw new Error("Format de date invalide (attendu : AAAA-MM-JJ).");
   }
 
+  const categorie = ((formData.get("categorie") as string) ?? "").trim() || "Actualité";
+  const isCompet = categorie === "Compétition";
+
+  const medal = (key: string) => {
+    const n = parseInt((formData.get(key) as string) ?? "", 10);
+    return Number.isFinite(n) && n > 0 ? Math.min(n, 99) : 0;
+  };
+  const poleRaw = ((formData.get("compet_pole") as string) ?? "").trim();
+  const compet_pole = isCompet && (poleRaw === "jeunes" || poleRaw === "veteran") ? poleRaw : null;
+
   return {
     titre,
     kanji: ((formData.get("kanji") as string) ?? "").trim().slice(0, 2) || "報",
-    categorie: ((formData.get("categorie") as string) ?? "").trim() || "Actualité",
+    categorie,
     date_publication: datePub || new Date().toISOString().slice(0, 10),
     extrait,
     body,
     body_html: bodyHtml || null,
     photo_url: ((formData.get("photo_url") as string) ?? "").trim() || null,
+    compet_pole,
+    compet_or: isCompet ? medal("compet_or") : 0,
+    compet_argent: isCompet ? medal("compet_argent") : 0,
+    compet_bronze: isCompet ? medal("compet_bronze") : 0,
     statut: (formData.get("statut") as string) === "published" ? "published" as const : "draft" as const,
     slugInput: ((formData.get("slug") as string) ?? "").trim(),
   };
@@ -86,8 +101,8 @@ export async function createActualite(formData: FormData) {
   const slug = await ensureUniqueSlug(f.slugInput || slugify(f.titre));
 
   await query(
-    "INSERT INTO actualites (kanji, categorie, date_publication, titre, slug, extrait, body, body_html, photo_url, statut) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-    [f.kanji, f.categorie, f.date_publication, f.titre, slug, f.extrait, f.body, f.body_html, f.photo_url, f.statut]
+    "INSERT INTO actualites (kanji, categorie, date_publication, titre, slug, extrait, body, body_html, photo_url, compet_pole, compet_or, compet_argent, compet_bronze, statut) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    [f.kanji, f.categorie, f.date_publication, f.titre, slug, f.extrait, f.body, f.body_html, f.photo_url, f.compet_pole, f.compet_or, f.compet_argent, f.compet_bronze, f.statut]
   );
 
   refreshPublicCache();
@@ -102,8 +117,8 @@ export async function updateActualite(id: string, formData: FormData) {
   const slug = await ensureUniqueSlug(f.slugInput || slugify(f.titre), id);
 
   await query(
-    `UPDATE actualites SET kanji = ?, categorie = ?, date_publication = ?, titre = ?, slug = ?, extrait = ?, body = ?, body_html = ?, photo_url = ?, statut = ? WHERE id = ?`,
-    [f.kanji, f.categorie, f.date_publication, f.titre, slug, f.extrait, f.body, f.body_html, f.photo_url, f.statut, id]
+    `UPDATE actualites SET kanji = ?, categorie = ?, date_publication = ?, titre = ?, slug = ?, extrait = ?, body = ?, body_html = ?, photo_url = ?, compet_pole = ?, compet_or = ?, compet_argent = ?, compet_bronze = ?, statut = ? WHERE id = ?`,
+    [f.kanji, f.categorie, f.date_publication, f.titre, slug, f.extrait, f.body, f.body_html, f.photo_url, f.compet_pole, f.compet_or, f.compet_argent, f.compet_bronze, f.statut, id]
   );
 
   refreshPublicCache();
