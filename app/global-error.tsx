@@ -25,7 +25,7 @@ export default function GlobalError({
         }}
       >
         <div style={{ maxWidth: 560 }}>
-          <div lang="ja" style={{ fontSize: 80, color: "#B5341E", marginBottom: 12 }}>
+          <div lang="ja" style={{ fontSize: 80, color: "#C8332A", marginBottom: 12 }}>
             道
           </div>
           <h1 style={{ fontSize: 32, fontWeight: 300, letterSpacing: "-0.02em", margin: "0 0 16px" }}>

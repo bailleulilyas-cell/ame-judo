@@ -68,6 +68,7 @@ export default function Footer({
               <li><Link href="/horaires">Horaires</Link></li>
               <li><Link href="/maitres">Maîtres</Link></li>
               <li><Link href="/adhesion">Adhésion</Link></li>
+              <li><Link href="/competition">Compétition</Link></li>
               <li><Link href="/actualites">Actualités</Link></li>
             </ul>
           </div>

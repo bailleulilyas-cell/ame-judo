@@ -194,7 +194,7 @@ export async function getHeroContent() {
     eyebrow: "Ermont · Val-d'Oise",
     titre: "Apprendre à <em>saluer</em>,<br>à <em>vaincre</em>.",
     sous_titre: "Club de judo ermontois depuis 1978. Une voie enseignée dans la rigueur et la sérénité, pour les enfants comme pour les adultes.",
-    stat1_num: "47",   stat1_label: "Années",
+    stat1_num: String(new Date().getFullYear() - 1978), stat1_label: "Années",
     stat2_num: "1882", stat2_label: "Origine du judo",
     stat3_num: "2",    stat3_label: "Essais gratuits",
   };

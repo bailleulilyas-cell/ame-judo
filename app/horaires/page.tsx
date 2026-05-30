@@ -46,7 +46,7 @@ export default async function HorairesPage() {
             <div className="horaires-layout">
               <div>
                 {note?.active && (
-                  <div className="horaires-note" role="alert">
+                  <div className="horaires-note" role="note">
                     {note.texte}
                   </div>
                 )}

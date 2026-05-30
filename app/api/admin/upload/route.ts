@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
   }
   if (!(ALLOWED as readonly string[]).includes(file.type)) {
     return NextResponse.json(
-      { message: "Format non supporté (JPG, PNG, WEBP ou GIF uniquement)." },
+      { message: "Format non supporté (JPG, PNG, WEBP, GIF ou PDF uniquement)." },
       { status: 400 }
     );
   }

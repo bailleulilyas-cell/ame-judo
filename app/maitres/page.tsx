@@ -6,7 +6,8 @@ import { getMaitres } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Les maîtres — Équipe enseignante",
-  description: "Les professeurs du club AME — gradés, formés et passionnés.",
+  description:
+    "L'équipe enseignante du club de judo AME à Ermont (95) — des professeurs diplômés d'État, gradés ceinture noire, formés à la pédagogie de l'enfant comme de l'adulte.",
   alternates: { canonical: "/maitres" },
 };
 
