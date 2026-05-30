@@ -90,9 +90,15 @@ const ORGANIZATION_JSONLD = {
   url: SITE_URL,
   logo: `${SITE_URL}/logo.png`,
   image: `${SITE_URL}/logo.png`,
-  description: "Club de judo à Ermont depuis 1978.",
+  description:
+    "Club de judo à Ermont (Val-d'Oise) depuis 1978. Cours enfants, ados et adultes, du baby-judo aux ceintures noires.",
+  slogan: "Apprendre à saluer, à vaincre.",
   foundingDate: "1978",
-  sport: ["Judo"],
+  sport: "Judo",
+  knowsAbout: ["Judo", "Baby judo", "Arts martiaux", "Self-défense", "Taïso"],
+  priceRange: "€€",
+  currenciesAccepted: "EUR",
+  knowsLanguage: "fr",
   address: {
     "@type": "PostalAddress",
     streetAddress: "Complexe Sportif Saint-Exupéry, Rue Kvot et Leydekkers",
@@ -106,7 +112,18 @@ const ORGANIZATION_JSONLD = {
     latitude: 48.9949,
     longitude: 2.2477,
   },
-  areaServed: { "@type": "City", name: "Ermont" },
+  hasMap: "https://www.google.com/maps?q=Complexe+Sportif+Saint-Exupéry+Ermont+95120",
+  // Zone de recrutement réelle du club : Ermont et communes limitrophes du Val-d'Oise.
+  areaServed: [
+    { "@type": "City", name: "Ermont" },
+    { "@type": "City", name: "Eaubonne" },
+    { "@type": "City", name: "Sannois" },
+    { "@type": "City", name: "Franconville" },
+    { "@type": "City", name: "Saint-Leu-la-Forêt" },
+    { "@type": "City", name: "Taverny" },
+    { "@type": "City", name: "Montmorency" },
+    { "@type": "City", name: "Le Plessis-Bouchard" },
+  ],
   openingHoursSpecification: [
     { "@type": "OpeningHoursSpecification", dayOfWeek: "Wednesday", opens: "17:00", closes: "20:30" },
     { "@type": "OpeningHoursSpecification", dayOfWeek: "Saturday", opens: "11:00", closes: "13:00" },

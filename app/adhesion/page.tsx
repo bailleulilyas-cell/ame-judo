@@ -5,9 +5,12 @@ import AdhesionForm from "@/components/AdhesionForm";
 import ScrollReveal from "@/components/ScrollReveal";
 import { getFormules, getDocuments } from "@/lib/data";
 
+const SITE_URL = "https://ame-judo.fr";
+
 export const metadata: Metadata = {
-  title: "Adhésion — Pré-inscription",
-  description: "Pré-inscrivez-vous au club AME en quelques instants. Deux séances d'essai gratuites.",
+  title: "Adhésion judo Ermont — Tarifs & pré-inscription",
+  description:
+    "Tarifs et pré-inscription au club de judo AME à Ermont (95) : baby-judo, enfants, ados, adultes. Deux séances d'essai gratuites.",
   alternates: { canonical: "/adhesion" },
 };
 
@@ -26,6 +29,24 @@ export default async function AdhesionPage() {
 
   // Construit la liste des liens à insérer dans le paragraphe contextuel
   const docAnchors = documents.map((d) => ({ ...d, anchor: `doc-${slugify(d.nom)}` }));
+
+  // Données structurées : formules d'adhésion (tarifs réels) rattachées au club.
+  const offerCatalogJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "OfferCatalog",
+    name: "Formules d'adhésion — Judo AME Ermont",
+    url: `${SITE_URL}/adhesion`,
+    itemListElement: formules.map((f) => ({
+      "@type": "Offer",
+      name: `${f.nom} — judo ${f.tranche_age}`,
+      description: f.italique,
+      price: f.prix,
+      priceCurrency: "EUR",
+      category: "Adhésion annuelle",
+      availability: "https://schema.org/InStock",
+      offeredBy: { "@id": `${SITE_URL}/#organization` },
+    })),
+  };
 
   return (
     <>
@@ -134,6 +155,10 @@ export default async function AdhesionPage() {
         )}
       </main>
       <Footer />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(offerCatalogJsonLd) }}
+      />
     </>
   );
 }
