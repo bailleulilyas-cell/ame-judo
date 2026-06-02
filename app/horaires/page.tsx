@@ -15,6 +15,7 @@ const JOURS = [
   { key: "mercredi", kanji: "水", label: "Mercredi" },
   { key: "jeudi",    kanji: "木", label: "Jeudi" },
   { key: "samedi",   kanji: "土", label: "Samedi" },
+  { key: "dimanche", kanji: "日", label: "Dimanche" },
 ] as const;
 
 export default async function HorairesPage() {

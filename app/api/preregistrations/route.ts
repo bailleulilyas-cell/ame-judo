@@ -127,6 +127,8 @@ export async function POST(req: NextRequest) {
     planLabel = `${formule.nom} (${formule.tranche_age})`;
   }
 
+  const souhaitCompetition = body.souhait_competition === true;
+
   // Champs responsable légal (mineurs)
   let cleanParentName: string | null = null;
   let cleanParentRelation: string | null = null;
@@ -154,8 +156,8 @@ export async function POST(req: NextRequest) {
         );
       }
       await db.execute(
-        "INSERT INTO preregistrations (full_name, email, phone, birth_date, plan, status, parent_name, parent_relation) VALUES (?, ?, ?, ?, ?, 'pending', ?, ?)",
-        [fullName, email, phone, birthDate, plan, cleanParentName, cleanParentRelation]
+        "INSERT INTO preregistrations (full_name, email, phone, birth_date, plan, status, parent_name, parent_relation, souhait_competition) VALUES (?, ?, ?, ?, ?, 'pending', ?, ?, ?)",
+        [fullName, email, phone, birthDate, plan, cleanParentName, cleanParentRelation, souhaitCompetition ? 1 : 0]
       );
     }
 
@@ -172,7 +174,7 @@ export async function POST(req: NextRequest) {
             from: process.env.FROM_EMAIL ?? "AME <noreply@ame-judo.fr>",
             to: process.env.BUREAU_EMAIL ?? "amejudoermont@gmail.com",
             subject: `Nouvelle pré-inscription — ${fullName} — ${planLabel}`,
-            html: bureauHtml(fullName, email, phone, birthDate, planLabel, cleanParentName, cleanParentRelation),
+            html: bureauHtml(fullName, email, phone, birthDate, planLabel, cleanParentName, cleanParentRelation, souhaitCompetition),
           }),
         ]);
       } catch (mailErr) {
@@ -226,7 +228,7 @@ const RELATION_LABELS: Record<string, string> = {
   autre: "Autre",
 };
 
-function bureauHtml(name: string, email: string, phone: string, dob: string, plan: string, parentName: string | null, parentRelation: string | null) {
+function bureauHtml(name: string, email: string, phone: string, dob: string, plan: string, parentName: string | null, parentRelation: string | null, competition = false) {
   const age = computeAge(dob);
   const n = escapeHtml(name);
   const e = escapeHtml(email);
@@ -248,6 +250,7 @@ function bureauHtml(name: string, email: string, phone: string, dob: string, pla
       <tr><td style="padding:8px 0;color:#6B6B6B;">Téléphone</td><td><a href="tel:${ph}">${ph}</a></td></tr>
       <tr><td style="padding:8px 0;color:#6B6B6B;">Âge</td><td>${age} ans (né·e le ${new Date(dob).toLocaleDateString("fr-FR")})</td></tr>
       <tr><td style="padding:8px 0;color:#6B6B6B;">Formule</td><td>${p}</td></tr>
+      <tr><td style="padding:8px 0;color:#6B6B6B;">Compétition</td><td>${competition ? "✓ Oui" : "Non"}</td></tr>
       ${parentRows}
     </table>
   </div>

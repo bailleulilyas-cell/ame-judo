@@ -19,6 +19,7 @@ export default function SlotForm({ action, slot, disciplines, mode }: Props) {
             <option value="mercredi">Mercredi</option>
             <option value="jeudi">Jeudi</option>
             <option value="samedi">Samedi</option>
+            <option value="dimanche">Dimanche</option>
           </select>
         </div>
         <div className="form-field">

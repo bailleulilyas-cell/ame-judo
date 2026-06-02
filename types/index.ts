@@ -106,6 +106,7 @@ export interface Preregistration {
   notes: string | null;
   parent_name: string | null;
   parent_relation: string | null;
+  souhait_competition: boolean;
   submitted_at: string;
   updated_at: string;
 }

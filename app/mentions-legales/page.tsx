@@ -23,7 +23,7 @@ export default function MentionsLegales() {
               Éditeur du site
             </h2>
             <p>
-              <strong>Association AME — Arts Martiaux Ermontois</strong><br />
+              <strong>Association AME-JUDO — Arts Martiaux Ermontois</strong><br />
               Association loi du 1ᵉʳ juillet 1901<br />
               Complexe Sportif Saint-Exupéry<br />
               Rue Kvot et Leydekkers, 95120 Ermont<br />
@@ -33,7 +33,7 @@ export default function MentionsLegales() {
             <h2 style={{ fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--stone)", marginBottom: 12, marginTop: 32, fontFamily: "var(--sans)", fontWeight: 500 }}>
               Directeur de publication
             </h2>
-            <p>Le Président de l&apos;association AME.</p>
+            <p>Le Président de l&apos;association AME-JUDO.</p>
 
             <h2 style={{ fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--stone)", marginBottom: 12, marginTop: 32, fontFamily: "var(--sans)", fontWeight: 500 }}>
               Hébergement
@@ -49,7 +49,7 @@ export default function MentionsLegales() {
             </h2>
             <p>
               L&apos;ensemble des contenus présents sur ce site (textes, images, logo) sont la propriété exclusive
-              de l&apos;association AME. Toute reproduction ou diffusion sans autorisation est interdite.
+              de l&apos;association AME-JUDO. Toute reproduction ou diffusion sans autorisation est interdite.
             </p>
           </div>
         </article>

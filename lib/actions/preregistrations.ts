@@ -41,9 +41,11 @@ export async function updatePreregistration(id: string, formData: FormData) {
   if (!VALID_PLANS.includes(plan as typeof VALID_PLANS[number])) throw new Error("Formule invalide.");
   if (!VALID_STATUS.includes(status as typeof VALID_STATUS[number])) throw new Error("Statut invalide.");
 
+  const souhaitCompetition = formData.get("souhait_competition") === "1" ? 1 : 0;
+
   await query(
-    "UPDATE preregistrations SET full_name = ?, email = ?, phone = ?, birth_date = ?, plan = ?, status = ?, notes = ?, parent_name = ?, parent_relation = ? WHERE id = ?",
-    [fullName, email, phone, birthDate, plan, status, notes, parentName, parentRelation, id]
+    "UPDATE preregistrations SET full_name = ?, email = ?, phone = ?, birth_date = ?, plan = ?, status = ?, notes = ?, parent_name = ?, parent_relation = ?, souhait_competition = ? WHERE id = ?",
+    [fullName, email, phone, birthDate, plan, status, notes, parentName, parentRelation, souhaitCompetition, id]
   );
 
   revalidatePath("/admin/preregistrations");

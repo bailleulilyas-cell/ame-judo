@@ -106,6 +106,20 @@ export default async function PreregistrationEdit({
           </>
         )}
 
+        <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 0", borderTop: "1px solid var(--hair-color)" }}>
+          <input
+            id="souhait_competition"
+            type="checkbox"
+            name="souhait_competition"
+            value="1"
+            defaultChecked={!!row.souhait_competition}
+            style={{ width: 16, height: 16, accentColor: "var(--red)", cursor: "pointer" }}
+          />
+          <label htmlFor="souhait_competition" className="form-label" style={{ margin: 0, cursor: "pointer" }}>
+            Souhaite participer à des compétitions
+          </label>
+        </div>
+
         <div className="form-field">
           <label className="form-label" htmlFor="notes">Notes internes (bureau uniquement)</label>
           <textarea

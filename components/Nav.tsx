@@ -10,6 +10,7 @@ const NAV_ITEMS = [
   { href: "/horaires", kanji: "時", label: "Horaires" },
   { href: "/maitres", kanji: "師", label: "Maîtres" },
   { href: "/adhesion", kanji: "入", label: "Adhésion" },
+  { href: "/adhesion#documents-section", kanji: "書", label: "Documents" },
   { href: "/competition", kanji: "競", label: "Compétition" },
   { href: "/actualites", kanji: "報", label: "Actualités" },
   { href: "/contact", kanji: "便", label: "Contact" },
@@ -17,22 +18,8 @@ const NAV_ITEMS = [
 
 export default function Nav() {
   const navRef = useRef<HTMLElement>(null);
-  const lastY = useRef(0);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-
-  useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY;
-      const nav = navRef.current;
-      if (!nav) return;
-      if (y > 240 && y > lastY.current) nav.classList.add("is-hidden");
-      else nav.classList.remove("is-hidden");
-      lastY.current = y;
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     setOpen(false);
@@ -60,7 +47,7 @@ export default function Nav() {
           {NAV_ITEMS.map((item) => {
             const isActive =
               pathname === item.href ||
-              (item.href !== "/" && pathname?.startsWith(item.href));
+              (item.href !== "/" && !item.href.includes("#") && pathname?.startsWith(item.href));
             return (
               <li key={item.href}>
                 <Link

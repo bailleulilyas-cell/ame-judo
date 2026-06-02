@@ -140,6 +140,7 @@ export default function AdhesionForm({ formules }: { formules: Formule[] }) {
           plan: selectedFormule!.plan_key,
           parentName: minor ? parentName : undefined,
           parentRelation: minor ? (data.get("parentRelation") as string) : undefined,
+          souhait_competition: data.get("souhait_competition") === "1",
           _honeypot: data.get("_honeypot"),
         }),
       });
@@ -374,6 +375,19 @@ export default function AdhesionForm({ formules }: { formules: Formule[] }) {
               </div>
             </>
           )}
+
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 12, margin: "8px 0 4px" }}>
+            <input
+              id="souhait_competition"
+              type="checkbox"
+              name="souhait_competition"
+              value="1"
+              style={{ marginTop: 3, flexShrink: 0, accentColor: "var(--red)", width: 16, height: 16, cursor: "pointer" }}
+            />
+            <label htmlFor="souhait_competition" style={{ fontSize: 14, lineHeight: 1.5, cursor: "pointer" }}>
+              Je souhaite participer à des <strong>compétitions</strong>.
+            </label>
+          </div>
 
           <p className="form-note">
             Deux séances d&apos;essai gratuites — aucun paiement requis à ce stade. En soumettant, vous
