@@ -75,6 +75,8 @@ export interface Actualite {
   body: string;
   body_html?: string | null;
   photo_url: string | null;
+  /** Point focal de la vignette (object-position CSS, ex. "50% 30%"). NULL = centré. */
+  photo_focus?: string | null;
   /** Champs « Compétition » — renseignés quand categorie === "Compétition". */
   compet_pole?: "jeunes" | "veteran" | null;
   compet_or?: number;

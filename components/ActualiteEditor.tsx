@@ -55,6 +55,7 @@ export default function ActualiteEditor({ actualite, action, mode }: Props) {
   const [datePub, setDatePub]   = useState(actualite?.date_publication?.slice(0, 10) ?? new Date().toISOString().slice(0, 10));
   const [statut, setStatut]     = useState<"draft" | "published">(actualite?.statut ?? "draft");
   const [cover, setCover]       = useState(actualite?.photo_url ?? "");
+  const [focus, setFocus]       = useState(actualite?.photo_focus ?? "50% 50%");
   const [pole, setPole]         = useState<"jeunes" | "veteran">(actualite?.compet_pole ?? "jeunes");
   const [medOr, setMedOr]       = useState(actualite?.compet_or ?? 0);
   const [medArg, setMedArg]     = useState(actualite?.compet_argent ?? 0);
@@ -236,14 +237,25 @@ export default function ActualiteEditor({ actualite, action, mode }: Props) {
                   <MedalInput label="Bronze" tone="bronze" value={medBro} onChange={setMedBro} />
                 </div>
               </div>
-
-              <div className="ed-compet-field ed-compet-field--photo">
-                <label>Photo du podium <span className="ed-opt">(vignette, facultative)</span></label>
-                <PhotoField value={cover} onChange={setCover} />
-              </div>
             </div>
           </section>
         )}
+
+        {/* ━━━━━━━━━━━━━━━━━━━━━━ IMAGE DE COUVERTURE ━━━━━━━━━━━━━━━━━━━━━━ */}
+        <section className="ed-compet" aria-label="Image de couverture">
+          <div className="ed-compet-head">
+            <span className="ed-compet-kanji" lang="ja" aria-hidden>絵</span>
+            <div>
+              <h2 className="ed-compet-title">Image de couverture</h2>
+              <p className="ed-compet-sub">
+                Sert de <strong>vignette dans la liste des actualités</strong> et de grande image
+                en haut de l’article. Une fois l’image ajoutée, <strong>cliquez dessus</strong> pour
+                choisir la partie qui restera visible dans la vignette.
+              </p>
+            </div>
+          </div>
+          <PhotoField value={cover} onChange={setCover} focus={focus} onFocusChange={setFocus} />
+        </section>
 
         {/* ━━━━━━━━━━━━━━━━━━━━━━ ARTICLE (feuille) ━━━━━━━━━━━━━━━━━━━━━━ */}
         <article className="ed-paper">
@@ -283,6 +295,7 @@ export default function ActualiteEditor({ actualite, action, mode }: Props) {
         {/* Champs cachés */}
         <input type="hidden" name="body"          value={actualite?.body ?? ""} />
         <input type="hidden" name="photo_url"     value={cover} />
+        <input type="hidden" name="photo_focus"   value={cover ? focus : ""} />
         <input type="hidden" name="compet_pole"   value={isCompet ? pole : ""} />
         <input type="hidden" name="compet_or"     value={isCompet ? medOr : 0} />
         <input type="hidden" name="compet_argent" value={isCompet ? medArg : 0} />
@@ -350,11 +363,28 @@ function MedalInput({
   );
 }
 
-/* ─── Champ photo (podium / vignette) ─── */
-function PhotoField({ value, onChange }: { value: string; onChange: (url: string) => void }) {
+/* ─── Champ photo de couverture + sélecteur de point focal ─── */
+function parseFocus(focus: string): { x: number; y: number } {
+  const m = focus.match(/^(\d{1,3})%\s+(\d{1,3})%$/);
+  if (!m) return { x: 50, y: 50 };
+  return { x: Math.min(100, Math.max(0, +m[1])), y: Math.min(100, Math.max(0, +m[2])) };
+}
+
+function PhotoField({
+  value, onChange, focus = "50% 50%", onFocusChange,
+}: {
+  value: string;
+  onChange: (url: string) => void;
+  focus?: string;
+  onFocusChange?: (focus: string) => void;
+}) {
   const ref = useRef<HTMLInputElement>(null);
+  const imgWrapRef = useRef<HTMLDivElement>(null);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
+  const [dragging, setDragging] = useState(false);
+
+  const { x, y } = parseFocus(focus);
 
   const pick = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
@@ -365,6 +395,7 @@ function PhotoField({ value, onChange }: { value: string; onChange: (url: string
     try {
       const { url } = await uploadImage(f);
       onChange(url);
+      onFocusChange?.("50% 50%"); // nouvelle image → focal recentré
     } catch (x) {
       setErr(x instanceof UploadError ? x.message : "Échec de l'envoi.");
     } finally {
@@ -372,25 +403,58 @@ function PhotoField({ value, onChange }: { value: string; onChange: (url: string
     }
   };
 
+  const setFocusFromPointer = (clientX: number, clientY: number) => {
+    const el = imgWrapRef.current;
+    if (!el || !onFocusChange) return;
+    const r = el.getBoundingClientRect();
+    if (r.width === 0 || r.height === 0) return;
+    const px = Math.round(Math.min(100, Math.max(0, ((clientX - r.left) / r.width) * 100)));
+    const py = Math.round(Math.min(100, Math.max(0, ((clientY - r.top) / r.height) * 100)));
+    onFocusChange(`${px}% ${py}%`);
+  };
+
   return (
     <div className="ed-cover">
       {value ? (
-        <div className="ed-cover-set">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={value} alt="" className="ed-cover-img" />
-          <div className="ed-cover-overlay">
+        <>
+          <div
+            ref={imgWrapRef}
+            className={`ed-focus-pick${dragging ? " is-dragging" : ""}`}
+            onPointerDown={(e) => {
+              if (!onFocusChange) return;
+              (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+              setDragging(true);
+              setFocusFromPointer(e.clientX, e.clientY);
+            }}
+            onPointerMove={(e) => { if (dragging) setFocusFromPointer(e.clientX, e.clientY); }}
+            onPointerUp={() => setDragging(false)}
+            onPointerCancel={() => setDragging(false)}
+            title="Cliquez ou glissez pour choisir la partie visible dans la vignette"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={value} alt="" className="ed-focus-img" draggable={false} />
+            {onFocusChange && (
+              <span className="ed-focus-dot" style={{ left: `${x}%`, top: `${y}%` }} aria-hidden />
+            )}
+          </div>
+          {onFocusChange && (
+            <p className="ed-focus-hint">
+              Point focal : <strong>{x}% · {y}%</strong> — cliquez sur l’image pour le déplacer.
+            </p>
+          )}
+          <div className="ed-cover-actions">
             <button type="button" className="ed-cover-act" onClick={() => ref.current?.click()} disabled={busy}>
-              {busy ? "Envoi…" : "Remplacer"}
+              {busy ? "Envoi…" : "Remplacer l’image"}
             </button>
-            <button type="button" className="ed-cover-act ed-cover-act--danger" onClick={() => onChange("")}>
+            <button type="button" className="ed-cover-act ed-cover-act--danger" onClick={() => { onChange(""); onFocusChange?.("50% 50%"); }}>
               Retirer
             </button>
           </div>
-        </div>
+        </>
       ) : (
         <button type="button" className="ed-cover-empty" onClick={() => ref.current?.click()} disabled={busy}>
-          <span className="ed-cover-empty-icon" aria-hidden>🏅</span>
-          {busy ? "Envoi en cours…" : "Ajouter la photo du podium"}
+          <span className="ed-cover-empty-icon" aria-hidden>🖼</span>
+          {busy ? "Envoi en cours…" : "Ajouter une image de couverture"}
         </button>
       )}
       {err && <p className="ed-cover-err" role="alert">{err}</p>}

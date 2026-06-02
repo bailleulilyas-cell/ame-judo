@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { getActualites } from "@/lib/data";
@@ -55,7 +56,21 @@ export default async function ActualitesPage() {
                       <h2 className="actu-title">{a.titre}</h2>
                       <p className="actu-extrait">{a.extrait}</p>
                     </div>
-                    <span className="actu-cta">Lire</span>
+                    {a.photo_url ? (
+                      <div className="actu-thumb">
+                        <Image
+                          src={a.photo_url}
+                          alt={a.titre}
+                          fill
+                          sizes="(max-width: 600px) 100vw, 140px"
+                          style={{ objectFit: "cover", objectPosition: a.photo_focus || "50% 50%" }}
+                        />
+                      </div>
+                    ) : (
+                      <div className="actu-thumb actu-thumb--empty" aria-hidden>
+                        <span className="actu-thumb-kanji" lang="ja">{a.kanji}</span>
+                      </div>
+                    )}
                   </Link>
                 ))}
               </div>

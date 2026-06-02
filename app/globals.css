@@ -1359,14 +1359,43 @@ main { padding-top: var(--nav-h); }
 .actus-list { display: grid; }
 .actu-row {
   display: grid;
-  grid-template-columns: 64px 1fr auto;
+  grid-template-columns: 64px 1fr 140px;
   gap: clamp(14px, 3vw, 40px);
   padding: clamp(20px, 3vw, 36px) 0;
   border-bottom: 1px solid var(--hair-color);
-  align-items: start;
+  align-items: center;
   transition: padding-left 0.3s;
 }
 .actu-row:hover { padding-left: 8px; }
+
+/* Vignette de couverture à droite de chaque ligne */
+.actu-thumb {
+  position: relative;
+  width: 140px;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border: 1px solid var(--hair-color);
+  background: var(--paper);
+}
+.actu-thumb img { transition: transform 0.4s ease; }
+.actu-row:hover .actu-thumb img { transform: scale(1.04); }
+
+/* Fallback sans photo : carré teinté avec kanji en filigrane */
+.actu-thumb--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(200, 51, 42, 0.10), transparent 60%),
+    var(--sand, #ECE6DB);
+}
+.actu-thumb-kanji {
+  font-family: var(--serif-jp);
+  font-size: 64px;
+  line-height: 1;
+  color: rgba(10, 10, 10, 0.14);
+  user-select: none;
+}
 
 .actu-kanji { font-family: var(--serif-jp); font-size: 38px; line-height: 1; color: var(--sumi); }
 .actu-content { min-width: 0; }
@@ -1400,12 +1429,16 @@ main { padding-top: var(--nav-h); }
 .actu-row:hover .actu-cta::after { transform: translateX(4px); }
 
 @media (max-width: 600px) {
-  .actu-row { grid-template-columns: 48px 1fr; gap: 12px; }
+  .actu-row { grid-template-columns: 44px 1fr 88px; gap: 12px; }
   .actu-cta { display: none; }
+  .actu-thumb { width: 88px; }
+  .actu-thumb-kanji { font-size: 40px; }
 }
 @media (max-width: 420px) {
-  .actu-row { grid-template-columns: 1fr; gap: 6px; }
-  .actu-kanji { font-size: 28px; }
+  .actu-row { grid-template-columns: 1fr 72px; gap: 12px; }
+  .actu-kanji { display: none; }
+  .actu-thumb { width: 72px; }
+  .actu-thumb-kanji { font-size: 34px; }
 }
 
 /* Article détail */
@@ -1914,6 +1947,52 @@ main { padding-top: var(--nav-h); }
   background: rgba(200, 51, 42, 0.08);
   color: var(--red);
   font-size: 13px;
+}
+
+/* ─── Sélecteur de point focal (couverture) ─── */
+.ed-focus-pick {
+  position: relative;
+  line-height: 0;
+  cursor: crosshair;
+  touch-action: none;
+  border: 1px solid var(--hair-color);
+  max-width: 480px;
+}
+.ed-focus-pick.is-dragging { cursor: grabbing; }
+.ed-focus-img {
+  width: 100%;
+  max-height: 360px;
+  object-fit: contain;
+  display: block;
+  background: var(--sand, #ECE6DB);
+  -webkit-user-select: none;
+  user-select: none;
+}
+.ed-focus-dot {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: rgba(200, 51, 42, 0.55);
+  box-shadow: 0 0 0 2px rgba(10, 10, 10, 0.45), 0 2px 8px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}
+.ed-focus-hint {
+  margin: 8px 0 0;
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--stone);
+}
+.ed-cover-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+.ed-cover-actions .ed-cover-act {
+  position: static;
+  background: var(--sumi);
 }
 
 /* ─── RichEditor (TipTap) intégré dans la feuille ─── */
