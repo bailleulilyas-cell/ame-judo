@@ -102,6 +102,18 @@ export default function ActualiteEditor({ actualite, action, mode }: Props) {
 
   const submit = (nextStatut: "draft" | "published") => {
     setError(null);
+
+    // Validation côté client — évite un aller-retour serveur inutile
+    // et contourne l'opacité des erreurs server action en production.
+    if (!titre.trim()) {
+      setError("Le titre est obligatoire.");
+      return;
+    }
+    if (!extrait.trim()) {
+      setError("L'extrait (chapô) est obligatoire — 1 à 2 phrases visibles dans la liste et sur Google.");
+      return;
+    }
+
     setStatut(nextStatut);
     const form = formRef.current;
     if (!form) return;
