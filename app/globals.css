@@ -485,19 +485,13 @@ main { padding-top: var(--nav-h); }
   align-items: center;
   justify-content: center;
 }
-.hero-visual-disc {
-  position: absolute;
-  inset: 12%;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--red) 0%, #A12822 100%);
-  box-shadow: 0 30px 80px -20px rgba(200, 51, 42, 0.35);
-}
+.hero-visual-disc { display: none; }
 .hero-visual-logo {
   position: relative;
-  width: 58%;
-  height: 58%;
+  width: 92%;
+  height: 92%;
   object-fit: contain;
-  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.15));
+  filter: drop-shadow(0 18px 42px rgba(10, 10, 10, 0.22));
 }
 .hero-kanji-bg {
   position: absolute;
