@@ -371,14 +371,15 @@ export async function createFormule(formData: FormData) {
     redirect("/admin/formules/new?error=" + encodeURIComponent("L'âge minimum doit être inférieur ou égal à l'âge maximum."));
   }
   const trancheTexte = String(formData.get("tranche_age") ?? "").trim() || formatTrancheAge(ageMin, ageMax);
-  const ordreRaw = String(formData.get("ordre") ?? "").trim();
-  const ordre = ordreRaw === "" ? 99 : Number(ordreRaw);
+  // Place automatiquement la nouvelle formule à la fin (ordre = max + 1).
+  const ordreRows = await query<{ max_ordre: number | null }>("SELECT MAX(ordre) AS max_ordre FROM formules");
+  const ordre = (ordreRows[0]?.max_ordre ?? 0) + 1;
 
   await query(
     `INSERT INTO formules (ordre, kanji, nom, tranche_age, age_min, age_max, prix, italique, slots_texte, plan_key)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
-      Number.isFinite(ordre) ? ordre : 99,
+      ordre,
       String(formData.get("kanji") ?? "").trim(),
       String(formData.get("nom") ?? "").trim(),
       trancheTexte,

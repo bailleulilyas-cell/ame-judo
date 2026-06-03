@@ -31,7 +31,7 @@ export default async function NewFormulePage({
           (champs ci-dessous). Vous pouvez créer autant de formules que nécessaire.
         </p>
 
-        <div style={{ display: "grid", gridTemplateColumns: "100px 1fr 120px", gap: 16 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "100px 1fr", gap: 16 }}>
           <div className="form-field">
             <label className="form-label" htmlFor="kanji">Kanji</label>
             <input id="kanji" name="kanji" type="text" className="form-input" style={{ fontFamily: "var(--serif-jp)", fontSize: 24, textAlign: "center" }} placeholder="人" />
@@ -39,10 +39,6 @@ export default async function NewFormulePage({
           <div className="form-field">
             <label className="form-label" htmlFor="nom">Nom</label>
             <input id="nom" name="nom" type="text" className="form-input" required placeholder="Senior" />
-          </div>
-          <div className="form-field">
-            <label className="form-label" htmlFor="ordre">Ordre</label>
-            <input id="ordre" name="ordre" type="number" min={0} step={1} defaultValue={99} className="form-input" />
           </div>
         </div>
 
