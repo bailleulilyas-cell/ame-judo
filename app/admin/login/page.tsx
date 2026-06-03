@@ -60,7 +60,7 @@ export default async function AdminLoginPage({
           <span lang="ja" style={{ fontFamily: "var(--serif-jp)", fontSize: 44, display: "block", marginBottom: 8 }}>管</span>
           <h1 className="title-md" style={{ marginBottom: 8 }}>Espace administrateur</h1>
           <p style={{ fontFamily: "var(--serif)", fontStyle: "italic", color: "var(--stone)", fontSize: 14, margin: 0 }}>
-            AME — réservé au bureau du club
+            AME-JUDO — réservé au bureau du club
           </p>
         </div>
 

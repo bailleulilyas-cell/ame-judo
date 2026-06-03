@@ -36,7 +36,7 @@ export default function AdminSidebar() {
   return (
     <aside className="admin-side" aria-label="Navigation admin">
       <div className="admin-side-brand">
-        <span style={{ fontFamily: "var(--serif)", fontSize: 18, letterSpacing: "0.12em" }}>AME · Admin</span>
+        <span style={{ fontFamily: "var(--serif)", fontSize: 18, letterSpacing: "0.12em" }}>AME-JUDO · Admin</span>
         <p style={{ fontFamily: "var(--sans)", fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--stone)", marginTop: 4 }}>
           Bureau du club
         </p>

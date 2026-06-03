@@ -7,7 +7,7 @@ import { getActualites } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Actualités",
-  description: "Toutes les actualités du club AME — stages, compétitions, événements.",
+  description: "Toutes les actualités du club AME-JUDO — stages, compétitions, événements.",
   alternates: { canonical: "/actualites" },
 };
 

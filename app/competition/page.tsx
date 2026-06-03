@@ -9,7 +9,7 @@ import type { Actualite } from "@/types";
 export const metadata: Metadata = {
   title: "Compétition",
   description:
-    "La compétition au club AME, à son rythme. Pôle jeunes et pôle vétérans — la compétition n'a pas d'âge. Derniers résultats du dojo.",
+    "La compétition au club AME-JUDO, à son rythme. Pôle jeunes et pôle vétérans — la compétition n'a pas d'âge. Derniers résultats du dojo.",
   alternates: { canonical: "/competition" },
 };
 

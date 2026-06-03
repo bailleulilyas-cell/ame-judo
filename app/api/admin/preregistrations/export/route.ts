@@ -46,7 +46,7 @@ export async function GET() {
   );
 
   const wb = new ExcelJS.Workbook();
-  wb.creator = "AME — Arts Martiaux Ermontois";
+  wb.creator = "AME-JUDO — Arts Martiaux Ermontois";
   wb.created = new Date();
 
   const ws = wb.addWorksheet("Pré-inscriptions", {
@@ -144,7 +144,7 @@ export async function GET() {
     fitToHeight: 0,
     margins: { left: 0.4, right: 0.4, top: 0.5, bottom: 0.5, header: 0.3, footer: 0.3 },
   };
-  ws.headerFooter.oddHeader = "&L&\"Calibri,Bold\"AME · Pré-inscriptions&R&D";
+  ws.headerFooter.oddHeader = "&L&\"Calibri,Bold\"AME-JUDO · Pré-inscriptions&R&D";
   ws.headerFooter.oddFooter = "&CPage &P / &N";
 
   const buffer = await wb.xlsx.writeBuffer();

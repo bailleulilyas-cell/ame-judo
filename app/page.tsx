@@ -67,7 +67,7 @@ export default async function HomePage() {
               <div className="hero-visual-disc" aria-hidden />
               <Image
                 src="/logo.png"
-                alt="Logo AME — Arts Martiaux Ermontois"
+                alt="Logo AME-JUDO — Arts Martiaux Ermontois"
                 width={420}
                 height={420}
                 className="hero-visual-logo"
@@ -98,7 +98,7 @@ export default async function HomePage() {
                   enseignée en <em>profondeur</em>.
                 </h2>
                 <p className="lead">
-                  Au club AME, nous avons fait le choix d&apos;une discipline et d&apos;une
+                  Au club AME-JUDO, nous avons fait le choix d&apos;une discipline et d&apos;une
                   seule : le <strong>judo</strong>. Discipline olympique fondée en 1882
                   par Jigoro Kano, elle se pratique du baby-judo aux adultes confirmés —
                   toujours dans la rigueur du geste et la bienveillance de la transmission.

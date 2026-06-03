@@ -10,7 +10,7 @@ const SITE_URL = "https://ame-judo.fr";
 export const metadata: Metadata = {
   title: "Adhésion judo Ermont — Tarifs & pré-inscription",
   description:
-    "Tarifs et pré-inscription au club de judo AME à Ermont (95) : baby-judo, enfants, ados, adultes. Deux séances d'essai gratuites.",
+    "Tarifs et pré-inscription au club de judo AME-JUDO à Ermont (95) : baby-judo, enfants, ados, adultes. Deux séances d'essai gratuites.",
   alternates: { canonical: "/adhesion" },
 };
 
@@ -34,7 +34,7 @@ export default async function AdhesionPage() {
   const offerCatalogJsonLd = {
     "@context": "https://schema.org",
     "@type": "OfferCatalog",
-    name: "Formules d'adhésion — Judo AME Ermont",
+    name: "Formules d'adhésion — Judo AME-JUDO Ermont",
     url: `${SITE_URL}/adhesion`,
     itemListElement: formules.map((f) => ({
       "@type": "Offer",

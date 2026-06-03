@@ -6,7 +6,7 @@ import { getSettings } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Contactez le club AME — adresse, email, horaires de permanence.",
+  description: "Contactez le club AME-JUDO — adresse, email, horaires de permanence.",
   alternates: { canonical: "/contact" },
 };
 
@@ -49,7 +49,7 @@ export default async function ContactPage() {
               </p>
               <div style={{ marginBottom: 32, borderRadius: 4, overflow: "hidden", border: "1px solid var(--hair-color)" }}>
                 <iframe
-                  title="Localisation du dojo AME"
+                  title="Localisation du dojo AME-JUDO"
                   src="https://maps.google.com/maps?q=Dojo+des+arts+martiaux+ermontois&output=embed&hl=fr&z=17"
                   width="100%"
                   height="220"

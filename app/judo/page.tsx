@@ -7,10 +7,10 @@ import ScrollReveal from "@/components/ScrollReveal";
 export const metadata: Metadata = {
   title: "Le Judo — la voie de la souplesse",
   description:
-    "Discipline olympique fondée en 1882 par Jigoro Kano. Au club AME, le judo s'enseigne dans toutes ses dimensions — technique, mental, et corps. Du baby-judo aux adultes confirmés.",
+    "Discipline olympique fondée en 1882 par Jigoro Kano. Au club AME-JUDO, le judo s'enseigne dans toutes ses dimensions — technique, mental, et corps. Du baby-judo aux adultes confirmés.",
   alternates: { canonical: "/judo" },
   openGraph: {
-    title: "Le Judo — au club AME",
+    title: "Le Judo — au club AME-JUDO",
     description: "Une discipline. Un cheminement. Une école.",
   },
 };
@@ -39,7 +39,7 @@ export default function JudoPage() {
             <p className="page-hero-sub">
               Discipline olympique fondée par Jigoro Kano en 1882, le judo n&apos;est pas
               un simple sport : c&apos;est une école du corps, de la décision, et du respect.
-              Au club AME, c&apos;est la seule voie que nous enseignons — et nous le faisons
+              Au club AME-JUDO, c&apos;est la seule voie que nous enseignons — et nous le faisons
               dans toute sa profondeur.
             </p>
           </div>
@@ -210,7 +210,7 @@ export default function JudoPage() {
               <blockquote className="judo-quote">
                 « On entre en saluant.<br />On part en saluant. »
               </blockquote>
-              <p className="judo-quote-attr">— Tradition AME</p>
+              <p className="judo-quote-attr">— Tradition AME-JUDO</p>
             </div>
 
             <div className="judo-grid-body">
@@ -218,7 +218,7 @@ export default function JudoPage() {
                 Notre <em>pédagogie</em>.
               </h2>
               <p className="judo-prose">
-                Au club AME, le judo s&apos;enseigne depuis bientôt cinquante ans dans
+                Au club AME-JUDO, le judo s&apos;enseigne depuis bientôt cinquante ans dans
                 un esprit fidèle à celui de Kano : <strong>rigueur dans le geste,
                 bienveillance dans la transmission</strong>. Nos professeurs sont tous
                 gradés, formés à la pédagogie de l&apos;enfant comme à celle de

@@ -165,13 +165,13 @@ export async function POST(req: NextRequest) {
       try {
         await Promise.all([
           resend.emails.send({
-            from: process.env.FROM_EMAIL ?? "AME <noreply@ame-judo.fr>",
+            from: process.env.FROM_EMAIL ?? "AME-JUDO <noreply@ame-judo.fr>",
             to: email,
-            subject: "AME — Votre pré-inscription est bien reçue",
+            subject: "AME-JUDO — Votre pré-inscription est bien reçue",
             html: confirmationHtml(fullName, planLabel),
           }),
           resend.emails.send({
-            from: process.env.FROM_EMAIL ?? "AME <noreply@ame-judo.fr>",
+            from: process.env.FROM_EMAIL ?? "AME-JUDO <noreply@ame-judo.fr>",
             to: process.env.BUREAU_EMAIL ?? "amejudoermont@gmail.com",
             subject: `Nouvelle pré-inscription — ${fullName} — ${planLabel}`,
             html: bureauHtml(fullName, email, phone, birthDate, planLabel, cleanParentName, cleanParentRelation, souhaitCompetition),
@@ -206,7 +206,7 @@ function confirmationHtml(name: string, plan: string) {
 <body style="margin:0;background:#F5F1EA;font-family:Georgia,serif;">
   <div style="max-width:600px;margin:40px auto;background:#FBFAF6;border:1px solid #ddd;">
     <div style="padding:32px 40px;border-bottom:1px solid #eee;">
-      <p style="font-family:Helvetica,sans-serif;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:#6B6B6B;margin:0 0 8px;">AME · Arts Martiaux Ermontois</p>
+      <p style="font-family:Helvetica,sans-serif;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:#6B6B6B;margin:0 0 8px;">AME-JUDO · Arts Martiaux Ermontois</p>
       <h1 style="font-size:28px;font-weight:300;letter-spacing:-0.02em;margin:0;">Pré-inscription reçue</h1>
     </div>
     <div style="padding:32px 40px;">

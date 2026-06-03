@@ -24,13 +24,13 @@ export default function Footer({
             <div className="footer-brand-row">
               <Image
                 src="/logo.png"
-                alt="Logo AME"
+                alt="Logo AME-JUDO"
                 width={56}
                 height={56}
                 className="footer-logo"
               />
               <div>
-                <div className="footer-brand-text">AME</div>
+                <div className="footer-brand-text">AME-JUDO</div>
                 <div style={{ fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(245,241,234,0.5)", marginTop: 4 }}>
                   Depuis 1978
                 </div>
@@ -93,7 +93,7 @@ export default function Footer({
         </div>
 
         <div className="footer-bottom">
-          <span>© 2026 AME — Association loi 1901</span>
+          <span>© 2026 AME-JUDO — Association loi 1901</span>
           <nav className="footer-legal" aria-label="Liens légaux">
             <Link href="/mentions-legales">Mentions légales</Link>
             <Link href="/rgpd">Confidentialité</Link>

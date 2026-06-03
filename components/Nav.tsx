@@ -28,17 +28,17 @@ export default function Nav() {
   return (
     <nav className="nav" ref={navRef} aria-label="Navigation principale">
       <div className="nav-inner">
-        <Link href="/" className="nav-brand" aria-label="AME — Accueil">
+        <Link href="/" className="nav-brand" aria-label="AME-JUDO — Accueil">
           <Image
             src="/logo.png"
-            alt="Logo AME"
+            alt="Logo AME-JUDO"
             width={44}
             height={44}
             className="nav-logo"
             priority
           />
           <span className="nav-brand-text">
-            <span className="nav-brand-name">AME</span>
+            <span className="nav-brand-name">AME-JUDO</span>
             <span className="nav-brand-sub">Arts Martiaux Ermontois</span>
           </span>
         </Link>

@@ -67,8 +67,8 @@ export default async function ActualiteDetail({
     datePublished: actu.date_publication,
     dateModified: actu.updated_at || actu.date_publication,
     image: actu.photo_url ? [actu.photo_url] : [`${SITE_URL}/opengraph-image`],
-    author: { "@type": "Organization", name: "AME — Arts Martiaux Ermontois" },
-    publisher: { "@type": "Organization", name: "AME", logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png` } },
+    author: { "@type": "Organization", name: "AME-JUDO — Arts Martiaux Ermontois" },
+    publisher: { "@type": "Organization", name: "AME-JUDO", logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png` } },
     mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}/actualites/${slug}` },
   };
 

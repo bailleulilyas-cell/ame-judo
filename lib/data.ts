@@ -18,7 +18,7 @@ const DEMO_DISCIPLINES: Discipline[] = [
   {
     id: "1", ordre: 1, kanji: "柔道", nom: "Judo", sens: "La voie de la souplesse",
     tagline: "Céder pour mieux vaincre.",
-    body: "Discipline olympique fondée par Jigoro Kano en 1882. Au club AME, le judo s'enseigne dans toutes ses dimensions : les projections debout (nage-waza), le travail au sol (katame-waza) et les formes traditionnelles (kata). Du baby-judo (4 ans) aux adultes confirmés, dans la rigueur et la sérénité.",
+    body: "Discipline olympique fondée par Jigoro Kano en 1882. Au club AME-JUDO, le judo s'enseigne dans toutes ses dimensions : les projections debout (nage-waza), le travail au sol (katame-waza) et les formes traditionnelles (kata). Du baby-judo (4 ans) aux adultes confirmés, dans la rigueur et la sérénité.",
     origine: "Japon · 1882 · Jigoro Kano",
   },
 ];
@@ -206,10 +206,10 @@ export async function getAboutContent() {
   }>("SELECT * FROM about_content WHERE id = 1");
   return rows?.[0] ?? {
     citation: "Le tatami ne ment jamais. C'est sa première leçon, et sa dernière.",
-    attribution: "Tradition AME",
+    attribution: "Tradition AME-JUDO",
     titre: "Une <em>maison</em> avant d'être un club.",
     paragraphes:
-      "Le club AME a ouvert ses portes à Ermont il y a près de cinquante ans. Il en reste aujourd'hui la même règle : on entre en saluant, on part en saluant.\n\nNotre voie n'est pas un simple sport : c'est une discipline de corps et d'esprit, pratiquée par des enfants de six ans comme par des adultes qui reviennent après vingt ans d'absence.",
+      "Le club AME-JUDO a ouvert ses portes à Ermont il y a près de cinquante ans. Il en reste aujourd'hui la même règle : on entre en saluant, on part en saluant.\n\nNotre voie n'est pas un simple sport : c'est une discipline de corps et d'esprit, pratiquée par des enfants de six ans comme par des adultes qui reviennent après vingt ans d'absence.",
   };
 }
 

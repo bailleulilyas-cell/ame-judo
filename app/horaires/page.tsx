@@ -6,7 +6,7 @@ import { getSlots, getHorairesNote } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Horaires — Tous les créneaux",
-  description: "Tous les créneaux de judo du club AME — pour enfants, ados et adultes. Du baby-judo aux ceintures noires.",
+  description: "Tous les créneaux de judo du club AME-JUDO — pour enfants, ados et adultes. Du baby-judo aux ceintures noires.",
   alternates: { canonical: "/horaires" },
 };
 

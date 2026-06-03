@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 // Next.js convention : Open Graph image générée à la build
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "AME — Club de judo à Ermont (95)";
+export const alt = "AME-JUDO — Club de judo à Ermont (95)";
 
 export const runtime = "edge";
 
@@ -36,7 +36,7 @@ export default function OpengraphImage() {
             color: "#A8A192",
           }}
         >
-          AME · Depuis 1978
+          AME-JUDO · Depuis 1978
         </div>
 
         <div
