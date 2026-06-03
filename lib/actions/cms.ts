@@ -333,3 +333,54 @@ export async function updateFormule(id: string, formData: FormData) {
   refresh();
   redirect("/admin/formules");
 }
+
+// Types de formule reconnus par le formulaire de pré-inscription (colonne plan_key).
+const VALID_PLAN_KEYS = ["baby", "benjamin", "senior"] as const;
+
+export async function createFormule(formData: FormData) {
+  await requireAuth();
+  if (!DB_READY) throw new Error("Base non configurée.");
+
+  const planKey = String(formData.get("plan_key") ?? "").trim();
+  if (!(VALID_PLAN_KEYS as readonly string[]).includes(planKey)) {
+    redirect("/admin/formules/new?error=" + encodeURIComponent("Type de formule invalide (baby, benjamin ou senior)."));
+  }
+
+  const ageMinRaw = String(formData.get("age_min") ?? "").trim();
+  const ageMaxRaw = String(formData.get("age_max") ?? "").trim();
+  const ageMin = ageMinRaw === "" ? null : Number(ageMinRaw);
+  const ageMax = ageMaxRaw === "" ? null : Number(ageMaxRaw);
+  if (ageMin !== null && ageMax !== null && ageMin > ageMax) {
+    redirect("/admin/formules/new?error=" + encodeURIComponent("L'âge minimum doit être inférieur ou égal à l'âge maximum."));
+  }
+  const trancheTexte = String(formData.get("tranche_age") ?? "").trim() || formatTrancheAge(ageMin, ageMax);
+  const ordreRaw = String(formData.get("ordre") ?? "").trim();
+  const ordre = ordreRaw === "" ? 99 : Number(ordreRaw);
+
+  await query(
+    `INSERT INTO formules (ordre, kanji, nom, tranche_age, age_min, age_max, prix, italique, slots_texte, plan_key)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [
+      Number.isFinite(ordre) ? ordre : 99,
+      String(formData.get("kanji") ?? "").trim(),
+      String(formData.get("nom") ?? "").trim(),
+      trancheTexte,
+      ageMin,
+      ageMax,
+      Number(formData.get("prix")) || 0,
+      String(formData.get("italique") ?? "").trim(),
+      String(formData.get("slots_texte") ?? "").trim(),
+      planKey,
+    ]
+  );
+  refresh();
+  redirect("/admin/formules");
+}
+
+export async function deleteFormule(id: string) {
+  await requireAuth();
+  if (!DB_READY) throw new Error("Base non configurée.");
+  await query("DELETE FROM formules WHERE id = ?", [id]);
+  refresh();
+  redirect("/admin/formules");
+}

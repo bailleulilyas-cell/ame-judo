@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import AdminPageHeader from "@/components/AdminPageHeader";
-import { getFormulesAdmin } from "@/lib/actions/cms";
+import DeleteButton from "@/components/DeleteButton";
+import { getFormulesAdmin, deleteFormule } from "@/lib/actions/cms";
 
 export const metadata: Metadata = { title: "Formules — Admin", robots: { index: false } };
 
@@ -12,22 +13,26 @@ export default async function FormulesAdminList() {
     <>
       <AdminPageHeader
         title="Formules d&apos;<em>adhésion</em>"
-        description="Trois formules fixes (Baby, Benjamin, Senior). Les tarifs et descriptions sont modifiables ; l'ajout/suppression nécessite une intervention technique."
+        description="Les formules d'adhésion proposées sur la page Adhésion. Modifiez, ajoutez ou supprimez librement."
+        action={
+          <Link href="/admin/formules/new" className="btn btn-primary">
+            + Nouvelle formule
+          </Link>
+        }
       />
 
       {formules.length === 0 ? (
         <p style={{ fontFamily: "var(--serif)", fontStyle: "italic", color: "var(--stone)" }}>
-          Base MySQL non configurée.
+          Aucune formule. Cliquez sur « Nouvelle formule » pour en ajouter une.
         </p>
       ) : (
         <div style={{ display: "grid", gap: 16 }}>
           {formules.map((f) => (
-            <Link
+            <div
               key={f.id}
-              href={`/admin/formules/${f.id}`}
               style={{
                 display: "grid",
-                gridTemplateColumns: "80px 1fr 120px auto",
+                gridTemplateColumns: "80px 1fr 110px auto auto",
                 gap: 24,
                 padding: "20px 24px",
                 background: "var(--paper)", border: "1px solid var(--hair-color)",
@@ -45,10 +50,16 @@ export default async function FormulesAdminList() {
                   {f.prix}<span style={{ fontSize: 14, color: "var(--stone)" }}>€</span>
                 </span>
               </div>
-              <span style={{ fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--sumi)" }}>
+              <Link
+                href={`/admin/formules/${f.id}`}
+                style={{ fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--sumi)" }}
+              >
                 Modifier →
-              </span>
-            </Link>
+              </Link>
+              <form action={deleteFormule.bind(null, f.id)}>
+                <DeleteButton label="Supprimer" itemName={f.nom} />
+              </form>
+            </div>
           ))}
         </div>
       )}
