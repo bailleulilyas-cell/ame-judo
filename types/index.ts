@@ -97,6 +97,14 @@ export interface AdhesionDocument {
   active: boolean;
 }
 
+export interface SocialLink {
+  id: string;
+  plateforme: import("@/lib/socials").SocialPlatform;
+  url: string;
+  ordre: number;
+  active: boolean;
+}
+
 export interface Preregistration {
   id: string;
   full_name: string;

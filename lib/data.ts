@@ -8,8 +8,9 @@
 import { query } from "@/lib/db";
 import type {
   Discipline, ScheduleSlot, HorairesNote, Maitre,
-  Formule, Actualite, FooterContent, AdhesionDocument
+  Formule, Actualite, FooterContent, AdhesionDocument, SocialLink
 } from "@/types";
+import { isSocialPlatform } from "@/lib/socials";
 
 const DB_READY = Boolean(process.env.DB_HOST && process.env.DB_NAME);
 
@@ -145,6 +146,41 @@ export async function getDocumentById(id: string): Promise<AdhesionDocument | nu
     return r ? { ...r, active: Boolean(r.active) } : null;
   }
   return DEMO_DOCUMENTS.find((d) => d.id === id) ?? null;
+}
+
+// ─── Réseaux sociaux ────────────────────────────────────────
+type SocialRow = { id: string; plateforme: string; url: string; ordre: number; active: number | boolean };
+
+function mapSocial(r: SocialRow): SocialLink | null {
+  if (!isSocialPlatform(r.plateforme)) return null;
+  return { id: r.id, plateforme: r.plateforme, url: r.url, ordre: r.ordre, active: Boolean(r.active) };
+}
+
+/** Public : réseaux actifs, pour le pied de page. */
+export async function getSocialLinks(): Promise<SocialLink[]> {
+  const rows = await tryQuery<SocialRow>(
+    "SELECT id, plateforme, url, ordre, active FROM reseaux_sociaux WHERE active = 1 ORDER BY ordre, id"
+  );
+  if (!rows) return [];
+  return rows.map(mapSocial).filter((x): x is SocialLink => x !== null);
+}
+
+/** Admin : tous les réseaux (actifs et inactifs). */
+export async function getSocialLinksAdmin(): Promise<SocialLink[]> {
+  const rows = await tryQuery<SocialRow>(
+    "SELECT id, plateforme, url, ordre, active FROM reseaux_sociaux ORDER BY ordre, id"
+  );
+  if (!rows) return [];
+  return rows.map(mapSocial).filter((x): x is SocialLink => x !== null);
+}
+
+export async function getSocialLinkById(id: string): Promise<SocialLink | null> {
+  const rows = await tryQuery<SocialRow>(
+    "SELECT id, plateforme, url, ordre, active FROM reseaux_sociaux WHERE id = ? LIMIT 1",
+    [id]
+  );
+  if (!rows || !rows[0]) return null;
+  return mapSocial(rows[0]);
 }
 
 export async function getFormules(): Promise<Formule[]> {

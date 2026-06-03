@@ -1511,6 +1511,26 @@ main { padding-top: var(--nav-h); }
 .footer-col-list a, .footer-col p { font-family: var(--serif); font-size: 14px; color: rgba(245,241,234,0.78); line-height: 1.55; margin: 0; }
 .footer-col-list a { transition: color 0.25s; }
 .footer-col-list a:hover { color: var(--red); }
+
+/* Réseaux sociaux (pied de page) */
+.footer-socials { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 2px; }
+.footer-social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(245, 241, 234, 0.18);
+  color: rgba(245, 241, 234, 0.78);
+  transition: color 0.25s, border-color 0.25s, background 0.25s, transform 0.25s;
+}
+.footer-social:hover {
+  color: var(--bg);
+  background: var(--red);
+  border-color: var(--red);
+  transform: translateY(-2px);
+}
 .footer-bottom {
   padding-top: 22px;
   display: flex;

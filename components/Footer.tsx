@@ -1,5 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
+import SocialIcon from "./SocialIcon";
+import { getSocialLinks } from "@/lib/data";
+import { SOCIAL_PLATFORMS } from "@/lib/socials";
 
 interface FooterProps {
   adresse?: { ligne1: string; ligne2: string; ligne3: string };
@@ -7,7 +10,7 @@ interface FooterProps {
   permanence?: string;
 }
 
-export default function Footer({
+export default async function Footer({
   adresse = {
     ligne1: "Complexe Sportif Saint-Exupéry",
     ligne2: "Rue Kvot et Leydekkers",
@@ -16,6 +19,7 @@ export default function Footer({
   email = "amejudoermont@gmail.com",
   permanence = "Mercredi 17h–20h30 · Samedi 11h–13h",
 }: FooterProps) {
+  const socials = await getSocialLinks();
   return (
     <footer className="footer" aria-label="Pied de page">
       <div className="container">
@@ -89,6 +93,26 @@ export default function Footer({
             </ul>
             <p className="footer-col-title" style={{ marginTop: 24 }}>Permanence</p>
             <p>{permanence}</p>
+
+            {socials.length > 0 && (
+              <>
+                <p className="footer-col-title" style={{ marginTop: 24 }}>Suivez-nous</p>
+                <div className="footer-socials">
+                  {socials.map((s) => (
+                    <a
+                      key={s.id}
+                      href={s.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="footer-social"
+                      aria-label={SOCIAL_PLATFORMS[s.plateforme].label}
+                    >
+                      <SocialIcon platform={s.plateforme} size={20} />
+                    </a>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
 
