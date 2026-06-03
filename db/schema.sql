@@ -147,7 +147,7 @@ CREATE TABLE formules (
   prix        INT NOT NULL,
   italique    TEXT NOT NULL,
   slots_texte VARCHAR(255) NOT NULL,
-  plan_key    ENUM('baby','benjamin','senior') NOT NULL
+  plan_key    VARCHAR(40) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO formules (ordre, kanji, nom, tranche_age, age_min, age_max, prix, italique, slots_texte, plan_key) VALUES
@@ -197,7 +197,7 @@ CREATE TABLE preregistrations (
   email            VARCHAR(255) NOT NULL,
   phone            VARCHAR(32) NOT NULL DEFAULT '',
   birth_date       DATE NOT NULL,
-  plan             ENUM('baby','benjamin','senior') NOT NULL,
+  plan             VARCHAR(40) NOT NULL,
   status           ENUM('pending','contacted','accepted','rejected') NOT NULL DEFAULT 'pending',
   notes            TEXT,
   parent_name      VARCHAR(255),

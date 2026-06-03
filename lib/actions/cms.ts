@@ -334,17 +334,34 @@ export async function updateFormule(id: string, formData: FormData) {
   redirect("/admin/formules");
 }
 
-// Types de formule reconnus par le formulaire de pré-inscription (colonne plan_key).
-const VALID_PLAN_KEYS = ["baby", "benjamin", "senior"] as const;
+// Génère une clé unique (plan_key) à partir du nom de la formule.
+// Cette clé relie la formule au formulaire de pré-inscription.
+function slugifyKey(s: string): string {
+  return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 32) || "formule";
+}
+async function uniquePlanKey(nom: string): Promise<string> {
+  const base = slugifyKey(nom);
+  const rows = await query<{ plan_key: string }>(
+    "SELECT plan_key FROM formules WHERE plan_key = ? OR plan_key LIKE ?",
+    [base, base + "-%"]
+  );
+  const taken = new Set(rows.map((r) => r.plan_key));
+  if (!taken.has(base)) return base;
+  let n = 2;
+  while (taken.has(`${base}-${n}`)) n++;
+  return `${base}-${n}`;
+}
 
 export async function createFormule(formData: FormData) {
   await requireAuth();
   if (!DB_READY) throw new Error("Base non configurée.");
 
-  const planKey = String(formData.get("plan_key") ?? "").trim();
-  if (!(VALID_PLAN_KEYS as readonly string[]).includes(planKey)) {
-    redirect("/admin/formules/new?error=" + encodeURIComponent("Type de formule invalide (baby, benjamin ou senior)."));
+  const nom = String(formData.get("nom") ?? "").trim();
+  if (!nom) {
+    redirect("/admin/formules/new?error=" + encodeURIComponent("Le nom est obligatoire."));
   }
+  const planKey = await uniquePlanKey(nom);
 
   const ageMinRaw = String(formData.get("age_min") ?? "").trim();
   const ageMaxRaw = String(formData.get("age_max") ?? "").trim();

@@ -20,12 +20,6 @@ const STATUS_COLORS: Record<string, string> = {
   rejected: "FF6B6B6B",
 };
 
-const PLAN_LABELS: Record<string, string> = {
-  baby: "Baby Judo",
-  benjamin: "Benjamin",
-  senior: "Senior",
-};
-
 const RELATION_LABELS: Record<string, string> = {
   mere: "Mère",
   pere: "Père",
@@ -44,6 +38,13 @@ export async function GET() {
   const rows = await query<Preregistration>(
     "SELECT * FROM preregistrations ORDER BY submitted_at DESC"
   );
+
+  // Libellés de formule (dynamiques) : plan_key -> nom
+  const formuleRows = await query<{ plan_key: string; nom: string }>(
+    "SELECT plan_key, nom FROM formules"
+  );
+  const PLAN_LABELS: Record<string, string> = {};
+  for (const f of formuleRows) PLAN_LABELS[f.plan_key] = f.nom;
 
   const wb = new ExcelJS.Workbook();
   wb.creator = "AME-JUDO — Arts Martiaux Ermontois";

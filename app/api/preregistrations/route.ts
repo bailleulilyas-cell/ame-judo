@@ -7,9 +7,6 @@ const DB_READY = Boolean(process.env.DB_HOST && process.env.DB_NAME);
 const RESEND_KEY = process.env.RESEND_API_KEY;
 const resend = RESEND_KEY && RESEND_KEY.startsWith("re_") ? new Resend(RESEND_KEY) : null;
 
-const VALID_PLANS = ["baby", "benjamin", "senior"] as const;
-type Plan = (typeof VALID_PLANS)[number];
-
 // Limites strictes (anti payload massif + cohérence DB)
 const LIMITS = {
   fullName: 120,
@@ -93,7 +90,7 @@ export async function POST(req: NextRequest) {
   if (!birthDate || !/^\d{4}-\d{2}-\d{2}$/.test(birthDate) || new Date(birthDate) > new Date()) {
     return NextResponse.json({ message: "Date de naissance invalide." }, { status: 400 });
   }
-  if (!VALID_PLANS.includes(plan as Plan)) {
+  if (!plan) {
     return NextResponse.json({ message: "Formule invalide." }, { status: 400 });
   }
 

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { query } from "@/lib/db";
 import type { Preregistration } from "@/types";
 import PreregistrationRow from "@/components/PreregistrationRow";
+import { getFormulesAdmin } from "@/lib/actions/cms";
 
 export const metadata: Metadata = {
   title: "Pré-inscriptions — Admin",
@@ -16,13 +17,6 @@ const STATUS_FILTERS = [
   { value: "contacted", label: "Contactés" },
   { value: "accepted", label: "Acceptés" },
   { value: "rejected", label: "Refusés" },
-];
-
-const PLAN_FILTERS = [
-  { value: "", label: "Toutes" },
-  { value: "baby", label: "Baby Judo" },
-  { value: "benjamin", label: "Benjamin" },
-  { value: "senior", label: "Senior" },
 ];
 
 async function fetchRows(): Promise<Preregistration[]> {
@@ -42,7 +36,10 @@ export default async function PreregistrationsPage({
   const statusFilter = params.status ?? "";
   const planFilter = params.plan ?? "";
 
-  const allRows = await fetchRows();
+  const [allRows, formules] = await Promise.all([fetchRows(), getFormulesAdmin()]);
+  const planLabels: Record<string, string> = {};
+  for (const f of formules) planLabels[f.plan_key] = f.nom;
+  const PLAN_FILTERS = [{ value: "", label: "Toutes" }, ...formules.map((f) => ({ value: f.plan_key, label: f.nom }))];
 
   const rows = allRows.filter((r) => {
     if (statusFilter && r.status !== statusFilter) return false;
@@ -143,7 +140,7 @@ export default async function PreregistrationsPage({
               </tr>
             </thead>
             <tbody>
-              {rows.map((r) => <PreregistrationRow key={r.id} row={r} />)}
+              {rows.map((r) => <PreregistrationRow key={r.id} row={r} planLabel={planLabels[r.plan] ?? r.plan} />)}
             </tbody>
           </table>
         </div>

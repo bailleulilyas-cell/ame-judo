@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import AdminPageHeader from "@/components/AdminPageHeader";
 import { getPreregistrationById, updatePreregistration } from "@/lib/actions/preregistrations";
+import { getFormulesAdmin } from "@/lib/actions/cms";
 
 export const metadata: Metadata = { title: "Modifier une pré-inscription", robots: { index: false } };
 
@@ -12,18 +13,18 @@ const STATUS_OPTIONS = [
   { value: "rejected", label: "Refusé" },
 ];
 
-const PLAN_OPTIONS = [
-  { value: "baby", label: "Baby Judo (4-5 ans)" },
-  { value: "benjamin", label: "Benjamin (6-13 ans)" },
-  { value: "senior", label: "Senior (14 ans et +)" },
-];
-
 export default async function PreregistrationEdit({
   params,
 }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const row = await getPreregistrationById(id);
+  const [row, formules] = await Promise.all([getPreregistrationById(id), getFormulesAdmin()]);
   if (!row) notFound();
+
+  const planOptions = formules.map((f) => ({ value: f.plan_key, label: `${f.nom} (${f.tranche_age})` }));
+  // Conserve la valeur actuelle même si la formule a été supprimée depuis.
+  if (row.plan && !planOptions.some((p) => p.value === row.plan)) {
+    planOptions.push({ value: row.plan, label: `${row.plan} (formule supprimée)` });
+  }
 
   const update = updatePreregistration.bind(null, id);
   const submittedAt = new Date(row.submitted_at);
@@ -69,7 +70,7 @@ export default async function PreregistrationEdit({
           <div className="form-field">
             <label className="form-label" htmlFor="plan">Formule</label>
             <select id="plan" name="plan" defaultValue={row.plan} className="form-select" required>
-              {PLAN_OPTIONS.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
+              {planOptions.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
             </select>
           </div>
           <div className="form-field">

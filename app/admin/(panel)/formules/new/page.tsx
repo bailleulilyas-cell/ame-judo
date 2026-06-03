@@ -26,17 +26,10 @@ export default async function NewFormulePage({
           </div>
         )}
 
-        <div className="form-field">
-          <label className="form-label" htmlFor="plan_key">Type de formule</label>
-          <select id="plan_key" name="plan_key" className="form-select" defaultValue="senior" required>
-            <option value="baby">Baby (petits)</option>
-            <option value="benjamin">Benjamin (enfants / ados)</option>
-            <option value="senior">Senior (ados / adultes)</option>
-          </select>
-          <p style={{ fontSize: 12, color: "var(--stone)", fontFamily: "var(--serif)", fontStyle: "italic", margin: "6px 0 0" }}>
-            ↳ Le type relie la formule au formulaire de pré-inscription (selon l&apos;âge saisi). Trois types possibles : baby, benjamin, senior.
-          </p>
-        </div>
+        <p style={{ fontSize: 13, color: "var(--stone)", fontFamily: "var(--serif)", fontStyle: "italic", margin: 0 }}>
+          La formule proposée à l&apos;inscription est déterminée automatiquement par l&apos;âge
+          (champs ci-dessous). Vous pouvez créer autant de formules que nécessaire.
+        </p>
 
         <div style={{ display: "grid", gridTemplateColumns: "100px 1fr 120px", gap: 16 }}>
           <div className="form-field">

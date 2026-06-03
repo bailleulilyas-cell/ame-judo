@@ -8,7 +8,6 @@ import type { Preregistration } from "@/types";
 
 const DB_READY = Boolean(process.env.DB_HOST && process.env.DB_NAME);
 const VALID_STATUS = ["pending", "contacted", "accepted", "rejected"] as const;
-const VALID_PLANS = ["baby", "benjamin", "senior"] as const;
 
 async function requireAuth() {
   if (!(await isAuthenticated())) throw new Error("Non autorisé.");
@@ -38,7 +37,7 @@ export async function updatePreregistration(id: string, formData: FormData) {
   if (!fullName) throw new Error("Nom requis.");
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error("Email invalide.");
   if (!birthDate) throw new Error("Date de naissance requise.");
-  if (!VALID_PLANS.includes(plan as typeof VALID_PLANS[number])) throw new Error("Formule invalide.");
+  if (!plan) throw new Error("Formule invalide.");
   if (!VALID_STATUS.includes(status as typeof VALID_STATUS[number])) throw new Error("Statut invalide.");
 
   const souhaitCompetition = formData.get("souhait_competition") === "1" ? 1 : 0;

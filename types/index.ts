@@ -49,7 +49,7 @@ export interface Formule {
   prix: number;
   italique: string;
   slots_texte: string;
-  plan_key: "baby" | "benjamin" | "senior";
+  plan_key: string;
 }
 
 export interface FooterContent {
@@ -111,7 +111,7 @@ export interface Preregistration {
   email: string;
   phone: string;
   birth_date: string;
-  plan: "baby" | "benjamin" | "senior";
+  plan: string;
   status: "pending" | "contacted" | "accepted" | "rejected";
   notes: string | null;
   parent_name: string | null;

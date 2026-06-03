@@ -13,13 +13,7 @@ const STATUS_OPTIONS = [
   { value: "rejected", label: "Refusé", color: "var(--stone)" },
 ];
 
-const PLAN_LABELS: Record<string, string> = {
-  baby: "Baby Judo",
-  benjamin: "Benjamin",
-  senior: "Senior",
-};
-
-export default function PreregistrationRow({ row }: { row: Preregistration }) {
+export default function PreregistrationRow({ row, planLabel }: { row: Preregistration; planLabel?: string }) {
   const [isPending, startTransition] = useTransition();
   const [confirmOpen, setConfirmOpen] = useState(false);
 
@@ -62,7 +56,7 @@ export default function PreregistrationRow({ row }: { row: Preregistration }) {
         <br />
         <span style={{ fontSize: 11, color: "var(--stone-soft)" }}>{age} ans</span>
       </td>
-      <td style={{ padding: "14px 12px", fontSize: 13 }}>{PLAN_LABELS[row.plan] ?? row.plan}</td>
+      <td style={{ padding: "14px 12px", fontSize: 13 }}>{planLabel ?? row.plan}</td>
       <td style={{ padding: "14px 12px" }}>
         <select
           value={row.status}
