@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
-import { getSettings } from "@/lib/data";
+import SocialIcon from "@/components/SocialIcon";
+import { getSettings, getSocialLinks } from "@/lib/data";
+import { SOCIAL_PLATFORMS } from "@/lib/socials";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -11,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ContactPage() {
-  const s = await getSettings();
+  const [s, socials] = await Promise.all([getSettings(), getSocialLinks()]);
 
   return (
     <>
@@ -76,6 +78,30 @@ export default async function ContactPage() {
               <p style={{ fontFamily: "var(--serif)", fontSize: 18 }}>
                 {s.permanence}
               </p>
+
+              {socials.length > 0 && (
+                <>
+                  <div className="section-header" style={{ marginTop: 32 }}>
+                    <span className="section-header-rule" aria-hidden />
+                    <span className="section-header-label">Suivez-nous</span>
+                  </div>
+                  <div className="contact-socials">
+                    {socials.map((soc) => (
+                      <a
+                        key={soc.id}
+                        href={soc.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="contact-social"
+                        aria-label={SOCIAL_PLATFORMS[soc.plateforme].label}
+                      >
+                        <SocialIcon platform={soc.plateforme} size={22} />
+                        <span>{SOCIAL_PLATFORMS[soc.plateforme].label}</span>
+                      </a>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
 
             <div style={{ background: "var(--paper)", border: "1px solid var(--hair-color)", padding: "clamp(28px, 3vw, 48px)" }}>

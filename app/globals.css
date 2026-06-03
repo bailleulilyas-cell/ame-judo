@@ -1512,6 +1512,21 @@ main { padding-top: var(--nav-h); }
 .footer-col-list a { transition: color 0.25s; }
 .footer-col-list a:hover { color: var(--red); }
 
+/* Réseaux sociaux (page Contact) */
+.contact-socials { display: flex; flex-direction: column; gap: 12px; }
+.contact-social {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--serif);
+  font-size: 17px;
+  color: var(--sumi);
+  transition: color 0.25s, gap 0.25s;
+}
+.contact-social svg { color: var(--stone); transition: color 0.25s; flex-shrink: 0; }
+.contact-social:hover { color: var(--red); gap: 16px; }
+.contact-social:hover svg { color: var(--red); }
+
 /* Réseaux sociaux (pied de page) */
 .footer-socials { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 2px; }
 .footer-social {
