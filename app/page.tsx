@@ -80,11 +80,11 @@ export default async function HomePage() {
         {/* ─── VIE DU DOJO (mosaïque pleine largeur) ─── */}
         <ScrollReveal as="section" className="photo-mosaic-section">
           <div className="photo-mosaic">
-            <figure className="pm pm-a"><Image src="/photos/photo-1.webp" alt="Cours de judo enfants au dojo AME-JUDO d'Ermont" fill sizes="(max-width: 700px) 100vw, 40vw" style={{ objectFit: "cover" }} /></figure>
-            <figure className="pm pm-b"><Image src="/photos/photo-2.webp" alt="Salut entre un professeur et un jeune judoka" fill sizes="(max-width: 700px) 50vw, 27vw" style={{ objectFit: "cover" }} /></figure>
+            <figure className="pm pm-a"><Image src="/photos/photo-2.webp" alt="Salut entre un professeur et un jeune judoka" fill sizes="(max-width: 700px) 100vw, 40vw" style={{ objectFit: "cover" }} /></figure>
+            <figure className="pm pm-b"><Image src="/photos/photo-1.webp" alt="Cours de judo enfants au dojo AME-JUDO d'Ermont" fill sizes="(max-width: 700px) 50vw, 27vw" style={{ objectFit: "cover" }} /></figure>
             <figure className="pm pm-c"><Image src="/photos/photo-3.webp" alt="Judoka gradé ceinture rouge et blanche au club AME-JUDO" fill sizes="(max-width: 700px) 50vw, 33vw" style={{ objectFit: "cover" }} /></figure>
-            <figure className="pm pm-d"><Image src="/photos/photo-4.webp" alt="Travail au sol entre deux judokas" fill sizes="(max-width: 700px) 50vw, 27vw" style={{ objectFit: "cover" }} /></figure>
-            <figure className="pm pm-e"><Image src="/photos/photo-5.webp" alt="Enfant en plein mouvement sur le tatami" fill sizes="(max-width: 700px) 50vw, 40vw" style={{ objectFit: "cover" }} /></figure>
+            <figure className="pm pm-d"><Image src="/photos/photo-5.webp" alt="Enfant en plein mouvement sur le tatami" fill sizes="(max-width: 700px) 50vw, 27vw" style={{ objectFit: "cover" }} /></figure>
+            <figure className="pm pm-e"><Image src="/photos/photo-4.webp" alt="Travail au sol entre deux judokas" fill sizes="(max-width: 700px) 50vw, 40vw" style={{ objectFit: "cover" }} /></figure>
           </div>
         </ScrollReveal>
 
