@@ -9,6 +9,11 @@ export const metadata: Metadata = {
   description:
     "L'équipe enseignante du club de judo AME-JUDO à Ermont (95) — des professeurs diplômés d'État, gradés ceinture noire, formés à la pédagogie de l'enfant comme de l'adulte.",
   alternates: { canonical: "/maitres" },
+  openGraph: {
+    title: "Les maîtres — AME-JUDO Ermont",
+    description: "L'équipe enseignante du club de judo AME-JUDO à Ermont (95).",
+    url: "/maitres",
+  },
 };
 
 export default async function MaitresPage() {

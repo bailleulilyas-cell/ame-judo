@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import AdhesionForm from "@/components/AdhesionForm";
@@ -12,6 +13,11 @@ export const metadata: Metadata = {
   description:
     "Tarifs et pré-inscription au club de judo AME-JUDO à Ermont (95) : baby-judo, enfants, ados, adultes. Deux séances d'essai gratuites.",
   alternates: { canonical: "/adhesion" },
+  openGraph: {
+    title: "Adhésion & tarifs — AME-JUDO Ermont",
+    description: "Tarifs et pré-inscription au club de judo AME-JUDO à Ermont (95). Deux séances d'essai gratuites.",
+    url: "/adhesion",
+  },
 };
 
 // Slug pour ancrer un document dans l'URL
@@ -88,6 +94,22 @@ export default async function AdhesionPage() {
                 <li><strong>En tenue de sport</strong><span>Pas besoin de kimono pour la première séance.</span></li>
                 <li><strong>Sans rendez-vous</strong><span>Présentez-vous simplement à un créneau de votre âge.</span></li>
               </ul>
+            </div>
+          </div>
+        </section>
+
+        <section className="section" style={{ paddingTop: 0 }}>
+          <div className="container">
+            <div className="ffjda">
+              <Image src="/ffjda.webp" alt="Club affilié à France Judo (FFJDA)" width={96} height={180} className="ffjda-logo" />
+              <div>
+                <h2 className="ffjda-title">Club affilié à France&nbsp;Judo (FFJDA)</h2>
+                <p className="ffjda-text">
+                  Notre club est affilié à la Fédération Française de Judo. La licence comprend
+                  l&apos;<strong>assurance</strong> du pratiquant et donne accès aux passages de grades
+                  ainsi qu&apos;aux compétitions officielles.
+                </p>
+              </div>
             </div>
           </div>
         </section>

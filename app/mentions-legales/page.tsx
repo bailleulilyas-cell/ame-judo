@@ -5,6 +5,8 @@ import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Mentions légales",
+  description: "Mentions légales du club de judo AME-JUDO (Ermont) — éditeur, hébergeur, propriété intellectuelle.",
+  alternates: { canonical: "/mentions-legales" },
   robots: { index: false },
 };
 

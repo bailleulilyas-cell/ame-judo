@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Le Judo — au club AME-JUDO",
     description: "Une discipline. Un cheminement. Une école.",
+    url: "/judo",
   },
 };
 

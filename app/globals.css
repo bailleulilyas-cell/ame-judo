@@ -1546,6 +1546,20 @@ main { padding-top: var(--nav-h); }
   .pm:hover img { transform: none; }
 }
 
+/* Encart affiliation FFJDA (page Adhésion) */
+.ffjda {
+  display: flex;
+  align-items: center;
+  gap: clamp(18px, 3vw, 32px);
+  border: 1px solid var(--hair-color);
+  background: var(--paper);
+  padding: clamp(18px, 3vw, 28px);
+}
+.ffjda-logo { height: 96px; width: auto; flex-shrink: 0; }
+.ffjda-title { font-family: var(--serif); font-weight: 400; font-size: clamp(17px, 2vw, 22px); margin: 0 0 8px; }
+.ffjda-text { font-family: var(--serif); font-size: 14px; line-height: 1.6; color: var(--sumi-soft); margin: 0; }
+@media (max-width: 560px) { .ffjda { flex-direction: column; text-align: center; } }
+
 /* Encart « Votre premier cours » (page Adhésion) */
 .premier-cours {
   border: 1px solid var(--hair-color);

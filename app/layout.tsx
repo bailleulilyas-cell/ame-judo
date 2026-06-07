@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Inter, Shippori_Mincho } from "next/font/google";
+import { getSocialLinks } from "@/lib/data";
 import "./globals.css";
 
 export const viewport: Viewport = {
@@ -131,7 +132,13 @@ const ORGANIZATION_JSONLD = {
   email: "amejudoermont@gmail.com",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // sameAs : profils sociaux officiels du club (aide Google à relier le site aux réseaux).
+  const socials = await getSocialLinks();
+  const organizationJsonLd = socials.length > 0
+    ? { ...ORGANIZATION_JSONLD, sameAs: socials.map((s) => s.url) }
+    : ORGANIZATION_JSONLD;
+
   return (
     <html
       lang="fr"
@@ -145,7 +152,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION_JSONLD) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
       </body>
     </html>

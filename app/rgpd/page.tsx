@@ -5,6 +5,8 @@ import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Politique de confidentialité",
+  description: "Politique de confidentialité du club AME-JUDO — données collectées, finalité, durée de conservation et vos droits (RGPD).",
+  alternates: { canonical: "/rgpd" },
   robots: { index: false },
 };
 

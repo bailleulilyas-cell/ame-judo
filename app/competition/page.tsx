@@ -11,6 +11,11 @@ export const metadata: Metadata = {
   description:
     "La compétition au club AME-JUDO, à son rythme. Pôle jeunes et pôle vétérans — la compétition n'a pas d'âge. Derniers résultats du dojo.",
   alternates: { canonical: "/competition" },
+  openGraph: {
+    title: "Compétition — AME-JUDO Ermont",
+    description: "La compétition au club AME-JUDO. Pôle jeunes et pôle vétérans.",
+    url: "/competition",
+  },
 };
 
 function medals(a: Actualite) {

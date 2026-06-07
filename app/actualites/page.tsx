@@ -9,6 +9,11 @@ export const metadata: Metadata = {
   title: "Actualités",
   description: "Toutes les actualités du club AME-JUDO — stages, compétitions, événements.",
   alternates: { canonical: "/actualites" },
+  openGraph: {
+    title: "Actualités — AME-JUDO Ermont",
+    description: "Stages, compétitions et événements du club AME-JUDO.",
+    url: "/actualites",
+  },
 };
 
 export default async function ActualitesPage() {

@@ -10,6 +10,11 @@ export const metadata: Metadata = {
   title: "Contact",
   description: "Contactez le club AME-JUDO — adresse, email, horaires de permanence.",
   alternates: { canonical: "/contact" },
+  openGraph: {
+    title: "Contact — AME-JUDO Ermont",
+    description: "Contactez le club de judo AME-JUDO — adresse, email, permanence.",
+    url: "/contact",
+  },
 };
 
 export default async function ContactPage() {

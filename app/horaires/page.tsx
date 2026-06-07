@@ -8,6 +8,11 @@ export const metadata: Metadata = {
   title: "Horaires — Tous les créneaux",
   description: "Tous les créneaux de judo du club AME-JUDO — pour enfants, ados et adultes. Du baby-judo aux ceintures noires.",
   alternates: { canonical: "/horaires" },
+  openGraph: {
+    title: "Horaires des cours — AME-JUDO Ermont",
+    description: "Tous les créneaux de judo du club AME-JUDO — enfants, ados et adultes.",
+    url: "/horaires",
+  },
 };
 
 const JOURS = [
