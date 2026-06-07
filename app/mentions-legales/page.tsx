@@ -25,6 +25,7 @@ export default function MentionsLegales() {
             <p>
               <strong>Association AME-JUDO — Arts Martiaux Ermontois</strong><br />
               Association loi du 1ᵉʳ juillet 1901<br />
+              N° RNA : W951008210<br />
               Complexe Sportif Saint-Exupéry<br />
               Rue Kvot et Leydekkers, 95120 Ermont<br />
               <a href="mailto:amejudoermont@gmail.com" style={{ borderBottom: "1px solid var(--hair-strong)" }}>amejudoermont@gmail.com</a>
@@ -33,7 +34,7 @@ export default function MentionsLegales() {
             <h2 style={{ fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--stone)", marginBottom: 12, marginTop: 32, fontFamily: "var(--sans)", fontWeight: 500 }}>
               Directeur de publication
             </h2>
-            <p>Le Président de l&apos;association AME-JUDO.</p>
+            <p>Thierry Bailleul, Président de l&apos;association AME-JUDO.</p>
 
             <h2 style={{ fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--stone)", marginBottom: 12, marginTop: 32, fontFamily: "var(--sans)", fontWeight: 500 }}>
               Hébergement

@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 };
 
 const SECTIONS = [
+  { titre: "Responsable du traitement", texte: "Le responsable du traitement des données est l'association AME-JUDO — Arts Martiaux Ermontois (loi 1901, RNA W951008210), représentée par son président, Thierry Bailleul. Contact : amejudoermont@gmail.com." },
   { titre: "Données collectées", texte: "Lors de votre pré-inscription, nous collectons : votre nom complet, votre adresse email et la date de naissance de la personne souhaitant pratiquer. Aucune donnée bancaire n'est collectée." },
   { titre: "Finalité du traitement", texte: "Ces données sont utilisées exclusivement pour vous contacter au sujet de votre demande de pré-inscription et organiser votre venue au dojo pour les séances d'essai." },
   { titre: "Base légale", texte: "Le traitement est fondé sur votre consentement (art. 6.1.a du RGPD), que vous exprimez en soumettant le formulaire." },
