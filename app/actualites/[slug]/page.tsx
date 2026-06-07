@@ -58,14 +58,20 @@ export default async function ActualiteDetail({
 
   const html = renderArticleBody(actu.body_html, actu.body);
 
+  // Normalise une date MySQL en ISO 8601 (exigé par Google pour les dates).
+  const toISO = (d: string) => {
+    const x = new Date(d);
+    return isNaN(x.getTime()) ? d : x.toISOString();
+  };
+
   // JSON-LD Article + BreadcrumbList
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
     headline: actu.titre,
     description: actu.extrait,
-    datePublished: actu.date_publication,
-    dateModified: actu.updated_at || actu.date_publication,
+    datePublished: toISO(actu.date_publication),
+    dateModified: toISO(actu.updated_at || actu.date_publication),
     image: actu.photo_url ? [actu.photo_url] : [`${SITE_URL}/opengraph-image`],
     author: { "@type": "Organization", name: "AME-JUDO — Arts Martiaux Ermontois" },
     publisher: { "@type": "Organization", name: "AME-JUDO", logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png` } },

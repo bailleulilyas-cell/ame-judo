@@ -10,7 +10,7 @@
   --sumi:        #0A0A0A;
   --sumi-soft:   #1A1A1A;
   --stone:       #6B6B6B;
-  --stone-soft:  #9A958A;
+  --stone-soft:  #767065;
   --sand:        #E8E1D4;
   --red:         #C8332A;
   --red-soft:    rgba(200, 51, 42, 0.08);
@@ -1167,7 +1167,7 @@ main { padding-top: var(--nav-h); }
 }
 @media (max-width: 520px) { .h-day-group { grid-template-columns: 1fr; gap: 10px; } }
 
-.h-day-name { display: flex; align-items: baseline; gap: 10px; }
+.h-day-name { display: flex; align-items: baseline; gap: 10px; margin: 0; font-weight: 400; }
 .h-day-kanji { font-family: var(--serif-jp); font-size: 26px; color: var(--sumi); }
 .h-day-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--stone); }
 .h-slots { display: flex; flex-direction: column; gap: 10px; }
@@ -1505,6 +1505,71 @@ main { padding-top: var(--nav-h); }
 .footer-col-list a, .footer-col p { font-family: var(--serif); font-size: 14px; color: rgba(245,241,234,0.78); line-height: 1.55; margin: 0; }
 .footer-col-list a { transition: color 0.25s; }
 .footer-col-list a:hover { color: var(--red); }
+
+/* ─── Mosaïque photos « vie du dojo » (accueil, pleine largeur, collée) ─── */
+.photo-mosaic-section { margin: clamp(48px, 8vw, 110px) 0; }
+.photo-mosaic {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas:
+    "a b c"
+    "d e c";
+  gap: 4px;
+  height: clamp(420px, 50vw, 780px);
+}
+.pm { position: relative; margin: 0; overflow: hidden; background: var(--paper); }
+.pm-a { grid-area: a; }
+.pm-b { grid-area: b; }
+.pm-c { grid-area: c; }
+.pm-d { grid-area: d; }
+.pm-e { grid-area: e; }
+
+/* Traitement unifié (cohérence charte) + animation au survol */
+.pm img { filter: saturate(0.8) contrast(1.05) brightness(1.02) sepia(0.1); transition: filter 0.6s ease, transform 0.7s ease; }
+.pm:hover img { filter: saturate(1) contrast(1) brightness(1) sepia(0); transform: scale(1.04); }
+
+@media (max-width: 700px) {
+  .photo-mosaic {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 42vw 28vw 28vw 42vw;
+    grid-template-areas:
+      "a a"
+      "b c"
+      "d c"
+      "e e";
+    height: auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pm img { transition: none; }
+  .pm:hover img { transform: none; }
+}
+
+/* Encart « Votre premier cours » (page Adhésion) */
+.premier-cours {
+  border: 1px solid var(--hair-color);
+  background: var(--paper);
+  border-left: 3px solid var(--red);
+  padding: clamp(20px, 3vw, 32px);
+}
+.premier-cours-title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(18px, 2vw, 24px);
+  margin: 0 0 18px;
+}
+.premier-cours-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 18px 28px;
+}
+.premier-cours-grid li { display: flex; flex-direction: column; gap: 3px; }
+.premier-cours-grid strong { font-size: 15px; color: var(--sumi); }
+.premier-cours-grid span { font-size: 13px; line-height: 1.5; color: var(--stone); font-family: var(--serif); }
 
 /* Réseaux sociaux (page Contact) */
 .contact-socials { display: flex; flex-direction: column; gap: 12px; }

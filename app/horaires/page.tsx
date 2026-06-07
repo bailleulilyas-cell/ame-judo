@@ -39,6 +39,17 @@ export default async function HorairesPage() {
             <p className="page-hero-sub">
               Quatre jours de pratique par semaine, sept créneaux. Le calendrier suit l&apos;année scolaire.
             </p>
+            <p className="page-hero-sub" style={{ marginTop: 14, fontSize: 15 }}>
+              <strong>Complexe Sportif Saint-Exupéry</strong> — Rue Kvot et Leydekkers, 95120 Ermont.{" "}
+              <a
+                href="https://www.google.com/maps?q=Complexe+Sportif+Saint-Exupéry+Ermont+95120"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ borderBottom: "1px solid var(--hair-strong)", color: "var(--sumi)" }}
+              >
+                Voir sur la carte ↗
+              </a>
+            </p>
           </div>
         </section>
 
@@ -57,10 +68,10 @@ export default async function HorairesPage() {
                   if (jourSlots.length === 0) return null;
                   return (
                     <div key={jour.key} className="h-day-group">
-                      <div className="h-day-name">
+                      <h2 className="h-day-name">
                         <span className="h-day-kanji" lang="ja" aria-hidden>{jour.kanji}</span>
                         <span className="h-day-label">{jour.label}</span>
-                      </div>
+                      </h2>
                       <div className="h-slots">
                         {jourSlots.map((s) => {
                           const parts = s.niveau.split(" · ");

@@ -78,7 +78,21 @@ export default async function AdhesionPage() {
           </div>
         </section>
 
-        <section className="section">
+        <section className="section" style={{ paddingTop: 0 }}>
+          <div className="container">
+            <div className="premier-cours">
+              <h2 className="premier-cours-title">Votre premier cours</h2>
+              <ul className="premier-cours-grid">
+                <li><strong>Dès 4 ans</strong><span>Baby-judo, enfants, ados et adultes — tous les niveaux.</span></li>
+                <li><strong>2 séances d&apos;essai gratuites</strong><span>Sans engagement, aucun paiement à la pré-inscription.</span></li>
+                <li><strong>En tenue de sport</strong><span>Pas besoin de kimono pour la première séance.</span></li>
+                <li><strong>Sans rendez-vous</strong><span>Présentez-vous simplement à un créneau de votre âge.</span></li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section className="section" style={{ paddingTop: 0 }}>
           <div className="container">
             <AdhesionForm formules={formules} />
           </div>

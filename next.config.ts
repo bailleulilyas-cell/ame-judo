@@ -69,6 +69,11 @@ const nextConfig: NextConfig = {
         source: "/_next/static/:path*",
         headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
       },
+      // Logo (présent sur chaque page, LCP) : cache 1 jour au lieu de max-age=0
+      {
+        source: "/logo.png",
+        headers: [{ key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" }],
+      },
     ];
   },
   async redirects() {
@@ -76,6 +81,9 @@ const nextConfig: NextConfig = {
       // Ancienne URL /voies → nouvelle URL /judo (préserve le SEO)
       { source: "/voies", destination: "/judo", permanent: true },
       { source: "/voies/:slug", destination: "/judo", permanent: true },
+      // URLs tapées à la main (audit) → pages réelles, au lieu d'un 404
+      { source: "/le-judo", destination: "/judo", permanent: true },
+      { source: "/documents", destination: "/adhesion#documents-section", permanent: true },
     ];
   },
 };
