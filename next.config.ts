@@ -53,6 +53,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
     formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 31536000,
     remotePatterns: [
       // Pour les images uploadées sur Vercel Blob (quand activé)
       { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },

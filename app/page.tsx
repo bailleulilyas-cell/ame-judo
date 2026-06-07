@@ -71,6 +71,7 @@ export default async function HomePage() {
                 width={420}
                 height={420}
                 className="hero-visual-logo"
+                sizes="(max-width: 880px) 200px, 420px"
                 priority
               />
             </div>

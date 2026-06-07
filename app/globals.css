@@ -1499,8 +1499,8 @@ main { padding-top: var(--nav-h); }
 .footer-brand-row { display: flex; align-items: center; gap: 12px; }
 .footer-logo { width: 48px; height: 48px; background: var(--bg); border-radius: 50%; padding: 5px; flex-shrink: 0; object-fit: contain; }
 .footer-brand-text { font-family: var(--serif); font-size: 20px; letter-spacing: 0.14em; }
-.footer-brand-sub { font-family: var(--serif); font-style: italic; font-size: 14px; color: rgba(245,241,234,0.58); line-height: 1.55; }
-.footer-col-title { font-size: 10px; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(245,241,234,0.42); margin: 0 0 14px; }
+.footer-brand-sub { font-family: var(--serif); font-style: italic; font-size: 14px; color: rgba(245,241,234,0.75); line-height: 1.55; }
+.footer-col-title { font-size: 10px; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(245,241,234,0.72); margin: 0 0 14px; }
 .footer-col-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 9px; }
 .footer-col-list a, .footer-col p { font-family: var(--serif); font-size: 14px; color: rgba(245,241,234,0.78); line-height: 1.55; margin: 0; }
 .footer-col-list a { transition: color 0.25s; }

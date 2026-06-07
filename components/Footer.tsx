@@ -35,7 +35,7 @@ export default async function Footer({
               />
               <div>
                 <div className="footer-brand-text">AME-JUDO</div>
-                <div style={{ fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(245,241,234,0.5)", marginTop: 4 }}>
+                <div style={{ fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(245,241,234,0.72)", marginTop: 4 }}>
                   Depuis 1978
                 </div>
               </div>
