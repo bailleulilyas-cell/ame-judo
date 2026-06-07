@@ -15,6 +15,7 @@ const JOURS = [
   { key: "mercredi", label: "Mercredi", kanji: "水" },
   { key: "jeudi", label: "Jeudi", kanji: "木" },
   { key: "samedi", label: "Samedi", kanji: "土" },
+  { key: "dimanche", label: "Dimanche", kanji: "日" },
 ];
 
 export default async function HorairesAdminPage({
@@ -32,7 +33,7 @@ export default async function HorairesAdminPage({
   }
 
   const [slots, note] = await Promise.all([
-    query<ScheduleSlot>("SELECT * FROM schedule_slots ORDER BY FIELD(jour,'lundi','mercredi','jeudi','samedi'), ordre"),
+    query<ScheduleSlot>("SELECT * FROM schedule_slots ORDER BY FIELD(jour,'lundi','mercredi','jeudi','samedi','dimanche'), ordre"),
     queryOne<HorairesNote>("SELECT * FROM horaires_note WHERE id = 1"),
   ]);
 
