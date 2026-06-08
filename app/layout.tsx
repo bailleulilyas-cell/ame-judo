@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Inter, Shippori_Mincho } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { getSocialLinks } from "@/lib/data";
 import "./globals.css";
 
@@ -154,6 +155,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
+        <Analytics />
       </body>
     </html>
   );
