@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import { getSettings } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Mentions légales",
@@ -10,7 +11,8 @@ export const metadata: Metadata = {
   robots: { index: false },
 };
 
-export default function MentionsLegales() {
+export default async function MentionsLegales() {
+  const { email } = await getSettings();
   return (
     <>
       <Nav />
@@ -30,7 +32,7 @@ export default function MentionsLegales() {
               N° RNA : W951008210<br />
               Complexe Sportif Saint-Exupéry<br />
               Rue Kvot et Leydekkers, 95120 Ermont<br />
-              <a href="mailto:amejudoermont@gmail.com" style={{ borderBottom: "1px solid var(--hair-strong)" }}>amejudoermont@gmail.com</a>
+              <a href={`mailto:${email}`} style={{ borderBottom: "1px solid var(--hair-strong)" }}>{email}</a>
             </p>
 
             <h2 style={{ fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--stone)", marginBottom: 12, marginTop: 32, fontFamily: "var(--sans)", fontWeight: 500 }}>

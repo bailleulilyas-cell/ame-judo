@@ -5,12 +5,12 @@ import Footer from "@/components/Footer";
 import { getMaitres } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Les maîtres — Équipe enseignante",
+  title: "Les enseignants — Équipe pédagogique",
   description:
     "L'équipe enseignante du club de judo AME-JUDO à Ermont (95) — des professeurs diplômés d'État, gradés ceinture noire, formés à la pédagogie de l'enfant comme de l'adulte.",
   alternates: { canonical: "/maitres" },
   openGraph: {
-    title: "Les maîtres — AME-JUDO Ermont",
+    title: "Les enseignants — AME-JUDO Ermont",
     description: "L'équipe enseignante du club de judo AME-JUDO à Ermont (95).",
     url: "/maitres",
   },
@@ -29,7 +29,7 @@ export default async function MaitresPage() {
               <span className="section-header-dot" aria-hidden />
               <span className="section-header-num" lang="ja" aria-hidden>三</span>
               <span className="section-header-rule" aria-hidden />
-              <span className="section-header-label">師範 · Maîtres</span>
+              <span className="section-header-label">師範 · Enseignants</span>
             </div>
             <h1 className="page-hero-title">
               L&apos;encadrement qui <em>transmet</em>.

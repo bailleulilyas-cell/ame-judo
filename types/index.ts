@@ -27,6 +27,16 @@ export interface HorairesNote {
   active: boolean;
 }
 
+export interface BureauMembre {
+  id: string;
+  ordre: number;
+  prenom: string;
+  nom: string;
+  poste: string;
+  description: string | null;
+  photo_url: string | null;
+}
+
 export interface Maitre {
   id: string;
   ordre: number;

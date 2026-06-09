@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import { getSettings } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Politique de confidentialité",
@@ -10,17 +11,21 @@ export const metadata: Metadata = {
   robots: { index: false },
 };
 
-const SECTIONS = [
-  { titre: "Responsable du traitement", texte: "Le responsable du traitement des données est l'association AME-JUDO — Arts Martiaux Ermontois (loi 1901, RNA W951008210), représentée par son président, Thierry Bailleul. Contact : amejudoermont@gmail.com." },
-  { titre: "Données collectées", texte: "Lors de votre pré-inscription, nous collectons : votre nom complet, votre adresse email et la date de naissance de la personne souhaitant pratiquer. Aucune donnée bancaire n'est collectée." },
-  { titre: "Finalité du traitement", texte: "Ces données sont utilisées exclusivement pour vous contacter au sujet de votre demande de pré-inscription et organiser votre venue au dojo pour les séances d'essai." },
-  { titre: "Base légale", texte: "Le traitement est fondé sur votre consentement (art. 6.1.a du RGPD), que vous exprimez en soumettant le formulaire." },
-  { titre: "Durée de conservation", texte: "Vos données sont conservées pendant 1 saison sportive (environ 12 mois). À l'issue de cette période, elles sont supprimées." },
-  { titre: "Vos droits", texte: "Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, de suppression et de portabilité de vos données. Pour exercer ces droits, contactez-nous à amejudoermont@gmail.com." },
-  { titre: "Cookies", texte: "Ce site n'utilise pas de cookies à des fins publicitaires ou de tracking. Des cookies techniques strictement nécessaires au fonctionnement du site peuvent être déposés." },
-];
+function buildSections(email: string) {
+  return [
+    { titre: "Responsable du traitement", texte: `Le responsable du traitement des données est l'association AME-JUDO — Arts Martiaux Ermontois (loi 1901, RNA W951008210), représentée par son président, Thierry Bailleul. Contact : ${email}.` },
+    { titre: "Données collectées", texte: "Lors de votre pré-inscription, nous collectons : votre nom complet, votre adresse email et la date de naissance de la personne souhaitant pratiquer. Aucune donnée bancaire n'est collectée." },
+    { titre: "Finalité du traitement", texte: "Ces données sont utilisées exclusivement pour vous contacter au sujet de votre demande de pré-inscription et organiser votre venue au dojo pour les séances d'essai." },
+    { titre: "Base légale", texte: "Le traitement est fondé sur votre consentement (art. 6.1.a du RGPD), que vous exprimez en soumettant le formulaire." },
+    { titre: "Durée de conservation", texte: "Vos données sont conservées pendant 1 saison sportive (environ 12 mois). À l'issue de cette période, elles sont supprimées." },
+    { titre: "Vos droits", texte: `Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, de suppression et de portabilité de vos données. Pour exercer ces droits, contactez-nous à ${email}.` },
+    { titre: "Cookies", texte: "Ce site n'utilise pas de cookies à des fins publicitaires ou de tracking. Des cookies techniques strictement nécessaires au fonctionnement du site peuvent être déposés." },
+  ];
+}
 
-export default function RGPD() {
+export default async function RGPD() {
+  const { email } = await getSettings();
+  const SECTIONS = buildSections(email);
   return (
     <>
       <Nav />

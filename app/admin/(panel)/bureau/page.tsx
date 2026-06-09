@@ -2,33 +2,33 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import AdminPageHeader from "@/components/AdminPageHeader";
 import DeleteButton from "@/components/DeleteButton";
-import { getMaitresAdmin, deleteMaitre } from "@/lib/actions/cms";
+import { getBureauAdmin, deleteBureauMembre } from "@/lib/actions/cms";
 
-export const metadata: Metadata = { title: "Enseignants — Admin", robots: { index: false } };
+export const metadata: Metadata = { title: "Bureau — Admin", robots: { index: false } };
 
-export default async function MaitresAdminList() {
-  const maitres = await getMaitresAdmin();
+export default async function BureauAdminList() {
+  const membres = await getBureauAdmin();
 
   return (
     <>
       <AdminPageHeader
-        title="Les <em>enseignants</em>"
-        description="Équipe pédagogique du club. Vous pouvez ajouter, modifier et supprimer chaque profil."
+        title="Le <em>bureau</em>"
+        description="Les membres du bureau affichés sur la page Contact. Vous pouvez ajouter, modifier et supprimer chaque profil."
         action={
-          <Link href="/admin/maitres/new" className="btn btn-primary">
-            + Nouvel enseignant
+          <Link href="/admin/bureau/new" className="btn btn-primary">
+            + Nouveau membre
             <span className="btn-dot" aria-hidden />
           </Link>
         }
       />
 
-      {maitres.length === 0 ? (
+      {membres.length === 0 ? (
         <p style={{ fontFamily: "var(--serif)", fontStyle: "italic", color: "var(--stone)" }}>
-          Aucun enseignant pour l&apos;instant.
+          Aucun membre du bureau pour l&apos;instant.
         </p>
       ) : (
         <div style={{ display: "grid", gap: 16 }}>
-          {maitres.map((m) => (
+          {membres.map((m) => (
             <div
               key={m.id}
               style={{
@@ -53,25 +53,24 @@ export default async function MaitresAdminList() {
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={m.photo_url}
-                    alt={m.nom}
-                    style={{ width: "100%", height: "100%", objectFit: "cover", filter: "grayscale(1)" }}
+                    alt={`${m.prenom} ${m.nom}`}
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   />
                 )}
               </div>
               <div>
-                <strong style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 17 }}>{m.nom}</strong>
-                <div style={{ fontSize: 13, color: "var(--stone)" }}>{m.role}</div>
-                <div style={{ fontSize: 12, color: "var(--stone)", marginTop: 2 }}>{m.grade} · {m.annees} ans</div>
+                <strong style={{ fontFamily: "var(--serif)", fontWeight: 500, fontSize: 17 }}>{m.prenom} {m.nom}</strong>
+                <div style={{ fontSize: 13, color: "var(--stone)" }}>{m.poste}</div>
               </div>
               <Link
-                href={`/admin/maitres/${m.id}`}
+                href={`/admin/bureau/${m.id}`}
                 style={{ fontSize: 11, letterSpacing: "0.18em", textTransform: "uppercase", padding: "6px 12px", border: "1px solid var(--hair-strong)" }}
               >
                 Modifier
               </Link>
-              <form action={deleteMaitre} style={{ display: "inline", position: "relative" }}>
+              <form action={deleteBureauMembre} style={{ display: "inline", position: "relative" }}>
                 <input type="hidden" name="id" value={m.id} />
-                <DeleteButton message="Supprimer cet enseignant ?" itemName={m.nom} />
+                <DeleteButton message="Supprimer ce membre ?" itemName={`${m.prenom} ${m.nom}`} />
               </form>
             </div>
           ))}

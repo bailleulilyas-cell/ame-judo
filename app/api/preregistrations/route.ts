@@ -159,6 +159,15 @@ export async function POST(req: NextRequest) {
     }
 
     if (resend) {
+      // Adresse de réception : priorité à l'email réglé dans l'admin (settings),
+      // puis variable d'env, puis valeur de repli.
+      let bureauEmail = process.env.BUREAU_EMAIL ?? "amejudoermont@gmail.com";
+      if (DB_READY) {
+        try {
+          const setting = await queryOne<{ email: string }>("SELECT email FROM settings WHERE id = 1");
+          if (setting?.email) bureauEmail = setting.email;
+        } catch { /* on garde le repli */ }
+      }
       try {
         await Promise.all([
           resend.emails.send({
@@ -169,7 +178,7 @@ export async function POST(req: NextRequest) {
           }),
           resend.emails.send({
             from: process.env.FROM_EMAIL ?? "AME-JUDO <noreply@ame-judo.fr>",
-            to: process.env.BUREAU_EMAIL ?? "amejudoermont@gmail.com",
+            to: bureauEmail,
             subject: `Nouvelle pré-inscription — ${fullName} — ${planLabel}`,
             html: bureauHtml(fullName, email, phone, birthDate, planLabel, cleanParentName, cleanParentRelation, souhaitCompetition),
           }),

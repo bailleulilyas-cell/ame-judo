@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { query, queryOne } from "@/lib/db";
 import { isAuthenticated } from "@/lib/auth";
-import type { Discipline, ScheduleSlot, Maitre, Formule } from "@/types";
+import type { Discipline, ScheduleSlot, Maitre, Formule, BureauMembre } from "@/types";
 import type { HeroContent, AboutContent } from "@/lib/cms-types";
 
 const DB_READY = Boolean(process.env.DB_HOST && process.env.DB_NAME);
@@ -279,6 +279,63 @@ export async function deleteMaitre(formData: FormData) {
   await requireAuth();
   if (!DB_READY) throw new Error("Base non configurée.");
   await query("DELETE FROM maitres WHERE id = ?", [String(formData.get("id"))]);
+  refresh();
+}
+
+// ═══════════════════════════════════════════════════════════
+// BUREAU (page Contact)
+// ═══════════════════════════════════════════════════════════
+export async function getBureauAdmin(): Promise<BureauMembre[]> {
+  if (!DB_READY) return [];
+  try { return await query<BureauMembre>("SELECT * FROM bureau ORDER BY ordre"); }
+  catch { return []; }
+}
+
+export async function getBureauMembreById(id: string): Promise<BureauMembre | null> {
+  if (!DB_READY) return null;
+  try { return await queryOne<BureauMembre>("SELECT * FROM bureau WHERE id = ?", [id]); }
+  catch { return null; }
+}
+
+function bureauFields(formData: FormData) {
+  return {
+    ordre: Number(formData.get("ordre")) || 0,
+    prenom: String(formData.get("prenom") ?? "").trim(),
+    nom: String(formData.get("nom") ?? "").trim(),
+    poste: String(formData.get("poste") ?? "").trim(),
+    description: String(formData.get("description") ?? "").trim() || null,
+    photo_url: String(formData.get("photo_url") ?? "").trim() || null,
+  };
+}
+
+export async function createBureauMembre(formData: FormData) {
+  await requireAuth();
+  if (!DB_READY) throw new Error("Base non configurée.");
+  const f = bureauFields(formData);
+  await query(
+    `INSERT INTO bureau (ordre, prenom, nom, poste, description, photo_url) VALUES (?, ?, ?, ?, ?, ?)`,
+    [f.ordre, f.prenom, f.nom, f.poste, f.description, f.photo_url]
+  );
+  refresh();
+  redirect("/admin/bureau");
+}
+
+export async function updateBureauMembre(id: string, formData: FormData) {
+  await requireAuth();
+  if (!DB_READY) throw new Error("Base non configurée.");
+  const f = bureauFields(formData);
+  await query(
+    `UPDATE bureau SET ordre = ?, prenom = ?, nom = ?, poste = ?, description = ?, photo_url = ? WHERE id = ?`,
+    [f.ordre, f.prenom, f.nom, f.poste, f.description, f.photo_url, id]
+  );
+  refresh();
+  redirect("/admin/bureau");
+}
+
+export async function deleteBureauMembre(formData: FormData) {
+  await requireAuth();
+  if (!DB_READY) throw new Error("Base non configurée.");
+  await query("DELETE FROM bureau WHERE id = ?", [String(formData.get("id"))]);
   refresh();
 }
 

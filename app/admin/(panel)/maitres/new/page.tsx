@@ -3,15 +3,15 @@ import AdminPageHeader from "@/components/AdminPageHeader";
 import MaitreForm from "@/components/MaitreForm";
 import { createMaitre } from "@/lib/actions/cms";
 
-export const metadata: Metadata = { title: "Nouveau maître", robots: { index: false } };
+export const metadata: Metadata = { title: "Nouvel enseignant", robots: { index: false } };
 
 export default function NewMaitrePage() {
   return (
     <>
       <AdminPageHeader
-        title="Nouveau <em>maître</em>"
+        title="Nouvel <em>enseignant</em>"
         backHref="/admin/maitres"
-        backLabel="Tous les maîtres"
+        backLabel="Tous les enseignants"
       />
       <MaitreForm action={createMaitre} mode="create" />
     </>

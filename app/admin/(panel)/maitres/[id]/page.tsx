@@ -4,7 +4,7 @@ import AdminPageHeader from "@/components/AdminPageHeader";
 import MaitreForm from "@/components/MaitreForm";
 import { getMaitreById, updateMaitre } from "@/lib/actions/cms";
 
-export const metadata: Metadata = { title: "Modifier un maître", robots: { index: false } };
+export const metadata: Metadata = { title: "Modifier un enseignant", robots: { index: false } };
 
 export default async function EditMaitre({
   params,
@@ -19,7 +19,7 @@ export default async function EditMaitre({
       <AdminPageHeader
         title={`Modifier — <em>${maitre.nom}</em>`}
         backHref="/admin/maitres"
-        backLabel="Tous les maîtres"
+        backLabel="Tous les enseignants"
       />
       <MaitreForm action={update} maitre={maitre} mode="edit" />
     </>

@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import SocialIcon from "@/components/SocialIcon";
-import { getSettings, getSocialLinks } from "@/lib/data";
+import { getSettings, getSocialLinks, getBureau } from "@/lib/data";
 import { SOCIAL_PLATFORMS } from "@/lib/socials";
 
 export const metadata: Metadata = {
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ContactPage() {
-  const [s, socials] = await Promise.all([getSettings(), getSocialLinks()]);
+  const [s, socials, bureau] = await Promise.all([getSettings(), getSocialLinks(), getBureau()]);
 
   return (
     <>
@@ -41,6 +42,51 @@ export default async function ContactPage() {
             </p>
           </div>
         </section>
+
+        {bureau.length > 0 && (
+          <section className="section">
+            <div className="container">
+              <div className="section-header">
+                <span className="section-header-dot" aria-hidden />
+                <span className="section-header-num" lang="ja" aria-hidden>会</span>
+                <span className="section-header-rule" aria-hidden />
+                <span className="section-header-label">会 · Le bureau</span>
+              </div>
+              <h2 className="title-lg" style={{ marginBottom: 16 }}>
+                Les femmes et les hommes <em>du club</em>.
+              </h2>
+              <p className="lead" style={{ marginBottom: 40 }}>
+                Le bureau, ce sont les bénévoles qui font vivre AME-JUDO au quotidien —
+                administration, événements, lien avec les familles.
+              </p>
+
+              <div className="bureau-grid">
+                {bureau.map((m) => (
+                  <article key={m.id} className="bureau-card">
+                    <div className="bureau-photo">
+                      {m.photo_url ? (
+                        <Image
+                          src={m.photo_url}
+                          alt={`${m.prenom} ${m.nom}`}
+                          fill
+                          sizes="(max-width: 880px) 50vw, 25vw"
+                          style={{ objectFit: "cover" }}
+                        />
+                      ) : (
+                        <span className="bureau-photo-initials" aria-hidden>
+                          {(m.prenom[0] ?? "") + (m.nom[0] ?? "")}
+                        </span>
+                      )}
+                    </div>
+                    <p className="bureau-poste">{m.poste}</p>
+                    <h3 className="bureau-name">{m.prenom} {m.nom}</h3>
+                    {m.description && <p className="bureau-desc">{m.description}</p>}
+                  </article>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         <section className="section">
           <div className="container contact-grid">

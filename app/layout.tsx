@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Inter, Shippori_Mincho } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
-import { getSocialLinks } from "@/lib/data";
+import { getSocialLinks, getSettings } from "@/lib/data";
 import "./globals.css";
 
 export const viewport: Viewport = {
@@ -135,10 +135,12 @@ const ORGANIZATION_JSONLD = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   // sameAs : profils sociaux officiels du club (aide Google à relier le site aux réseaux).
-  const socials = await getSocialLinks();
-  const organizationJsonLd = socials.length > 0
-    ? { ...ORGANIZATION_JSONLD, sameAs: socials.map((s) => s.url) }
-    : ORGANIZATION_JSONLD;
+  const [socials, settings] = await Promise.all([getSocialLinks(), getSettings()]);
+  const organizationJsonLd = {
+    ...ORGANIZATION_JSONLD,
+    email: settings.email,
+    ...(socials.length > 0 ? { sameAs: socials.map((s) => s.url) } : {}),
+  };
 
   return (
     <html

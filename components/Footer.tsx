@@ -1,25 +1,14 @@
 import Link from "next/link";
 import Image from "next/image";
 import SocialIcon from "./SocialIcon";
-import { getSocialLinks } from "@/lib/data";
+import { getSocialLinks, getSettings } from "@/lib/data";
 import { SOCIAL_PLATFORMS } from "@/lib/socials";
 
-interface FooterProps {
-  adresse?: { ligne1: string; ligne2: string; ligne3: string };
-  email?: string;
-  permanence?: string;
-}
-
-export default async function Footer({
-  adresse = {
-    ligne1: "Complexe Sportif Saint-Exupéry",
-    ligne2: "Rue Kvot et Leydekkers",
-    ligne3: "95120 Ermont",
-  },
-  email = "amejudoermont@gmail.com",
-  permanence = "Mercredi 17h–20h30 · Samedi 11h–13h",
-}: FooterProps) {
-  const socials = await getSocialLinks();
+export default async function Footer() {
+  const [socials, s] = await Promise.all([getSocialLinks(), getSettings()]);
+  const adresse = { ligne1: s.adresse_ligne1, ligne2: s.adresse_ligne2, ligne3: s.adresse_ligne3 };
+  const email = s.email;
+  const permanence = s.permanence;
   return (
     <footer className="footer" aria-label="Pied de page">
       <div className="container">
@@ -70,7 +59,7 @@ export default async function Footer({
             <ul className="footer-col-list">
               <li><Link href="/judo">Le judo</Link></li>
               <li><Link href="/horaires">Horaires</Link></li>
-              <li><Link href="/maitres">Maîtres</Link></li>
+              <li><Link href="/maitres">Enseignants</Link></li>
               <li><Link href="/adhesion">Adhésion</Link></li>
               <li><Link href="/competition">Compétition</Link></li>
               <li><Link href="/actualites">Actualités</Link></li>

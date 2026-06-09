@@ -3,16 +3,15 @@ import Image from "next/image";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
-import { getActualites, getFormules, getHeroContent, getAboutContent, getSettings } from "@/lib/data";
+import { getActualites, getFormules, getHeroContent, getAboutContent } from "@/lib/data";
 import { sanitizeInlineTitle } from "@/lib/sanitize";
 
 export default async function HomePage() {
-  const [formules, actus, hero, about, settings] = await Promise.all([
+  const [formules, actus, hero, about] = await Promise.all([
     getFormules(),
     getActualites(3),
     getHeroContent(),
     getAboutContent(),
-    getSettings(),
   ]);
 
   return (
@@ -250,11 +249,7 @@ export default async function HomePage() {
           </div>
         </ScrollReveal>
       </main>
-      <Footer
-        adresse={{ ligne1: settings.adresse_ligne1, ligne2: settings.adresse_ligne2, ligne3: settings.adresse_ligne3 }}
-        email={settings.email}
-        permanence={settings.permanence}
-      />
+      <Footer />
     </>
   );
 }

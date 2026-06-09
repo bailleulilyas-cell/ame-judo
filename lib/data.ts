@@ -8,7 +8,7 @@
 import { query } from "@/lib/db";
 import type {
   Discipline, ScheduleSlot, HorairesNote, Maitre,
-  Formule, Actualite, FooterContent, AdhesionDocument, SocialLink
+  Formule, Actualite, FooterContent, AdhesionDocument, SocialLink, BureauMembre
 } from "@/types";
 import { isSocialPlatform } from "@/lib/socials";
 
@@ -105,6 +105,13 @@ export async function getHorairesNote(): Promise<HorairesNote | null> {
   if (!rows) return null;
   const row = rows[0];
   return row && row.active ? row : null;
+}
+
+export async function getBureau(): Promise<BureauMembre[]> {
+  const rows = await tryQuery<BureauMembre>(
+    "SELECT id, ordre, prenom, nom, poste, description, photo_url FROM bureau ORDER BY ordre, id"
+  );
+  return rows ?? [];
 }
 
 export async function getMaitres(): Promise<Maitre[]> {

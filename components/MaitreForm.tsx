@@ -75,7 +75,7 @@ export default function MaitreForm({ action, maitre, mode }: Props) {
 
       <div style={{ display: "flex", gap: 12, paddingTop: 16, borderTop: "1px solid var(--hair-color)" }}>
         <button type="submit" className="btn btn-primary">
-          {mode === "create" ? "Créer le maître" : "Enregistrer"}
+          {mode === "create" ? "Créer l'enseignant" : "Enregistrer"}
           <span className="btn-dot" aria-hidden />
         </button>
         <Link href="/admin/maitres" className="btn btn-secondary">Annuler</Link>

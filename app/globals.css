@@ -1585,6 +1585,58 @@ main { padding-top: var(--nav-h); }
 .premier-cours-grid strong { font-size: 15px; color: var(--sumi); }
 .premier-cours-grid span { font-size: 13px; line-height: 1.5; color: var(--stone); font-family: var(--serif); }
 
+/* Bureau (page Contact) */
+.bureau-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 210px));
+  gap: clamp(24px, 3vw, 44px);
+  justify-content: start;
+}
+@media (max-width: 480px) {
+  .bureau-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+}
+.bureau-card { margin: 0; max-width: 210px; }
+.bureau-photo {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--sand, #ECE6DB);
+  border: 1px solid var(--hair-color);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bureau-photo img { filter: grayscale(0.15); }
+.bureau-photo-initials {
+  font-family: var(--serif);
+  font-size: 40px;
+  color: rgba(10, 10, 10, 0.22);
+  letter-spacing: 0.05em;
+}
+.bureau-poste {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin: 0 0 4px;
+  font-weight: 500;
+}
+.bureau-name {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.2;
+  margin: 0 0 8px;
+}
+.bureau-desc {
+  font-family: var(--serif);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--sumi-soft);
+  margin: 0;
+}
+
 /* Réseaux sociaux (page Contact) */
 .contact-socials { display: flex; flex-direction: column; gap: 12px; }
 .contact-social {
