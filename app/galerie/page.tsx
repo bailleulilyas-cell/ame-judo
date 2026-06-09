@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import JustifiedGallery from "@/components/JustifiedGallery";
 import { getGaleriePhotos } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -45,15 +46,7 @@ export default async function GaleriePage() {
                 Les photos arrivent bientôt.
               </p>
             ) : (
-              <div className="photo-masonry">
-                {photos.map((p) => (
-                  <figure key={p.id} className="masonry-item">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={p.url} alt={p.legende ?? "Photo du club AME-JUDO"} loading="lazy" />
-                    {p.legende && <figcaption className="masonry-caption">{p.legende}</figcaption>}
-                  </figure>
-                ))}
-              </div>
+              <JustifiedGallery items={photos} />
             )}
           </div>
         </section>

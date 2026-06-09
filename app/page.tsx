@@ -3,6 +3,7 @@ import Image from "next/image";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
+import JustifiedGallery from "@/components/JustifiedGallery";
 import { getActualites, getFormules, getHeroContent, getAboutContent, getGaleriePhotos } from "@/lib/data";
 import { sanitizeInlineTitle } from "@/lib/sanitize";
 
@@ -91,14 +92,7 @@ export default async function HomePage() {
               <h2 className="title-lg" style={{ marginBottom: 28 }}>
                 La vie sur le <em>tatami</em>.
               </h2>
-              <div className="home-photo-grid">
-                {galerie.map((p) => (
-                  <figure key={p.id} className="home-photo-item">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={p.url} alt={p.legende ?? "Photo du club AME-JUDO"} loading="lazy" />
-                  </figure>
-                ))}
-              </div>
+              <JustifiedGallery items={galerie} fillLastRow />
               <div style={{ marginTop: 32 }}>
                 <Link href="/galerie" className="btn btn-secondary btn-arrow">
                   Voir toute la galerie

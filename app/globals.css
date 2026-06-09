@@ -1506,22 +1506,20 @@ main { padding-top: var(--nav-h); }
 .footer-col-list a { transition: color 0.25s; }
 .footer-col-list a:hover { color: var(--red); }
 
-/* ─── Aperçu galerie sur l'accueil : grille uniforme, sans trou, toutes photos ─── */
-.home-photo-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-@media (max-width: 760px) { .home-photo-grid { grid-template-columns: repeat(2, 1fr); } }
-.home-photo-item {
+/* ─── Galerie « lignes justifiées » (accueil + /galerie) ─── */
+/* Lignes calées à la Google Photos : même hauteur par ligne, largeur remplie,
+   aucun recadrage, aucun trou, tous formats. (Voir components/JustifiedGallery) */
+.jgal { display: flex; flex-direction: column; gap: 6px; }
+.jgal-row { display: flex; gap: 6px; }
+.jgal-item {
   margin: 0;
   position: relative;
-  aspect-ratio: 1 / 1;
   overflow: hidden;
+  flex: 0 0 auto;
   border: 1px solid var(--hair-color);
   background: var(--paper);
 }
-.home-photo-item img {
+.jgal-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -1529,42 +1527,11 @@ main { padding-top: var(--nav-h); }
   filter: saturate(0.85) contrast(1.04) brightness(1.02) sepia(0.06);
   transition: filter 0.5s ease, transform 0.6s ease;
 }
-.home-photo-item:hover img { filter: none; transform: scale(1.04); }
-@media (prefers-reduced-motion: reduce) {
-  .home-photo-item img { transition: none; }
-  .home-photo-item:hover img { transform: none; }
-}
-
-/* ─── Galerie « masonry » (page /galerie) ─── */
-/* Colonnes CSS : chaque photo garde son format (portrait/paysage), zéro recadrage. */
-.photo-masonry {
-  column-count: 3;
-  column-gap: 12px;
-}
-@media (max-width: 880px) { .photo-masonry { column-count: 2; } }
-@media (max-width: 480px) { .photo-masonry { column-count: 1; } }
-
-.masonry-item {
-  margin: 0 0 12px;
-  break-inside: avoid;
-  position: relative;
-  overflow: hidden;
-  border: 1px solid var(--hair-color);
-  background: var(--paper);
-  line-height: 0;
-}
-.masonry-item img {
-  width: 100%;
-  height: auto;
-  display: block;
-  filter: saturate(0.85) contrast(1.04) brightness(1.02) sepia(0.06);
-  transition: filter 0.5s ease, transform 0.6s ease;
-}
-.masonry-item:hover img { filter: none; transform: scale(1.03); }
-.masonry-caption {
+.jgal-item:hover img { filter: none; transform: scale(1.04); }
+.jgal-caption {
   position: absolute;
   left: 0; right: 0; bottom: 0;
-  padding: 18px 12px 8px;
+  padding: 16px 10px 7px;
   font-family: var(--serif);
   font-size: 12px;
   color: #fff;
@@ -1573,10 +1540,10 @@ main { padding-top: var(--nav-h); }
   opacity: 0;
   transition: opacity 0.3s ease;
 }
-.masonry-item:hover .masonry-caption { opacity: 1; }
+.jgal-item:hover .jgal-caption { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
-  .masonry-item img { transition: none; }
-  .masonry-item:hover img { transform: none; }
+  .jgal-item img { transition: none; }
+  .jgal-item:hover img { transform: none; }
 }
 
 /* Encart affiliation FFJDA (page Adhésion) */
