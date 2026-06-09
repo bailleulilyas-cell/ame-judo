@@ -46,11 +46,11 @@ export async function createGaleriePhoto(formData: FormData) {
   const f = fields(formData);
   if (!f.ok) redirect(`/admin/galerie/new?error=${encodeURIComponent(f.error)}`);
 
-  // Ordre auto à la fin si non précisé (0).
+  // Ordre auto : la nouvelle photo passe en premier (ordre le plus petit).
   let ordre = f.ordre;
   if (ordre === 0) {
-    const rows = await query<{ max_ordre: number | null }>("SELECT MAX(ordre) AS max_ordre FROM galerie");
-    ordre = (rows[0]?.max_ordre ?? 0) + 1;
+    const rows = await query<{ min_ordre: number | null }>("SELECT MIN(ordre) AS min_ordre FROM galerie");
+    ordre = (rows[0]?.min_ordre ?? 1) - 1;
   }
 
   await query("INSERT INTO galerie (ordre, url, legende) VALUES (?, ?, ?)", [ordre, f.url, f.legende]);

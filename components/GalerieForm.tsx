@@ -31,7 +31,7 @@ export default function GalerieForm({ action, photo, mode, error }: Props) {
           <input id="legende" name="legende" type="text" maxLength={200} defaultValue={photo?.legende ?? ""} className="form-input" placeholder="Ex. Stage de fin d'année" />
         </div>
         <div className="form-field">
-          <label className="form-label" htmlFor="ordre">Ordre <span style={{ color: "var(--stone)", fontWeight: 400 }}>(0 = à la fin)</span></label>
+          <label className="form-label" htmlFor="ordre">Ordre <span style={{ color: "var(--stone)", fontWeight: 400 }}>(0 = en premier)</span></label>
           <input id="ordre" name="ordre" type="number" min={0} defaultValue={photo?.ordre ?? 0} className="form-input" />
         </div>
       </div>
