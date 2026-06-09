@@ -3,15 +3,16 @@ import Image from "next/image";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
-import { getActualites, getFormules, getHeroContent, getAboutContent } from "@/lib/data";
+import { getActualites, getFormules, getHeroContent, getAboutContent, getGaleriePhotos } from "@/lib/data";
 import { sanitizeInlineTitle } from "@/lib/sanitize";
 
 export default async function HomePage() {
-  const [formules, actus, hero, about] = await Promise.all([
+  const [formules, actus, hero, about, galerie] = await Promise.all([
     getFormules(),
     getActualites(3),
     getHeroContent(),
     getAboutContent(),
+    getGaleriePhotos(6),
   ]);
 
   return (
@@ -77,16 +78,35 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ─── VIE DU DOJO (mosaïque pleine largeur) ─── */}
-        <ScrollReveal as="section" className="photo-mosaic-section">
-          <div className="photo-mosaic">
-            <figure className="pm pm-a"><Image src="/photos/photo-2.webp" alt="Salut entre un professeur et un jeune judoka" fill sizes="(max-width: 700px) 100vw, 40vw" style={{ objectFit: "cover" }} /></figure>
-            <figure className="pm pm-b"><Image src="/photos/photo-1.webp" alt="Cours de judo enfants au dojo AME-JUDO d'Ermont" fill sizes="(max-width: 700px) 50vw, 27vw" style={{ objectFit: "cover" }} /></figure>
-            <figure className="pm pm-c"><Image src="/photos/photo-3b.webp" alt="Judokas du club AME-JUDO devant les portraits des maîtres" fill sizes="(max-width: 700px) 50vw, 33vw" style={{ objectFit: "cover" }} /></figure>
-            <figure className="pm pm-d"><Image src="/photos/photo-5.webp" alt="Enfant en plein mouvement sur le tatami" fill sizes="(max-width: 700px) 50vw, 27vw" style={{ objectFit: "cover" }} /></figure>
-            <figure className="pm pm-e"><Image src="/photos/photo-4.webp" alt="Travail au sol entre deux judokas" fill sizes="(max-width: 700px) 50vw, 40vw" style={{ objectFit: "cover" }} /></figure>
-          </div>
-        </ScrollReveal>
+        {/* ─── VIE DU DOJO (galerie masonry, alimentée par l'admin) ─── */}
+        {galerie.length > 0 && (
+          <ScrollReveal as="section" className="section">
+            <div className="container">
+              <div className="section-header">
+                <span className="section-header-dot" aria-hidden />
+                <span className="section-header-num" lang="ja" aria-hidden>写</span>
+                <span className="section-header-rule" aria-hidden />
+                <span className="section-header-label">道場 · En images</span>
+              </div>
+              <h2 className="title-lg" style={{ marginBottom: 28 }}>
+                La vie sur le <em>tatami</em>.
+              </h2>
+              <div className="photo-masonry">
+                {galerie.map((p) => (
+                  <figure key={p.id} className="masonry-item">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={p.url} alt={p.legende ?? "Photo du club AME-JUDO"} loading="lazy" />
+                  </figure>
+                ))}
+              </div>
+              <div style={{ marginTop: 32 }}>
+                <Link href="/galerie" className="btn btn-secondary btn-arrow">
+                  Voir toute la galerie
+                </Link>
+              </div>
+            </div>
+          </ScrollReveal>
+        )}
 
         {/* ─── LES VOIES (preview) ─── */}
         <ScrollReveal as="section" className="section section--paper home-judo-teaser">

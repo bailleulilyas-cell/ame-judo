@@ -27,6 +27,13 @@ export interface HorairesNote {
   active: boolean;
 }
 
+export interface GaleriePhoto {
+  id: string;
+  ordre: number;
+  url: string;
+  legende: string | null;
+}
+
 export interface BureauMembre {
   id: string;
   ordre: number;

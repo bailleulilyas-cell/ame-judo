@@ -1506,44 +1506,48 @@ main { padding-top: var(--nav-h); }
 .footer-col-list a { transition: color 0.25s; }
 .footer-col-list a:hover { color: var(--red); }
 
-/* ─── Mosaïque photos « vie du dojo » (accueil, pleine largeur, collée) ─── */
-.photo-mosaic-section { margin: clamp(48px, 8vw, 110px) 0; }
-.photo-mosaic {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: 1fr 1fr;
-  grid-template-areas:
-    "a b c"
-    "d e c";
-  gap: 4px;
-  height: clamp(420px, 50vw, 780px);
+/* ─── Galerie « masonry » (accueil + page /galerie) ─── */
+/* Colonnes CSS : chaque photo garde son format (portrait/paysage), zéro recadrage. */
+.photo-masonry {
+  column-count: 3;
+  column-gap: 12px;
 }
-.pm { position: relative; margin: 0; overflow: hidden; background: var(--paper); }
-.pm-a { grid-area: a; }
-.pm-b { grid-area: b; }
-.pm-c { grid-area: c; }
-.pm-d { grid-area: d; }
-.pm-e { grid-area: e; }
+@media (max-width: 880px) { .photo-masonry { column-count: 2; } }
+@media (max-width: 480px) { .photo-masonry { column-count: 1; } }
 
-/* Traitement unifié (cohérence charte) + animation au survol */
-.pm img { filter: saturate(0.8) contrast(1.05) brightness(1.02) sepia(0.1); transition: filter 0.6s ease, transform 0.7s ease; }
-.pm:hover img { filter: saturate(1) contrast(1) brightness(1) sepia(0); transform: scale(1.04); }
-
-@media (max-width: 700px) {
-  .photo-mosaic {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 42vw 28vw 28vw 42vw;
-    grid-template-areas:
-      "a a"
-      "b c"
-      "d c"
-      "e e";
-    height: auto;
-  }
+.masonry-item {
+  margin: 0 0 12px;
+  break-inside: avoid;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--hair-color);
+  background: var(--paper);
+  line-height: 0;
 }
+.masonry-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: saturate(0.85) contrast(1.04) brightness(1.02) sepia(0.06);
+  transition: filter 0.5s ease, transform 0.6s ease;
+}
+.masonry-item:hover img { filter: none; transform: scale(1.03); }
+.masonry-caption {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 18px 12px 8px;
+  font-family: var(--serif);
+  font-size: 12px;
+  color: #fff;
+  line-height: 1.3;
+  background: linear-gradient(to top, rgba(10,10,10,0.6), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.masonry-item:hover .masonry-caption { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
-  .pm img { transition: none; }
-  .pm:hover img { transform: none; }
+  .masonry-item img { transition: none; }
+  .masonry-item:hover img { transform: none; }
 }
 
 /* Encart affiliation FFJDA (page Adhésion) */

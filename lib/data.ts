@@ -8,7 +8,7 @@
 import { query } from "@/lib/db";
 import type {
   Discipline, ScheduleSlot, HorairesNote, Maitre,
-  Formule, Actualite, FooterContent, AdhesionDocument, SocialLink, BureauMembre
+  Formule, Actualite, FooterContent, AdhesionDocument, SocialLink, BureauMembre, GaleriePhoto
 } from "@/types";
 import { isSocialPlatform } from "@/lib/socials";
 
@@ -105,6 +105,24 @@ export async function getHorairesNote(): Promise<HorairesNote | null> {
   if (!rows) return null;
   const row = rows[0];
   return row && row.active ? row : null;
+}
+
+const DEMO_GALERIE: GaleriePhoto[] = [
+  { id: "1", ordre: 1, url: "/photos/photo-2.webp",  legende: "Le salut" },
+  { id: "2", ordre: 2, url: "/photos/photo-1.webp",  legende: "Cours enfants" },
+  { id: "3", ordre: 3, url: "/photos/photo-3b.webp", legende: "Devant les portraits des maîtres" },
+  { id: "4", ordre: 4, url: "/photos/photo-5.webp",  legende: "Sur le tatami" },
+  { id: "5", ordre: 5, url: "/photos/photo-4.webp",  legende: "Travail au sol" },
+];
+
+export async function getGaleriePhotos(limit?: number): Promise<GaleriePhoto[]> {
+  const sql = limit
+    ? "SELECT id, ordre, url, legende FROM galerie ORDER BY ordre, id LIMIT ?"
+    : "SELECT id, ordre, url, legende FROM galerie ORDER BY ordre, id";
+  const rows = await tryQuery<GaleriePhoto>(sql, limit ? [limit] : []);
+  // Repli : tant que la table n'existe pas / pas de DB, on montre les photos par défaut.
+  if (!rows) return limit ? DEMO_GALERIE.slice(0, limit) : DEMO_GALERIE;
+  return rows;
 }
 
 export async function getBureau(): Promise<BureauMembre[]> {

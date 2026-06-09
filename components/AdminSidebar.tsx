@@ -7,6 +7,7 @@ const SECTIONS = [
   { title: "Contenu",      items: [
     { href: "/admin",                  kanji: "公", label: "Dashboard" },
     { href: "/admin/actualites",       kanji: "報", label: "Actualités" },
+    { href: "/admin/galerie",          kanji: "写", label: "Galerie" },
   ]},
   { title: "Pages",        items: [
     { href: "/admin/hero",             kanji: "頭", label: "Accueil (Hero)" },

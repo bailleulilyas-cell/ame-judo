@@ -63,6 +63,7 @@ export default async function Footer() {
               <li><Link href="/adhesion">Adhésion</Link></li>
               <li><Link href="/competition">Compétition</Link></li>
               <li><Link href="/actualites">Actualités</Link></li>
+              <li><Link href="/galerie">Galerie</Link></li>
             </ul>
           </div>
 
