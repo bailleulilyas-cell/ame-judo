@@ -91,9 +91,9 @@ export default async function HomePage() {
               <h2 className="title-lg" style={{ marginBottom: 28 }}>
                 La vie sur le <em>tatami</em>.
               </h2>
-              <div className="home-photo-grid">
+              <div className="photo-masonry">
                 {galerie.map((p) => (
-                  <figure key={p.id} className="home-photo-item">
+                  <figure key={p.id} className="masonry-item">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={p.url} alt={p.legende ?? "Photo du club AME-JUDO"} loading="lazy" />
                   </figure>
