@@ -112,10 +112,10 @@ export default function AdhesionForm({ formules }: { formules: Formule[] }) {
     if (!dateComplete) errs.birthDate = "Date de naissance requise";
     else if (!dateValid) errs.birthDate = "Date invalide";
 
+    // L'âge n'est jamais bloquant : on demande juste de choisir une formule.
+    // Si elle ne colle pas pile à l'âge, le bureau ajustera (note plus bas).
     if (!selectedFormule) {
-      errs.formule = "Aucune formule ne correspond à cet âge — contactez-nous.";
-    } else if (age !== null && !formuleMatchesAge(selectedFormule, age)) {
-      errs.formule = `Cette formule ne correspond pas à l'âge indiqué (${age} ans).`;
+      errs.formule = "Merci de choisir une formule (le bureau confirmera si besoin).";
     }
 
     if (minor && !parentName) errs.parentName = "Nom du responsable légal requis";
@@ -168,13 +168,13 @@ export default function AdhesionForm({ formules }: { formules: Formule[] }) {
         <p style={{ fontSize: 13, color: "var(--stone)", fontFamily: "var(--serif)", fontStyle: "italic", marginBottom: 16 }}>
           Âge détecté : <strong style={{ color: "var(--sumi)" }}>{age} ans</strong>
           {eligibleFormules.length > 0
-            ? " — la formule correspondante a été sélectionnée automatiquement."
-            : " — aucune formule ne correspond, merci de nous contacter."}
+            ? " — la formule conseillée a été sélectionnée automatiquement (vous pouvez la changer)."
+            : " — choisissez la formule la plus proche, le bureau confirmera avec vous."}
         </p>
       )}
       <div className="formules-grid" role="radiogroup" aria-label="Formules d'adhésion">
         {formules.map((f) => {
-          const isEligible = age === null || formuleMatchesAge(f, age);
+          const isConseille = age !== null && formuleMatchesAge(f, age);
           const isSelected = selected === f.id;
           return (
             <button
@@ -184,14 +184,11 @@ export default function AdhesionForm({ formules }: { formules: Formule[] }) {
               role="radio"
               aria-checked={isSelected}
               onClick={() => setSelected(f.id)}
-              style={{
-                opacity: isEligible ? 1 : 0.4,
-                position: "relative",
-              }}
+              style={{ position: "relative" }}
             >
-              {!isEligible && age !== null && (
-                <span style={{ position: "absolute", top: 12, right: 12, fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--stone)", background: "var(--paper)", padding: "3px 8px", border: "1px solid var(--hair-color)" }}>
-                  Hors tranche
+              {isConseille && (
+                <span style={{ position: "absolute", top: 12, right: 12, fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--red)", background: "rgba(200,51,42,0.08)", padding: "3px 8px", border: "1px solid rgba(200,51,42,0.25)" }}>
+                  Conseillé
                 </span>
               )}
               <div className="formule-check" aria-hidden>{isSelected ? "✓" : ""}</div>
@@ -210,6 +207,12 @@ export default function AdhesionForm({ formules }: { formules: Formule[] }) {
         })}
       </div>
       {errors.formule && <p className="form-error" role="alert" style={{ marginTop: 12 }}>{errors.formule}</p>}
+      {!errors.formule && age !== null && selectedFormule && !formuleMatchesAge(selectedFormule, age) && (
+        <p style={{ marginTop: 12, fontSize: 13, color: "var(--sumi-soft)", fontFamily: "var(--serif)", fontStyle: "italic", background: "rgba(200,51,42,0.05)", borderLeft: "3px solid var(--red)", padding: "10px 14px" }}>
+          Cette formule ne correspond pas tout à fait à l&apos;âge indiqué ({age} ans) — aucun souci,
+          vous pouvez l&apos;envoyer : le bureau ajustera la formule avec vous.
+        </p>
+      )}
 
       {state === "success" ? (
         <div className="form-success" role="status" ref={successRef}>

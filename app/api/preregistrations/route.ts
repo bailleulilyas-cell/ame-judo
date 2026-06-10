@@ -109,18 +109,8 @@ export async function POST(req: NextRequest) {
     if (!formule) {
       return NextResponse.json({ message: "Formule introuvable." }, { status: 400 });
     }
-    if (formule.age_min !== null && age < formule.age_min) {
-      return NextResponse.json(
-        { message: `Cette formule est réservée aux ${formule.age_min} ans et plus.` },
-        { status: 400 }
-      );
-    }
-    if (formule.age_max !== null && age > formule.age_max) {
-      return NextResponse.json(
-        { message: `Cette formule est réservée aux ${formule.age_max} ans et moins.` },
-        { status: 400 }
-      );
-    }
+    // L'âge n'est PAS bloquant : il sert seulement à conseiller une formule.
+    // Le bureau ajuste les cas particuliers (entre deux tranches, etc.).
     planLabel = `${formule.nom} (${formule.tranche_age})`;
   }
 
