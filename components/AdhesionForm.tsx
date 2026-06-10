@@ -59,18 +59,16 @@ export default function AdhesionForm({ formules }: { formules: Formule[] }) {
     return formules.filter((f) => formuleMatchesAge(f, age)).map((f) => f.id);
   }, [age, formules]);
 
-  // Auto-sélection de la formule quand l'âge est connu et qu'une seule correspond
+  // Conseille une formule selon l'âge — UNE SEULE FOIS par âge détecté.
+  // Ensuite l'utilisateur choisit librement : on n'écrase plus son choix.
+  const lastSuggestedAge = useRef<number | null>(null);
   useEffect(() => {
-    if (age === null) return;
+    if (age === null) { lastSuggestedAge.current = null; return; }
+    if (lastSuggestedAge.current === age) return;
+    lastSuggestedAge.current = age;
     const matching = formules.filter((f) => formuleMatchesAge(f, age));
-    if (matching.length === 1) {
-      setSelected(matching[0].id);
-    } else if (matching.length === 0) {
-      setSelected("");
-    } else if (!matching.some((f) => f.id === selected)) {
-      setSelected(matching[0].id);
-    }
-  }, [age, formules, selected]);
+    if (matching.length > 0) setSelected(matching[0].id);
+  }, [age, formules]);
 
   useEffect(() => {
     if (state === "success") {
