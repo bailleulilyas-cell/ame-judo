@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Formule } from "@/types";
 
 type FormState = "idle" | "loading" | "success" | "error";
@@ -25,12 +25,6 @@ function isValidDate(day: number, month: number, year: number): boolean {
   return birth <= new Date();
 }
 
-function formuleMatchesAge(f: Formule, age: number): boolean {
-  if (f.age_min !== null && age < f.age_min) return false;
-  if (f.age_max !== null && age > f.age_max) return false;
-  return true;
-}
-
 function toBirthDateString(day: number, month: number, year: number): string {
   return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 }
@@ -53,22 +47,6 @@ export default function AdhesionForm({ formules }: { formules: Formule[] }) {
   const dateComplete = dd.length > 0 && mm.length > 0 && yyyy.length === 4;
   const dateValid = isValidDate(day, month, year);
   const minor = age !== null && age < 18;
-
-  const eligibleFormules = useMemo(() => {
-    if (age === null) return formules.map((f) => f.id);
-    return formules.filter((f) => formuleMatchesAge(f, age)).map((f) => f.id);
-  }, [age, formules]);
-
-  // Conseille une formule selon l'âge — UNE SEULE FOIS par âge détecté.
-  // Ensuite l'utilisateur choisit librement : on n'écrase plus son choix.
-  const lastSuggestedAge = useRef<number | null>(null);
-  useEffect(() => {
-    if (age === null) { lastSuggestedAge.current = null; return; }
-    if (lastSuggestedAge.current === age) return;
-    lastSuggestedAge.current = age;
-    const matching = formules.filter((f) => formuleMatchesAge(f, age));
-    if (matching.length > 0) setSelected(matching[0].id);
-  }, [age, formules]);
 
   useEffect(() => {
     if (state === "success") {
@@ -162,17 +140,8 @@ export default function AdhesionForm({ formules }: { formules: Formule[] }) {
   return (
     <>
       <h2 className="title-md" style={{ marginBottom: 20 }}>Choisir une formule.</h2>
-      {age !== null && (
-        <p style={{ fontSize: 13, color: "var(--stone)", fontFamily: "var(--serif)", fontStyle: "italic", marginBottom: 16 }}>
-          Âge détecté : <strong style={{ color: "var(--sumi)" }}>{age} ans</strong>
-          {eligibleFormules.length > 0
-            ? " — la formule conseillée a été sélectionnée automatiquement (vous pouvez la changer)."
-            : " — choisissez la formule la plus proche, le bureau confirmera avec vous."}
-        </p>
-      )}
       <div className="formules-grid" role="radiogroup" aria-label="Formules d'adhésion">
         {formules.map((f) => {
-          const isConseille = age !== null && formuleMatchesAge(f, age);
           const isSelected = selected === f.id;
           return (
             <button
@@ -184,11 +153,6 @@ export default function AdhesionForm({ formules }: { formules: Formule[] }) {
               onClick={() => setSelected(f.id)}
               style={{ position: "relative" }}
             >
-              {isConseille && (
-                <span style={{ position: "absolute", top: 12, right: 12, fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--red)", background: "rgba(200,51,42,0.08)", padding: "3px 8px", border: "1px solid rgba(200,51,42,0.25)" }}>
-                  Conseillé
-                </span>
-              )}
               <div className="formule-check" aria-hidden>{isSelected ? "✓" : ""}</div>
               <div className="formule-head">
                 <span className="formule-kanji" lang="ja" aria-hidden>{f.kanji}</span>
@@ -205,12 +169,6 @@ export default function AdhesionForm({ formules }: { formules: Formule[] }) {
         })}
       </div>
       {errors.formule && <p className="form-error" role="alert" style={{ marginTop: 12 }}>{errors.formule}</p>}
-      {!errors.formule && age !== null && selectedFormule && !formuleMatchesAge(selectedFormule, age) && (
-        <p style={{ marginTop: 12, fontSize: 13, color: "var(--sumi-soft)", fontFamily: "var(--serif)", fontStyle: "italic", background: "rgba(200,51,42,0.05)", borderLeft: "3px solid var(--red)", padding: "10px 14px" }}>
-          Cette formule ne correspond pas tout à fait à l&apos;âge indiqué ({age} ans) — aucun souci,
-          vous pouvez l&apos;envoyer : le bureau ajustera la formule avec vous.
-        </p>
-      )}
 
       {state === "success" ? (
         <div className="form-success" role="status" ref={successRef}>
