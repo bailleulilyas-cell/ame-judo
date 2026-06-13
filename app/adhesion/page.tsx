@@ -2,20 +2,25 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
-import AdhesionForm from "@/components/AdhesionForm";
+import HelloAssoWidget from "@/components/HelloAssoWidget";
 import ScrollReveal from "@/components/ScrollReveal";
 import { getFormules, getDocuments } from "@/lib/data";
 
 const SITE_URL = "https://ame-judo.fr";
 
+// URL du bouton d'adhésion HelloAsso (campagne en cours).
+// À mettre à jour chaque saison quand le club crée une nouvelle campagne.
+const HELLOASSO_BUTTON_URL =
+  "https://www.helloasso.com/associations/arts-martiaux-ermontois-judo/adhesions/adhesion-2026-2027-ame-judo/widget-bouton";
+
 export const metadata: Metadata = {
-  title: "Adhésion judo Ermont — Tarifs & pré-inscription",
+  title: "Adhésion judo Ermont — Tarifs & inscription en ligne",
   description:
-    "Tarifs et pré-inscription au club de judo AME-JUDO à Ermont (95) : baby-judo, enfants, ados, adultes. Deux séances d'essai gratuites.",
+    "Tarifs et inscription en ligne au club de judo AME-JUDO à Ermont (95) : baby-judo, enfants, ados, adultes. Deux séances d'essai gratuites.",
   alternates: { canonical: "/adhesion" },
   openGraph: {
     title: "Adhésion & tarifs — AME-JUDO Ermont",
-    description: "Tarifs et pré-inscription au club de judo AME-JUDO à Ermont (95). Deux séances d'essai gratuites.",
+    description: "Tarifs et inscription en ligne au club de judo AME-JUDO à Ermont (95). Deux séances d'essai gratuites.",
     url: "/adhesion",
   },
 };
@@ -67,10 +72,10 @@ export default async function AdhesionPage() {
               <span className="section-header-label">入門 · Adhésion</span>
             </div>
             <h1 className="page-hero-title">
-              Pré-<em>inscription</em>.
+              Adhésion <em>en ligne</em>.
             </h1>
             <p className="page-hero-sub">
-              Choisissez votre formule et remplissez le formulaire — un membre du bureau vous recontactera dans les 48 heures.
+              Adhérez et réglez votre licence en quelques minutes, en toute sécurité — paiement géré par HelloAsso.
             </p>
             {docAnchors.length > 0 && (
               <p className="page-hero-sub" style={{ marginTop: 18 }}>
@@ -90,7 +95,7 @@ export default async function AdhesionPage() {
               <h2 className="premier-cours-title">Votre premier cours</h2>
               <ul className="premier-cours-grid">
                 <li><strong>Dès 4 ans</strong><span>Baby-judo, enfants, ados et adultes — tous les niveaux.</span></li>
-                <li><strong>2 séances d&apos;essai gratuites</strong><span>Sans engagement, aucun paiement à la pré-inscription.</span></li>
+                <li><strong>2 séances d&apos;essai gratuites</strong><span>Sans engagement — venez essayer avant d&apos;adhérer.</span></li>
                 <li><strong>En tenue de sport</strong><span>Pas besoin de kimono pour la première séance.</span></li>
                 <li><strong>Sans rendez-vous</strong><span>Présentez-vous simplement à un créneau de votre âge.</span></li>
               </ul>
@@ -116,7 +121,47 @@ export default async function AdhesionPage() {
 
         <section className="section" style={{ paddingTop: 0 }}>
           <div className="container">
-            <AdhesionForm formules={formules} />
+            <div className="section-header" style={{ marginBottom: 28 }}>
+              <span className="section-header-dot" aria-hidden />
+              <span className="section-header-num" lang="ja" aria-hidden>入</span>
+              <span className="section-header-rule" aria-hidden />
+              <span className="section-header-label">入会 · Adhérer</span>
+            </div>
+            <h2 className="title-lg" style={{ marginBottom: 28 }}>
+              Nos <em>formules</em>.
+            </h2>
+
+            <div className="cards-grid" style={{ marginBottom: 48 }}>
+              {formules.map((f) => (
+                <div key={f.id} className="card">
+                  <span className="card-kanji" lang="ja" aria-hidden>{f.kanji}</span>
+                  <h3 className="card-title">{f.nom}</h3>
+                  <p style={{ fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--stone)", margin: 0 }}>
+                    {f.tranche_age}
+                  </p>
+                  <p style={{ fontFamily: "var(--serif)", fontWeight: 300, fontSize: 56, lineHeight: 1, letterSpacing: "-0.03em", margin: "8px 0", fontFeatureSettings: "'tnum'" }}>
+                    {f.prix}<span style={{ fontSize: 22, color: "var(--stone)", marginLeft: 4 }}>€</span>
+                  </p>
+                  <p className="card-text">{f.italique}</p>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ maxWidth: 520, margin: "0 auto", textAlign: "center", background: "var(--paper)", border: "1px solid var(--hair-color)", padding: "clamp(28px, 4vw, 44px)" }}>
+              <p style={{ fontFamily: "var(--serif)", fontSize: "clamp(20px, 2vw, 26px)", color: "var(--sumi)", margin: "0 0 10px" }}>
+                Prêt·e à rejoindre le club&nbsp;?
+              </p>
+              <p style={{ fontFamily: "var(--serif)", color: "var(--sumi-soft)", fontSize: 15, lineHeight: 1.55, margin: "0 0 26px" }}>
+                L&apos;inscription et le règlement se font en ligne, en quelques minutes et en toute sécurité.
+              </p>
+              <div style={{ maxWidth: 340, margin: "0 auto" }}>
+                <HelloAssoWidget src={HELLOASSO_BUTTON_URL} height={70} title="Adhérer en ligne — HelloAsso" />
+              </div>
+              <p style={{ marginTop: 16, fontSize: 13, color: "var(--stone)", fontFamily: "var(--serif)", fontStyle: "italic" }}>
+                Paiement 100&nbsp;% sécurisé via HelloAsso. Une question&nbsp;?{" "}
+                <a href="/contact" style={{ borderBottom: "1px solid var(--hair-strong)", color: "var(--sumi)" }}>contactez le bureau</a>.
+              </p>
+            </div>
           </div>
         </section>
 

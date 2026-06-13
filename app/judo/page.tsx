@@ -304,12 +304,12 @@ export default function JudoPage() {
               pour décider en connaissance.
             </h2>
             <p className="lead">
-              Pas de paiement à la pré-inscription. Vous venez essayer, vous voyez si
-              ça vous parle, et vous décidez ensuite.
+              Les séances d&apos;essai sont gratuites. Vous venez essayer, vous voyez si
+              ça vous parle, et vous adhérez ensuite — en ligne, en quelques minutes.
             </p>
             <div className="judo-cta-buttons">
               <Link href="/adhesion" className="btn btn-primary">
-                Pré-inscription
+                Adhérer en ligne
                 <span className="btn-dot" aria-hidden />
               </Link>
               <Link href="/horaires" className="btn btn-secondary btn-arrow">

@@ -40,7 +40,7 @@ export default async function HomePage() {
               <p className="hero-sub">{hero.sous_titre}</p>
               <div className="hero-actions">
                 <Link href="/adhesion" className="btn btn-primary">
-                  Pré-inscription
+                  Adhérer en ligne
                   <span className="btn-dot" aria-hidden />
                 </Link>
                 <Link href="/judo" className="btn btn-secondary btn-arrow">
@@ -182,8 +182,8 @@ export default async function HomePage() {
               avant tout engagement.
             </h2>
             <p className="lead" style={{ marginBottom: 40 }}>
-              Trois formules selon l&apos;âge et la pratique. Aucun paiement requis pour la pré-inscription —
-              le règlement se fait au premier cours.
+              Trois formules selon l&apos;âge et la pratique. Inscription et règlement en ligne,
+              en toute sécurité via HelloAsso.
             </p>
 
             <div className="cards-grid" style={{ marginBottom: 40 }}>
@@ -203,7 +203,7 @@ export default async function HomePage() {
             </div>
 
             <Link href="/adhesion" className="btn btn-primary">
-              Pré-inscrire — formulaire
+              Adhérer en ligne
               <span className="btn-dot" aria-hidden />
             </Link>
           </div>

@@ -157,13 +157,13 @@ export default async function ContactPage() {
 
             <div style={{ background: "var(--paper)", border: "1px solid var(--hair-color)", padding: "clamp(28px, 3vw, 48px)" }}>
               <h2 className="title-md" style={{ marginBottom: 8 }}>
-                Pré-<em>inscription</em> ?
+                <em>Adhérer</em> au club ?
               </h2>
               <p style={{ fontFamily: "var(--serif)", color: "var(--sumi-soft)", marginBottom: 24, fontSize: 16, lineHeight: 1.55 }}>
-                Pour une demande d&apos;inscription au club, utilisez le formulaire dédié — c&apos;est plus simple et plus rapide.
+                L&apos;inscription et le règlement de la licence se font en ligne, en quelques minutes et en toute sécurité.
               </p>
               <Link href="/adhesion" className="btn btn-primary">
-                Formulaire de pré-inscription
+                Adhérer en ligne
                 <span className="btn-dot" aria-hidden />
               </Link>
 

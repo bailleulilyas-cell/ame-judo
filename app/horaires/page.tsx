@@ -106,7 +106,7 @@ export default async function HorairesPage() {
                   Aucun rendez-vous nécessaire.
                 </p>
                 <Link href="/adhesion" className="btn btn-primary" style={{ width: "100%", justifyContent: "center" }}>
-                  Pré-inscription
+                  Adhérer en ligne
                   <span className="btn-dot" aria-hidden />
                 </Link>
               </aside>
