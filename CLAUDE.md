@@ -14,7 +14,7 @@ pour le bureau (éditeur final non-technique → interfaces simples, en françai
 | Langage | TypeScript strict, React 19 |
 | DB | MySQL mutualisé Hostinger (`u430582688_AME_Judo` @ `srv1787.hstgr.io`) — PAS Supabase |
 | Auth admin | JWT (jose, HS256) + bcrypt(12), mot de passe unique en DB, token versioning |
-| Emails | Resend (transactionnel : confirmation pré-inscription + notif bureau) |
+| Emails | Resend (plus utilisé depuis le passage de l'adhésion à HelloAsso — clé conservée) |
 | Upload images | Vercel Blob en prod (si `BLOB_READ_WRITE_TOKEN`), filesystem local `/public/uploads/AAAA/MM/` en dev |
 | Images | next/image (AVIF/WebP), remotePatterns autorise `*.public.blob.vercel-storage.com` |
 | CSS | Tailwind v4 + CSS custom (tokens + composants dans `app/globals.css`, ~2700 lignes) |
@@ -37,13 +37,16 @@ pour le bureau (éditeur final non-technique → interfaces simples, en françai
 
 ## Architecture
 
-- **Public** : `/`, `/judo`, `/horaires`, `/maitres`, `/adhesion` (+ section Documents),
-  `/competition`, `/actualites` (+ `[slug]`), `/contact`, `/mentions-legales`, `/rgpd`.
+- **Public** : `/`, `/judo`, `/horaires`, `/maitres`, `/adhesion` (tarifs + **bouton HelloAsso** + Documents),
+  `/competition`, `/actualites` (+ `[slug]`), `/galerie`, `/contact`, `/mentions-legales`, `/rgpd`.
 - **Admin** : `/admin/login` + groupe `(panel)` (sidebar) et `(editor)` (plein écran).
-  Sections : dashboard, actualités, hero, about, disciplines, horaires, maîtres, formules,
-  documents, **réseaux sociaux**, pré-inscriptions, paramètres (footer/contact), mot de passe.
-- **API** : `api/preregistrations` (public, rate-limité), `api/admin/upload`,
-  `api/admin/preregistrations/export` (Excel), `api/admin/logout`.
+  Sections : dashboard, actualités, galerie, hero, about, le judo (disciplines), horaires,
+  enseignants (`/admin/maitres`), bureau, formules, documents, réseaux sociaux,
+  paramètres (footer/contact), mot de passe.
+- **Adhésion** : passe par le **bouton HelloAsso** sur `/adhesion` (cf. `components/HelloAssoWidget.tsx`,
+  URL de campagne dans `app/adhesion/page.tsx`). L'ancien formulaire de pré-inscription
+  (form + `api/preregistrations` + admin + table `preregistrations`) a été **supprimé**.
+- **API** : `api/admin/upload`, `api/admin/logout`.
 
 ## Modules notables
 

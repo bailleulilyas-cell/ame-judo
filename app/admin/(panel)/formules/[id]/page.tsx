@@ -35,8 +35,8 @@ export default async function FormuleEdit({
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 2fr", gap: 16 }}>
           <div className="form-field">
-            <label className="form-label" htmlFor="age_min">Âge minimum</label>
-            <input id="age_min" name="age_min" type="number" min={0} max={120} defaultValue={f.age_min ?? ""} className="form-input" required />
+            <label className="form-label" htmlFor="age_min">Âge minimum <span style={{ color: "var(--stone)", fontWeight: 400 }}>(facultatif)</span></label>
+            <input id="age_min" name="age_min" type="number" min={0} max={120} defaultValue={f.age_min ?? ""} className="form-input" />
           </div>
           <div className="form-field">
             <label className="form-label" htmlFor="age_max">Âge maximum <span style={{ color: "var(--stone)", fontWeight: 400 }}>(vide = pas de max)</span></label>
@@ -49,7 +49,8 @@ export default async function FormuleEdit({
         </div>
 
         <p style={{ fontSize: 12, color: "var(--stone)", fontFamily: "var(--serif)", fontStyle: "italic", margin: 0 }}>
-          ↳ L&apos;âge minimum et maximum déterminent automatiquement quelle formule est proposée selon la date de naissance saisie par l&apos;inscrit·e.
+          ↳ Les champs d&apos;âge servent seulement à générer la tranche d&apos;âge affichée sur la carte
+          (ou laissez-les vides et remplissez «&nbsp;Texte affiché&nbsp;»). L&apos;inscription se fait via HelloAsso.
         </p>
 
         <div className="form-field">

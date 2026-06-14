@@ -1,29 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getActualites } from "@/lib/data";
-import { query } from "@/lib/db";
 
 export const metadata: Metadata = {
   title: "Tableau de bord",
   robots: { index: false },
 };
 
-const DB_READY = Boolean(process.env.DB_HOST && process.env.DB_NAME);
-
-async function countPending(): Promise<number> {
-  if (!DB_READY) return 0;
-  try {
-    const rows = await query<{ n: number }>(
-      "SELECT COUNT(*) AS n FROM preregistrations WHERE status = 'pending'"
-    );
-    return Number(rows[0]?.n ?? 0);
-  } catch {
-    return 0;
-  }
-}
-
 export default async function AdminHome() {
-  const [actus, pending] = await Promise.all([getActualites(50), countPending()]);
+  const actus = await getActualites(50);
   const published = actus.filter((a) => a.statut === "published").length;
   const drafts = actus.length - published;
 
@@ -32,7 +17,6 @@ export default async function AdminHome() {
       <h1 className="admin-h1">Tableau de bord</h1>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))", gap: 16, marginBottom: 48 }}>
-        <Stat kanji="入" label="Nouvelles pré-inscriptions" value={pending} href="/admin/preregistrations" />
         <Stat kanji="報" label="Actualités publiées" value={published} href="/admin/actualites" />
         <Stat kanji="✎" label="Brouillons" value={drafts} href="/admin/actualites" />
       </div>
@@ -43,7 +27,7 @@ export default async function AdminHome() {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 16 }}>
         <Action href="/admin/actualites/new" kanji="新" title="Publier une actualité" desc="Stage, compétition, info pratique…" />
         <Action href="/admin/actualites" kanji="報" title="Gérer les actualités" desc="Modifier, dépublier, supprimer" />
-        <Action href="/admin/preregistrations" kanji="入" title="Voir les pré-inscriptions" desc="Suivre les demandes" />
+        <Action href="/admin/galerie/new" kanji="写" title="Ajouter une photo" desc="Alimenter la galerie du club" />
       </div>
     </>
   );

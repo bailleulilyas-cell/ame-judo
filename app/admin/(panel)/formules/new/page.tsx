@@ -27,8 +27,9 @@ export default async function NewFormulePage({
         )}
 
         <p style={{ fontSize: 13, color: "var(--stone)", fontFamily: "var(--serif)", fontStyle: "italic", margin: 0 }}>
-          La formule proposée à l&apos;inscription est déterminée automatiquement par l&apos;âge
-          (champs ci-dessous). Vous pouvez créer autant de formules que nécessaire.
+          Ces formules sont les tarifs affichés sur la page Adhésion. Les champs d&apos;âge servent
+          seulement à générer la tranche d&apos;âge affichée — laissez-les vides et remplissez
+          «&nbsp;Texte affiché&nbsp;» si vous préférez. L&apos;inscription se fait ensuite via HelloAsso.
         </p>
 
         <div style={{ display: "grid", gridTemplateColumns: "100px 1fr", gap: 16 }}>
@@ -44,8 +45,8 @@ export default async function NewFormulePage({
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 2fr", gap: 16 }}>
           <div className="form-field">
-            <label className="form-label" htmlFor="age_min">Âge minimum</label>
-            <input id="age_min" name="age_min" type="number" min={0} max={120} className="form-input" required />
+            <label className="form-label" htmlFor="age_min">Âge minimum <span style={{ color: "var(--stone)", fontWeight: 400 }}>(facultatif)</span></label>
+            <input id="age_min" name="age_min" type="number" min={0} max={120} className="form-input" />
           </div>
           <div className="form-field">
             <label className="form-label" htmlFor="age_max">Âge maximum <span style={{ color: "var(--stone)", fontWeight: 400 }}>(vide = pas de max)</span></label>

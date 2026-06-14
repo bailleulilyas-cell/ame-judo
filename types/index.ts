@@ -122,18 +122,3 @@ export interface SocialLink {
   active: boolean;
 }
 
-export interface Preregistration {
-  id: string;
-  full_name: string;
-  email: string;
-  phone: string;
-  birth_date: string;
-  plan: string;
-  status: "pending" | "contacted" | "accepted" | "rejected";
-  notes: string | null;
-  parent_name: string | null;
-  parent_relation: string | null;
-  souhait_competition: boolean;
-  submitted_at: string;
-  updated_at: string;
-}
