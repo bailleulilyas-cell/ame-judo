@@ -6,7 +6,6 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 const NAV_ITEMS = [
-  { href: "/", kanji: "家", label: "Accueil" },
   { href: "/judo", kanji: "柔", label: "Le judo" },
   { href: "/horaires", kanji: "時", label: "Horaires" },
   { href: "/maitres", kanji: "師", label: "Enseignants" },
