@@ -10,9 +10,6 @@ const SECTIONS = [
     { href: "/admin/galerie",          kanji: "写", label: "Galerie" },
   ]},
   { title: "Pages",        items: [
-    { href: "/admin/hero",             kanji: "頭", label: "Accueil (Hero)" },
-    { href: "/admin/about",            kanji: "魂", label: "L'âme du club" },
-    { href: "/admin/disciplines",      kanji: "柔", label: "Le judo" },
     { href: "/admin/horaires",         kanji: "時", label: "Horaires" },
     { href: "/admin/maitres",          kanji: "師", label: "Enseignants" },
     { href: "/admin/bureau",           kanji: "会", label: "Bureau" },

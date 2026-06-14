@@ -40,9 +40,13 @@ pour le bureau (éditeur final non-technique → interfaces simples, en françai
 - **Public** : `/`, `/judo`, `/horaires`, `/maitres`, `/adhesion` (tarifs + **bouton HelloAsso** + Documents),
   `/competition`, `/actualites` (+ `[slug]`), `/galerie`, `/contact`, `/mentions-legales`, `/rgpd`.
 - **Admin** : `/admin/login` + groupe `(panel)` (sidebar) et `(editor)` (plein écran).
-  Sections : dashboard, actualités, galerie, hero, about, le judo (disciplines), horaires,
-  enseignants (`/admin/maitres`), bureau, formules, documents, réseaux sociaux,
-  paramètres (footer/contact), mot de passe.
+  Sections : dashboard, actualités, galerie, horaires, enseignants (`/admin/maitres`),
+  bureau, formules, documents, réseaux sociaux, paramètres (footer/contact), mot de passe.
+- **Contenus NON éditables en admin** (modifiables uniquement par le dev en base/code) :
+  le hero et le bloc « âme » de l'accueil (toujours lus via `getHeroContent`/`getAboutContent`
+  dans `lib/data.ts` et affichés), et toute la page `/judo` (en dur). Les pages admin
+  hero/about/disciplines ont été **retirées** (textes obsolètes, peu d'usage pour le bureau).
+  La table `disciplines` subsiste : elle sert de catégorie interne aux créneaux d'horaires.
 - **Adhésion** : passe par le **bouton HelloAsso** sur `/adhesion` (cf. `components/HelloAssoWidget.tsx`,
   URL de campagne dans `app/adhesion/page.tsx`). L'ancien formulaire de pré-inscription
   (form + `api/preregistrations` + admin + table `preregistrations`) a été **supprimé**.
