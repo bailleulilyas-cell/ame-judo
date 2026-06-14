@@ -107,7 +107,7 @@ export default async function AdhesionPage() {
           <div className="container">
             <a
               className="ffjda"
-              href="https://www.francejudo.fr"
+              href="https://www.ffjudo.com/club-arts-martiaux-ermontois"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Site de France Judo (FFJDA) — nouvel onglet"
