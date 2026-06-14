@@ -105,17 +105,24 @@ export default async function AdhesionPage() {
 
         <section className="section" style={{ paddingTop: 0 }}>
           <div className="container">
-            <div className="ffjda">
+            <a
+              className="ffjda"
+              href="https://www.francejudo.fr"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Site de France Judo (FFJDA) — nouvel onglet"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
               <Image src="/ffjda.webp" alt="Club affilié à France Judo (FFJDA)" width={96} height={180} className="ffjda-logo" />
               <div>
-                <h2 className="ffjda-title">Club affilié à France&nbsp;Judo (FFJDA)</h2>
+                <h2 className="ffjda-title">Club affilié à France&nbsp;Judo (FFJDA)&nbsp;↗</h2>
                 <p className="ffjda-text">
                   Notre club est affilié à la Fédération Française de Judo. La licence comprend
                   l&apos;<strong>assurance</strong>{" "}du pratiquant et donne accès aux passages de grades
                   ainsi qu&apos;aux compétitions officielles.
                 </p>
               </div>
-            </div>
+            </a>
           </div>
         </section>
 
@@ -149,7 +156,7 @@ export default async function AdhesionPage() {
 
             <div style={{ maxWidth: 520, margin: "0 auto", textAlign: "center", background: "var(--paper)", border: "1px solid var(--hair-color)", padding: "clamp(28px, 4vw, 44px)" }}>
               <p style={{ fontFamily: "var(--serif)", fontSize: "clamp(20px, 2vw, 26px)", color: "var(--sumi)", margin: "0 0 10px" }}>
-                Prêt·e à rejoindre le club&nbsp;?
+                Envie de rejoindre le club&nbsp;?
               </p>
               <p style={{ fontFamily: "var(--serif)", color: "var(--sumi-soft)", fontSize: 15, lineHeight: 1.55, margin: "0 0 26px" }}>
                 L&apos;inscription et le règlement se font en ligne, en quelques minutes et en toute sécurité.

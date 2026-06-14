@@ -438,6 +438,7 @@ main { padding-top: var(--nav-h); }
   flex-wrap: wrap;
 }
 .hero-eyebrow-jp { font-family: var(--serif-jp); font-size: 14px; letter-spacing: 0; text-transform: none; color: var(--sumi); }
+.hero-eyebrow-fr { font-family: var(--serif); font-style: italic; font-size: 12px; letter-spacing: 0; text-transform: none; color: var(--stone); }
 .hero-eyebrow-rule { width: 28px; height: 1px; background: var(--hair-strong); flex-shrink: 0; }
 
 .hero-title {
@@ -523,7 +524,7 @@ main { padding-top: var(--nav-h); }
 @media (max-width: 640px) {
   .hero { padding: 16px 0 40px; gap: 18px; }
   .hero-visual { max-width: 140px; }
-  .hero-eyebrow-jp, .hero-eyebrow-rule { display: none; }
+  .hero-eyebrow-jp, .hero-eyebrow-fr, .hero-eyebrow-rule { display: none; }
   .hero-actions { gap: 10px; }
   .hero-actions .btn { flex: 1 1 120px; justify-content: center; }
   .hero-stats { gap: 24px; margin-top: 28px; padding-top: 20px; }
@@ -1215,7 +1216,7 @@ main { padding-top: var(--nav-h); }
 .maitre-role { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--stone); margin: 0; }
 .maitre-grade { font-family: var(--serif); font-size: 14px; color: var(--sumi); margin: 0; }
 .maitre-annees { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--stone); margin: 0; }
-.maitre-citation { font-family: var(--serif); font-style: italic; font-size: 15px; line-height: 1.55; color: var(--sumi-soft); padding-top: 12px; border-top: 1px solid var(--hair-color); margin: 0; }
+.maitre-citation { font-family: var(--serif); font-style: italic; font-size: 15px; line-height: 1.55; color: var(--sumi-soft); margin: 0; }
 
 /* ═══════════════════════════════════════════════════════════
    Adhésion — formules

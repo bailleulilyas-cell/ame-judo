@@ -33,6 +33,7 @@ export default async function HomePage() {
             <div>
               <p className="hero-eyebrow">
                 <span className="hero-eyebrow-jp" lang="ja">{hero.proverbe_jp}</span>
+                {hero.proverbe_fr && <span className="hero-eyebrow-fr">{hero.proverbe_fr}</span>}
                 <span className="hero-eyebrow-rule" aria-hidden />
                 <span>{hero.eyebrow}</span>
               </p>
@@ -182,7 +183,7 @@ export default async function HomePage() {
               avant tout engagement.
             </h2>
             <p className="lead" style={{ marginBottom: 40 }}>
-              Trois formules selon l&apos;âge et la pratique. Inscription et règlement en ligne,
+              Des formules selon l&apos;âge et la pratique. Inscription et règlement en ligne,
               en toute sécurité via HelloAsso.
             </p>
 
