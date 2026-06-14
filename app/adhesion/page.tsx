@@ -111,7 +111,7 @@ export default async function AdhesionPage() {
                 <h2 className="ffjda-title">Club affilié à France&nbsp;Judo (FFJDA)</h2>
                 <p className="ffjda-text">
                   Notre club est affilié à la Fédération Française de Judo. La licence comprend
-                  l&apos;<strong>assurance</strong> du pratiquant et donne accès aux passages de grades
+                  l&apos;<strong>assurance</strong>{" "}du pratiquant et donne accès aux passages de grades
                   ainsi qu&apos;aux compétitions officielles.
                 </p>
               </div>
