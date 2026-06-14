@@ -6,6 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 const NAV_ITEMS = [
+  { href: "/", kanji: "家", label: "Accueil" },
   { href: "/judo", kanji: "柔", label: "Le judo" },
   { href: "/horaires", kanji: "時", label: "Horaires" },
   { href: "/maitres", kanji: "師", label: "Enseignants" },
@@ -13,7 +14,7 @@ const NAV_ITEMS = [
   { href: "/adhesion#documents-section", kanji: "書", label: "Documents" },
   { href: "/competition", kanji: "競", label: "Compétition" },
   { href: "/actualites", kanji: "報", label: "Actualités" },
-  { href: "/contact", kanji: "便", label: "Contact" },
+  { href: "/contact", kanji: "会", label: "Le bureau" },
 ];
 
 export default function Nav() {

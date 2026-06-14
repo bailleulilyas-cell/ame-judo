@@ -9,8 +9,8 @@
   --paper:       #FBFAF6;
   --sumi:        #0A0A0A;
   --sumi-soft:   #1A1A1A;
-  --stone:       #6B6B6B;
-  --stone-soft:  #767065;
+  --stone:       #605D57;
+  --stone-soft:  #645F55;
   --sand:        #E8E1D4;
   --red:         #C8332A;
   --red-soft:    rgba(200, 51, 42, 0.08);
@@ -38,7 +38,7 @@ body {
   background: var(--bg);
   color: var(--sumi);
   font-family: var(--sans);
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -305,7 +305,7 @@ html { scroll-padding-top: 88px; }
 .nav-burger.is-open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
 /* ─── Nav mobile ─────────────────────────────────────────── */
-@media (max-width: 980px) {
+@media (max-width: 1140px) {
   .nav-links { display: none; }
   .nav-burger { display: flex; }
   .nav-cta { padding: 8px 14px; }

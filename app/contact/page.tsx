@@ -8,12 +8,12 @@ import { getSettings, getSocialLinks, getBureau } from "@/lib/data";
 import { SOCIAL_PLATFORMS } from "@/lib/socials";
 
 export const metadata: Metadata = {
-  title: "Contact",
-  description: "Contactez le club AME-JUDO — adresse, email, horaires de permanence.",
+  title: "Le bureau",
+  description: "Le bureau du club AME-JUDO — l'équipe bénévole, et comment nous joindre (adresse, email, permanence).",
   alternates: { canonical: "/contact" },
   openGraph: {
-    title: "Contact — AME-JUDO Ermont",
-    description: "Contactez le club de judo AME-JUDO — adresse, email, permanence.",
+    title: "Le bureau — AME-JUDO Ermont",
+    description: "L'équipe bénévole du club de judo AME-JUDO — et comment nous joindre.",
     url: "/contact",
   },
 };
@@ -31,14 +31,14 @@ export default async function ContactPage() {
               <span className="section-header-dot" aria-hidden />
               <span className="section-header-num" lang="ja" aria-hidden>六</span>
               <span className="section-header-rule" aria-hidden />
-              <span className="section-header-label">便 · Contact</span>
+              <span className="section-header-label">会 · Le bureau</span>
             </div>
             <h1 className="page-hero-title">
-              Nous <em>écrire</em>, nous <em>trouver</em>.
+              Le <em>bureau</em>.
             </h1>
             <p className="page-hero-sub">
-              Une question, une remarque, ou simplement envie de venir voir le dojo —
-              n&apos;hésitez pas à passer ou à nous écrire.
+              Les bénévoles qui font vivre le club au quotidien — et tout pour nous joindre :
+              nous écrire, nous trouver, venir voir le dojo.
             </p>
           </div>
         </section>
@@ -50,7 +50,7 @@ export default async function ContactPage() {
                 <span className="section-header-dot" aria-hidden />
                 <span className="section-header-num" lang="ja" aria-hidden>会</span>
                 <span className="section-header-rule" aria-hidden />
-                <span className="section-header-label">会 · Le bureau</span>
+                <span className="section-header-label">会 · L&apos;équipe</span>
               </div>
               <h2 className="title-lg" style={{ marginBottom: 16 }}>
                 Les femmes et les hommes <em>du club</em>.
