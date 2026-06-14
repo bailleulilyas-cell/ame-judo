@@ -181,7 +181,7 @@ export default async function AdhesionPage() {
               </h2>
               <p className="lead" style={{ marginBottom: 48 }}>
                 Téléchargez ces documents, remplissez-les, et apportez-les lors de votre venue
-                au dojo. Tout est gratuit, et nous restons à votre disposition pour toute question.
+                au dojo. Nous restons à votre disposition pour toute question.
               </p>
 
               <div className="docs-grid">
