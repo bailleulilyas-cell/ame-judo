@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
 import { getActualites } from "@/lib/data";
+import { club } from "@/club.config";
 
-const BASE_URL = "https://ame-judo.fr";
+const BASE_URL = club.url;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();

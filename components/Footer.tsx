@@ -3,6 +3,7 @@ import Image from "next/image";
 import SocialIcon from "./SocialIcon";
 import { getSocialLinks, getSettings } from "@/lib/data";
 import { SOCIAL_PLATFORMS } from "@/lib/socials";
+import { club, agency } from "@/club.config";
 
 export default async function Footer() {
   const [socials, s] = await Promise.all([getSocialLinks(), getSettings()]);
@@ -17,39 +18,39 @@ export default async function Footer() {
             <div className="footer-brand-row">
               <Image
                 src="/logo.png"
-                alt="Logo AME-JUDO"
+                alt={`Logo ${club.name}`}
                 width={56}
                 height={56}
                 className="footer-logo"
               />
               <div>
-                <div className="footer-brand-text">AME-JUDO</div>
+                <div className="footer-brand-text">{club.name}</div>
                 <div style={{ fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(245,241,234,0.72)", marginTop: 4 }}>
-                  Depuis 1978
+                  Depuis {club.foundingYear}
                 </div>
               </div>
             </div>
             <p className="footer-brand-sub">
-              Club de judo à Ermont<br />
-              depuis 1978.
+              Club de {club.sport.toLowerCase()} à {club.city}<br />
+              depuis {club.foundingYear}.
             </p>
             <a
-              href="https://lerelaisweb.com"
+              href={agency.url}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Site réalisé par Le Relais Web"
+              aria-label={`Site réalisé par ${agency.name}`}
               className="footer-credit-inline"
             >
               <Image
-                src="/logo-relais-web.png"
-                alt="Le Relais Web"
+                src={agency.logo}
+                alt={agency.name}
                 width={44}
                 height={44}
                 className="footer-credit-logo"
               />
               <span className="footer-credit-text">
                 <span className="footer-credit-label">Réalisé par</span>
-                <strong>Le Relais Web</strong>
+                <strong>{agency.name}</strong>
               </span>
             </a>
           </div>
@@ -107,7 +108,7 @@ export default async function Footer() {
         </div>
 
         <div className="footer-bottom">
-          <span>© 2026 AME-JUDO — Association loi 1901</span>
+          <span>© {new Date().getFullYear()} {club.name} — Association loi 1901</span>
           <nav className="footer-legal" aria-label="Liens légaux">
             <Link href="/mentions-legales">Mentions légales</Link>
             <Link href="/rgpd">Confidentialité</Link>

@@ -3,10 +3,11 @@ import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { getSettings } from "@/lib/data";
+import { club } from "@/club.config";
 
 export const metadata: Metadata = {
   title: "Mentions légales",
-  description: "Mentions légales du club de judo AME-JUDO (Ermont) — éditeur, hébergeur, propriété intellectuelle.",
+  description: `Mentions légales du club de ${club.sport.toLowerCase()} ${club.name} (${club.city}) — éditeur, hébergeur, propriété intellectuelle.`,
   alternates: { canonical: "/mentions-legales" },
   robots: { index: false },
 };
@@ -27,18 +28,18 @@ export default async function MentionsLegales() {
               Éditeur du site
             </h2>
             <p>
-              <strong>Association AME-JUDO — Arts Martiaux Ermontois</strong><br />
-              Association loi du 1ᵉʳ juillet 1901<br />
-              N° RNA : W951008210<br />
-              Complexe Sportif Saint-Exupéry<br />
-              Rue Kvot et Leydekkers, 95120 Ermont<br />
+              <strong>Association {club.legalName}</strong><br />
+              {club.legal.associationType}<br />
+              N° RNA : {club.legal.rna}<br />
+              {club.address.venue}<br />
+              {club.address.street}, {club.address.postalCode} {club.address.locality}<br />
               <a href={`mailto:${email}`} style={{ borderBottom: "1px solid var(--hair-strong)" }}>{email}</a>
             </p>
 
             <h2 style={{ fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--stone)", marginBottom: 12, marginTop: 32, fontFamily: "var(--sans)", fontWeight: 500 }}>
               Directeur de publication
             </h2>
-            <p>Thierry Bailleul, Président de l&apos;association AME-JUDO.</p>
+            <p>{club.legal.president}, Président de l&apos;association {club.name}.</p>
 
             <h2 style={{ fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--stone)", marginBottom: 12, marginTop: 32, fontFamily: "var(--sans)", fontWeight: 500 }}>
               Hébergement
@@ -54,7 +55,7 @@ export default async function MentionsLegales() {
             </h2>
             <p>
               L&apos;ensemble des contenus présents sur ce site (textes, images, logo) sont la propriété exclusive
-              de l&apos;association AME-JUDO. Toute reproduction ou diffusion sans autorisation est interdite.
+              de l&apos;association {club.name}. Toute reproduction ou diffusion sans autorisation est interdite.
             </p>
           </div>
         </article>

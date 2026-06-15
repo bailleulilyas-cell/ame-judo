@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { club } from "@/club.config";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -7,6 +8,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/admin", "/preview", "/api"],
     },
-    sitemap: "https://ame-judo.fr/sitemap.xml",
+    sitemap: `${club.url}/sitemap.xml`,
   };
 }

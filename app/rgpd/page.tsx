@@ -3,18 +3,19 @@ import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { getSettings } from "@/lib/data";
+import { club } from "@/club.config";
 
 export const metadata: Metadata = {
   title: "Politique de confidentialité",
-  description: "Politique de confidentialité du club AME-JUDO — données collectées, finalité, durée de conservation et vos droits (RGPD).",
+  description: `Politique de confidentialité du club ${club.name} — données collectées, finalité, durée de conservation et vos droits (RGPD).`,
   alternates: { canonical: "/rgpd" },
   robots: { index: false },
 };
 
 function buildSections(email: string) {
   return [
-    { titre: "Responsable du traitement", texte: `Le responsable du traitement des données est l'association AME-JUDO — Arts Martiaux Ermontois (loi 1901, RNA W951008210), représentée par son président, Thierry Bailleul. Contact : ${email}.` },
-    { titre: "Données collectées", texte: "L'adhésion et le règlement de la licence se font en ligne via notre prestataire HelloAsso, qui recueille les informations nécessaires à votre inscription (identité, coordonnées, date de naissance) directement sur sa plateforme sécurisée. Le site ame-judo.fr ne collecte ni ne stocke lui-même de données d'inscription, et aucune donnée bancaire ne transite par le site." },
+    { titre: "Responsable du traitement", texte: `Le responsable du traitement des données est l'association ${club.legalName} (loi 1901, RNA ${club.legal.rna}), représentée par son président, ${club.legal.president}. Contact : ${email}.` },
+    { titre: "Données collectées", texte: `L'adhésion et le règlement de la licence se font en ligne via notre prestataire HelloAsso, qui recueille les informations nécessaires à votre inscription (identité, coordonnées, date de naissance) directement sur sa plateforme sécurisée. Le site ${club.domain} ne collecte ni ne stocke lui-même de données d'inscription, et aucune donnée bancaire ne transite par le site.` },
     { titre: "Finalité du traitement", texte: "Les données recueillies servent exclusivement à gérer votre adhésion au club et votre licence sportive, et à vous contacter au sujet de votre pratique." },
     { titre: "Sous-traitant", texte: "Le traitement des inscriptions et des paiements est assuré par HelloAsso, qui agit en qualité de sous-traitant et dispose de sa propre politique de confidentialité (helloasso.com/confidentialite)." },
     { titre: "Base légale", texte: "Le traitement repose sur l'exécution du contrat d'adhésion et sur votre consentement, exprimé au moment de votre inscription en ligne." },

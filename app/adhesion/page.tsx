@@ -5,13 +5,12 @@ import Footer from "@/components/Footer";
 import HelloAssoWidget from "@/components/HelloAssoWidget";
 import ScrollReveal from "@/components/ScrollReveal";
 import { getFormules, getDocuments } from "@/lib/data";
+import { club } from "@/club.config";
 
-const SITE_URL = "https://ame-judo.fr";
+const SITE_URL = club.url;
 
-// URL du bouton d'adhésion HelloAsso (campagne en cours).
-// À mettre à jour chaque saison quand le club crée une nouvelle campagne.
-const HELLOASSO_BUTTON_URL =
-  "https://www.helloasso.com/associations/arts-martiaux-ermontois-judo/adhesions/adhesion-2026-2027-ame-judo/widget-bouton";
+// URL du bouton d'adhésion HelloAsso (campagne en cours) — voir club.config.ts.
+const HELLOASSO_BUTTON_URL = club.links.helloAssoButton;
 
 export const metadata: Metadata = {
   title: "Adhésion judo Ermont — Tarifs & inscription en ligne",
@@ -107,7 +106,7 @@ export default async function AdhesionPage() {
           <div className="container">
             <a
               className="ffjda"
-              href="https://www.ffjudo.com/club-arts-martiaux-ermontois"
+              href={club.links.ffjda}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Site de France Judo (FFJDA) — nouvel onglet"

@@ -1,9 +1,10 @@
 import { ImageResponse } from "next/og";
+import { club } from "@/club.config";
 
 // Next.js convention : Open Graph image générée à la build
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "AME-JUDO — Club de judo à Ermont (95)";
+export const alt = club.seo.titleDefault;
 
 export const runtime = "edge";
 
@@ -18,7 +19,7 @@ export default function OpengraphImage() {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          background: "#F5F1EA",
+          background: club.theme.paper,
           fontFamily: "serif",
           color: "#1A1A1A",
           padding: 80,
@@ -36,18 +37,18 @@ export default function OpengraphImage() {
             color: "#A8A192",
           }}
         >
-          AME-JUDO · Depuis 1978
+          {club.og.eyebrow}
         </div>
 
         <div
           style={{
             fontSize: 240,
-            color: "#C8332A",
+            color: club.theme.accent,
             lineHeight: 1,
             marginBottom: 24,
           }}
         >
-          道
+          {club.theme.kanjiHero}
         </div>
 
         <div
@@ -60,7 +61,7 @@ export default function OpengraphImage() {
             maxWidth: 1000,
           }}
         >
-          Club de Judo · Ermont
+          {club.og.title}
         </div>
 
         <div
@@ -71,7 +72,7 @@ export default function OpengraphImage() {
             marginTop: 24,
           }}
         >
-          Une voie. Une école. Depuis 1978.
+          {club.og.subtitle}
         </div>
 
         <div
@@ -85,7 +86,7 @@ export default function OpengraphImage() {
             color: "#A8A192",
           }}
         >
-          ame-judo.fr
+          {club.domain}
         </div>
       </div>
     ),
