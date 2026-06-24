@@ -1681,7 +1681,8 @@ main { padding-top: var(--nav-h); }
   font-size: 10px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(245,241,234,0.38);
+  /* 0.72 ≈ 9:1 de contraste sur le fond sumi — accessible (AA). */
+  color: rgba(245,241,234,0.72);
 }
 .footer-legal { display: flex; gap: 18px; flex-wrap: wrap; }
 .footer-legal a:hover { color: var(--red); }

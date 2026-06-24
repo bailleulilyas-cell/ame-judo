@@ -38,7 +38,7 @@ export default async function Footer() {
               href={agency.url}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`Site réalisé par ${agency.name}`}
+              aria-label={`Réalisé par ${agency.name}`}
               className="footer-credit-inline"
             >
               <Image
