@@ -8,14 +8,6 @@ interface Item {
   legende: string | null;
 }
 
-// Passe l'image par l'optimiseur Next (redimensionnement + AVIF/WebP) au lieu
-// de servir le fichier d'origine en pleine résolution. Le ratio est préservé,
-// donc la mise en page justifiée (calculée via onLoad) reste identique.
-// 828 = taille autorisée par défaut (deviceSizes) — large mais bien plus léger.
-function optimized(url: string, w = 828, q = 72): string {
-  return `/_next/image?url=${encodeURIComponent(url)}&w=${w}&q=${q}`;
-}
-
 /**
  * Galerie « lignes justifiées » (à la Google Photos / Flickr).
  * Lit le ratio réel de chaque image, puis cale chaque ligne pour que toutes
@@ -80,10 +72,9 @@ export default function JustifiedGallery({
               <figure className="jgal-item" key={it.id} style={{ width: row.height * ar }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={optimized(it.url)}
+                  src={it.url}
                   alt={it.legende ?? "Photo du club AME-JUDO"}
                   loading="lazy"
-                  decoding="async"
                   onLoad={(e) => {
                     const img = e.currentTarget;
                     if (img.naturalWidth && img.naturalHeight) {
