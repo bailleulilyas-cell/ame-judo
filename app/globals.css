@@ -1166,6 +1166,35 @@ main { padding-top: var(--nav-h); }
   gap: 20px;
   align-items: start;
 }
+
+/* Bloc « cours par semaine » sous les horaires */
+.h-freq-block { margin-top: 40px; padding-top: 28px; border-top: 1px solid var(--hair-strong); }
+.h-freq-title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(18px, 2vw, 22px);
+  margin: 0 0 16px;
+  color: var(--sumi);
+}
+.h-freq-list { list-style: none; margin: 0; padding: 0; }
+.h-freq-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--hair-color);
+}
+.h-freq-row:last-child { border-bottom: none; }
+.h-freq-cat { font-family: var(--serif); font-size: 15px; color: var(--sumi); }
+.h-freq-val {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--stone);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
 @media (max-width: 520px) { .h-day-group { grid-template-columns: 1fr; gap: 10px; } }
 
 .h-day-name { display: flex; align-items: baseline; gap: 10px; margin: 0; font-weight: 400; }
@@ -1689,40 +1718,40 @@ main { padding-top: var(--nav-h); }
 .footer-mark-red { width: 5px; height: 5px; border-radius: 50%; background: var(--red); display: inline-block; vertical-align: middle; margin-left: 5px; }
 @media (max-width: 480px) { .footer-bottom { flex-direction: column; gap: 10px; } }
 
-.footer-credit-inline {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 22px;
-  color: rgba(245,241,234,0.55);
-  transition: color 0.25s;
-}
-.footer-credit-inline:hover { color: rgba(245,241,234,0.95); }
-.footer-credit-logo { display: block; opacity: 0.85; transition: opacity 0.25s; border-radius: 50%; }
-.footer-credit-inline:hover .footer-credit-logo { opacity: 1; }
-.footer-credit-text {
+/* Signature agence — discrète, centrée, sous le bas de footer. */
+.footer-signature {
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(245,241,234,0.08);
   display: flex;
-  flex-direction: column;
-  line-height: 1.25;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
-.footer-credit-label {
-  display: block;
+.footer-signature-label {
   font-family: var(--sans);
   font-size: 10px;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(245,241,234,0.5);
+  /* 0.72 ≈ contraste AA sur le fond sumi */
+  color: rgba(245,241,234,0.72);
 }
-.footer-credit-inline strong {
+.footer-signature-link {
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
+  transition: opacity 0.25s;
+}
+.footer-signature-logo {
+  height: 22px;
+  width: auto;
   display: block;
-  font-family: var(--serif);
-  font-weight: 400;
-  font-size: 16px;
-  letter-spacing: 0.02em;
-  text-transform: none;
-  margin-top: 3px;
-  color: rgba(245,241,234,0.85);
+  /* Le logo distant est bleu marine : on l'éclaircit pour le footer sombre. */
+  filter: brightness(0) invert(1);
+  opacity: 0.78;
+  transition: opacity 0.25s;
 }
+.footer-signature-link:hover .footer-signature-logo { opacity: 1; }
 
 /* ═══════════════════════════════════════════════════════════
    Admin

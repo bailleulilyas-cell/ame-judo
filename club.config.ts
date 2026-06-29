@@ -118,8 +118,9 @@ export const club = {
 } as const;
 
 // ── Crédit agence (TA signature — à garder sur tous les sites livrés) ──
+// logo : URL distante (mise à jour centralement pour tous les sites clients).
 export const agency = {
   name: "Le Relais Web",
   url: "https://lerelaisweb.com",
-  logo: "/logo-relais-web.png",
+  logo: "https://lerelaisweb.com/logo-relais-nav.webp",
 } as const;

@@ -224,6 +224,27 @@ export async function updateHorairesNote(formData: FormData) {
   redirect("/admin/horaires?ok=1");
 }
 
+export async function updateHorairesFrequences(formData: FormData) {
+  await requireAuth();
+  if (!DB_READY) throw new Error("Base non configurée.");
+  // Crée la table au besoin (idempotent) : l'enregistrement marche même si la
+  // migration n'a pas encore été exécutée à la main.
+  await query(
+    `CREATE TABLE IF NOT EXISTS horaires_frequences (
+       id    INT PRIMARY KEY DEFAULT 1,
+       texte MEDIUMTEXT NOT NULL,
+       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`
+  );
+  await query(
+    `INSERT INTO horaires_frequences (id, texte) VALUES (1, ?)
+     ON DUPLICATE KEY UPDATE texte = VALUES(texte)`,
+    [String(formData.get("texte") ?? "").trim()]
+  );
+  refresh();
+  redirect("/admin/horaires?ok=1");
+}
+
 // ═══════════════════════════════════════════════════════════
 // MAÎTRES
 // ═══════════════════════════════════════════════════════════

@@ -107,6 +107,25 @@ export async function getHorairesNote(): Promise<HorairesNote | null> {
   return row && row.active ? row : null;
 }
 
+// Fréquence des cours par catégorie d'âge (bloc affiché sous les horaires).
+// Une ligne par catégorie : « Catégorie (années) : X cours par semaine ».
+const DEMO_FREQUENCES = `Baby (2022 - 2021) : 1 cours par semaine
+Mini-Poussins (2020 - 2019) : 2 cours par semaine
+Poussins (2018 - 2017) : 3 cours par semaine
+Benjamins (2016 - 2015) : 3 cours par semaine
+Minimes (2014 - 2013) : 3 cours par semaine
+Cadets (2012 - 2011 - 2010) : 3 cours par semaine
+Juniors (2009 - 2008 - 2007) : 3 cours par semaine
+Seniors / Vétérans (2006 et avant) : 3 cours par semaine`;
+
+export async function getHorairesFrequences(): Promise<string> {
+  const rows = await tryQuery<{ texte: string }>("SELECT texte FROM horaires_frequences WHERE id = 1");
+  const t = rows?.[0]?.texte?.trim();
+  // Repli sur le texte par défaut tant que la table n'existe pas / est vide,
+  // pour que le bloc s'affiche toujours (jamais d'état vide).
+  return t && t.length > 0 ? t : DEMO_FREQUENCES;
+}
+
 const DEMO_GALERIE: GaleriePhoto[] = [
   { id: "1", ordre: 1, url: "/photos/photo-2.webp",  legende: "Le salut" },
   { id: "2", ordre: 2, url: "/photos/photo-1.webp",  legende: "Cours enfants" },

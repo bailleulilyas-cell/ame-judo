@@ -4,7 +4,8 @@ import { query, queryOne } from "@/lib/db";
 import type { ScheduleSlot, HorairesNote } from "@/types";
 import AdminPageHeader from "@/components/AdminPageHeader";
 import DeleteButton from "@/components/DeleteButton";
-import { deleteSlot, updateHorairesNote } from "@/lib/actions/cms";
+import { deleteSlot, updateHorairesNote, updateHorairesFrequences } from "@/lib/actions/cms";
+import { getHorairesFrequences } from "@/lib/data";
 
 export const metadata: Metadata = { title: "Horaires — Admin", robots: { index: false } };
 
@@ -32,9 +33,10 @@ export default async function HorairesAdminPage({
     );
   }
 
-  const [slots, note] = await Promise.all([
+  const [slots, note, frequences] = await Promise.all([
     query<ScheduleSlot>("SELECT * FROM schedule_slots ORDER BY FIELD(jour,'lundi','mercredi','jeudi','samedi','dimanche'), ordre"),
     queryOne<HorairesNote>("SELECT * FROM horaires_note WHERE id = 1"),
+    getHorairesFrequences(),
   ]);
 
   return (
@@ -75,6 +77,29 @@ export default async function HorairesAdminPage({
           />
           <button type="submit" className="btn btn-secondary" style={{ alignSelf: "flex-start" }}>
             Enregistrer la note
+          </button>
+        </form>
+      </fieldset>
+
+      {/* ─── Fréquence des cours par catégorie d'âge ─── */}
+      <fieldset style={{ border: "1px solid var(--hair-color)", padding: 24, margin: "0 0 40px" }}>
+        <legend style={{ padding: "0 8px", fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--stone)" }}>
+          Cours par semaine (par catégorie)
+        </legend>
+        <form action={updateHorairesFrequences} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <p style={{ margin: 0, fontSize: 13, color: "var(--stone)", lineHeight: 1.5 }}>
+            Une ligne par catégorie, au format «&nbsp;<strong>Catégorie (années) : X cours par semaine</strong>&nbsp;».
+            Ce bloc s&apos;affiche sous les horaires sur le site.
+          </p>
+          <textarea
+            name="texte"
+            className="form-input"
+            defaultValue={frequences}
+            rows={9}
+            style={{ resize: "vertical", lineHeight: 1.6 }}
+          />
+          <button type="submit" className="btn btn-secondary" style={{ alignSelf: "flex-start" }}>
+            Enregistrer les fréquences
           </button>
         </form>
       </fieldset>

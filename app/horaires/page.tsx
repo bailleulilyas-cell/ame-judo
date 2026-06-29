@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
-import { getSlots, getHorairesNote } from "@/lib/data";
+import { getSlots, getHorairesNote, getHorairesFrequences } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Horaires — Tous les créneaux",
@@ -24,7 +24,19 @@ const JOURS = [
 ] as const;
 
 export default async function HorairesPage() {
-  const [slots, note] = await Promise.all([getSlots(), getHorairesNote()]);
+  const [slots, note, freqText] = await Promise.all([getSlots(), getHorairesNote(), getHorairesFrequences()]);
+
+  // Une ligne par catégorie : « Catégorie (années) : fréquence ».
+  const frequences = freqText
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const i = line.indexOf(" : ");
+      return i === -1
+        ? { cat: line, freq: "" }
+        : { cat: line.slice(0, i).trim(), freq: line.slice(i + 3).trim() };
+    });
 
   return (
     <>
@@ -96,6 +108,20 @@ export default async function HorairesPage() {
                     </div>
                   );
                 })}
+
+                {frequences.length > 0 && (
+                  <div className="h-freq-block">
+                    <h2 className="h-freq-title">Combien de cours par semaine&nbsp;?</h2>
+                    <ul className="h-freq-list">
+                      {frequences.map((f, i) => (
+                        <li key={i} className="h-freq-row">
+                          <span className="h-freq-cat">{f.cat}</span>
+                          {f.freq && <span className="h-freq-val">{f.freq}</span>}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
 
               <aside className="horaires-aside">
