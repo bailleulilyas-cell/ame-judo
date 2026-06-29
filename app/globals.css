@@ -1736,22 +1736,28 @@ main { padding-top: var(--nav-h); }
   /* 0.72 ≈ contraste AA sur le fond sumi */
   color: rgba(245,241,234,0.72);
 }
+/* Le logo distant est bleu marine : on le pose sur un petit fond clair
+   (badge) pour qu'il reste lisible sur le footer sombre — robuste, sans
+   dépendre d'un filtre CSS. */
 .footer-signature-link {
   display: inline-flex;
   align-items: center;
   line-height: 0;
-  transition: opacity 0.25s;
+  background: #F5F1EA;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 1px 0 rgba(245,241,234,0.12);
+}
+.footer-signature-link:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.35);
 }
 .footer-signature-logo {
-  height: 22px;
+  height: 20px;
   width: auto;
   display: block;
-  /* Le logo distant est bleu marine : on l'éclaircit pour le footer sombre. */
-  filter: brightness(0) invert(1);
-  opacity: 0.78;
-  transition: opacity 0.25s;
 }
-.footer-signature-link:hover .footer-signature-logo { opacity: 1; }
 
 /* ═══════════════════════════════════════════════════════════
    Admin
