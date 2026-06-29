@@ -34,6 +34,28 @@ export default async function Footer() {
               Club de {club.sport.toLowerCase()} à {club.city}<br />
               depuis {club.foundingYear}.
             </p>
+
+            {/* Signature agence — « Réalisé par » + logo distant (ancre = marque seule). */}
+            <div className="footer-signature">
+              <span className="footer-signature-label">Réalisé par</span>
+              <a
+                href={agency.url}
+                target="_blank"
+                rel="noopener"
+                className="footer-signature-link"
+              >
+                {/* logo distant (hors next/image) : alt = nom de marque → ancre du backlink */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={agency.logo}
+                  alt={agency.name}
+                  className="footer-signature-logo"
+                  height={40}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+            </div>
           </div>
 
           <div>
@@ -97,28 +119,6 @@ export default async function Footer() {
               一礼<span className="footer-mark-red" />
             </span>
           </nav>
-        </div>
-
-        {/* Signature agence — « Réalisé par » + logo distant (ancre = marque seule). */}
-        <div className="footer-signature">
-          <span className="footer-signature-label">Réalisé par</span>
-          <a
-            href={agency.url}
-            target="_blank"
-            rel="noopener"
-            className="footer-signature-link"
-          >
-            {/* logo distant (hors next/image) : alt = nom de marque → ancre du backlink */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={agency.logo}
-              alt={agency.name}
-              className="footer-signature-logo"
-              height={22}
-              loading="lazy"
-              decoding="async"
-            />
-          </a>
         </div>
 
       </div>

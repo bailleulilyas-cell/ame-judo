@@ -1718,15 +1718,13 @@ main { padding-top: var(--nav-h); }
 .footer-mark-red { width: 5px; height: 5px; border-radius: 50%; background: var(--red); display: inline-block; vertical-align: middle; margin-left: 5px; }
 @media (max-width: 480px) { .footer-bottom { flex-direction: column; gap: 10px; } }
 
-/* Signature agence — discrète, centrée, sous le bas de footer. */
+/* Signature agence — sous le bloc de marque (colonne gauche), alignée à gauche. */
 .footer-signature {
   margin-top: 26px;
-  padding-top: 22px;
-  border-top: 1px solid rgba(245,241,234,0.08);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 9px;
 }
 .footer-signature-label {
   font-family: var(--sans);
@@ -1754,7 +1752,7 @@ main { padding-top: var(--nav-h); }
   box-shadow: 0 4px 14px rgba(0,0,0,0.35);
 }
 .footer-signature-logo {
-  height: 20px;
+  height: 40px;
   width: auto;
   display: block;
 }
