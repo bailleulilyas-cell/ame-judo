@@ -1157,6 +1157,8 @@ main { padding-top: var(--nav-h); }
   font-family: var(--serif);
   font-style: italic;
   font-size: 15px;
+  /* Préserve les retours à la ligne saisis dans l'admin. */
+  white-space: pre-line;
 }
 .h-day-group {
   border-bottom: 1px solid var(--hair-color);
